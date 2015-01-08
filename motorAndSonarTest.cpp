@@ -55,15 +55,10 @@ void echo_handler(void* args) {
     std::cout << "Distance: " <<  diffTime * 170.0 << "m" << std::endl;
     if (currentDistanceEstimate < .5){
 
-      setMotorSpeed(pwmMotor1, dir1, 0);
-      setMotorSpeed(pwmMotor2, dir2, 0);
-
-      usleep(1.0 * 1000000);
-
       setMotorSpeed(pwmMotor1, dir1, .5);
       setMotorSpeed(pwmMotor2, dir2, -.5);
 
-      sleep(2.0 * 1000000);
+      usleep(2.0 * 1000000);
 
       setMotorSpeed(pwmMotor1, dir1, .5);
       setMotorSpeed(pwmMotor2, dir2, .5);
