@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_motor.cpp -o test_motor -lmraa
+// g++ motorAndSonarTest.cpp -o motorAndSonarTest -lmraa
 // Controls a motor through a range of speeds using the Cytron motor controller
 // Pwm on pin 9, and dir on pin 8.
 
@@ -49,7 +49,10 @@ void echo_handler(void* args) {
   }
   else {
     int diffSec = end.tv_sec - start.tv_sec;
-    currentDistanceEstimate = currentDistanceEstimate*distanceAlpha + (diffTime * 170.0 * (1.0 - distanceAlpha))
+    int diffUSec = end.tv_usec - start.tv_usec;
+    double diffTime = (double)diffSec + 0.000001*diffUSec;
+    currentDistanceEstimate = currentDistanceEstimate*distanceAlpha + (diffTime * 170.0 * (1.0 - distanceAlpha));
+
     // std::cout << "Distance: " <<  diffTime * 170.0 << "m" << std::endl;
     if (currentDistanceEstimate < .5){
       turnAround();
@@ -94,7 +97,7 @@ int main() {
   dir1.dir(mraa::DIR_OUT);
   dir1.write(0);
   
-  double speed1 = -1.0;
+  speed1 = 0;
 
   pwmMotor2 = mraa::Pwm(6);
   pwmMotor2.write(0.0);
@@ -105,7 +108,7 @@ int main() {
   dir2.dir(mraa::DIR_OUT);
   dir2.write(0);
   
-  double speed1 = -1.0;
+  speed2 = 0;
 
   //ultrasonic:
   mraa::Gpio* trig = new mraa::Gpio(2);
