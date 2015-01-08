@@ -32,8 +32,7 @@ void setMotorSpeed(mraa::Pwm& pwm, mraa::Gpio& dir, double speed) {
     dir.write(0);
   }
   pwm.write(fabs(speed));
-  std::cout << "Speed1: " << speed1 << std::endl;
-  std::cout << "Speed2: " << speed2 << std::endl;
+  std::cout << "Setting speed: " << speed << std::endl;
 }
 
 void echo_handler(void* args) {
@@ -59,10 +58,12 @@ void echo_handler(void* args) {
       setMotorSpeed(pwmMotor1, dir1, 0);
       setMotorSpeed(pwmMotor2, dir2, 0);
 
+      usleep(1.0 * 1000000);
+
       setMotorSpeed(pwmMotor1, dir1, .5);
       setMotorSpeed(pwmMotor2, dir2, -.5);
 
-      sleep(2.0);
+      sleep(2.0 * 1000000);
 
       setMotorSpeed(pwmMotor1, dir1, .5);
       setMotorSpeed(pwmMotor2, dir2, .5);
