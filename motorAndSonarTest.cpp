@@ -55,25 +55,23 @@ void echo_handler(void* args) {
 
     // std::cout << "Distance: " <<  diffTime * 170.0 << "m" << std::endl;
     if (currentDistanceEstimate < .5){
-      turnAround();
+
+      setMotorSpeed(pwmMotor1, dir1, 0);
+      setMotorSpeed(pwmMotor2, dir2, 0);
+
+      setMotorSpeed(pwmMotor1, dir1, .5);
+      setMotorSpeed(pwmMotor2, dir2, -.5);
+
+      sleep(2.0);
+
+      setMotorSpeed(pwmMotor1, dir1, .5);
+      setMotorSpeed(pwmMotor2, dir2, .5);
     }
 
 
   }
 }
 
-void turnAround(){
-  setMotorSpeed(pwmMotor1, dir1, 0);
-  setMotorSpeed(pwmMotor2, dir2, 0);
-
-  setMotorSpeed(pwmMotor1, dir1, .5);
-  setMotorSpeed(pwmMotor2, dir2, -.5);
-
-  sleep(2.0);
-
-  setMotorSpeed(pwmMotor1, dir1, .5);
-  setMotorSpeed(pwmMotor2, dir2, .5);
-}
 
 void sig_handler(int signo)
 {
