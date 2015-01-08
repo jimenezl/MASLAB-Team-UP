@@ -53,7 +53,7 @@ void echo_handler(void* args) {
     double diffTime = (double)diffSec + 0.000001*diffUSec;
     currentDistanceEstimate = currentDistanceEstimate*distanceAlpha + (diffTime * 170.0 * (1.0 - distanceAlpha));
 
-    // std::cout << "Distance: " <<  diffTime * 170.0 << "m" << std::endl;
+    std::cout << "Distance: " <<  diffTime * 170.0 << "m" << std::endl;
     if (currentDistanceEstimate < .5){
 
       setMotorSpeed(pwmMotor1, dir1, 0);
@@ -130,7 +130,7 @@ int main() {
     clock_gettime(CLOCK_MONOTONIC, &currentTime);
     ultrasonicDiffTime = double(currentTime.tv_sec - lastUltrasonicMeasurementTime.tv_sec) + (currentTime.tv_nsec - lastUltrasonicMeasurementTime.tv_nsec)/1000000000.0;
     
-    if (ultrasonicDiffTime > .06){
+    if (ultrasonicDiffTime > .5){
       // 20us trigger pulse (must be at least 10us)
       trig->write(1);
       usleep(20);
