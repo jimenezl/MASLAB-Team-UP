@@ -15,12 +15,12 @@ int running = 1;
 double currentDistanceEstimate = 10; //set to arbitrary distance
 double distanceAlpha = .3;
 
-mraa::Pwm pwmMotor1;
-mraa::Gpio dir1;
+mraa::Pwm pwmMotor1 = mraa::Pwm(9);;
+mraa::Gpio dir1 = mraa::Gpio(8);
 double speed1;
 
-mraa::Pwm pwmMotor2;
-mraa::Gpio dir2;
+mraa::Pwm pwmMotor2 = mraa::Pwm(6);
+mraa::Gpio dir2 = mraa::Gpio(7);
 double speed2;
 
 void setMotorSpeed(mraa::Pwm& pwm, mraa::Gpio& dir, double speed) {
@@ -86,22 +86,22 @@ int main() {
   signal(SIGINT, sig_handler);
 
   //Control Motors:
-  pwmMotor1 = mraa::Pwm(9);
+  // pwmMotor1 = mraa::Pwm(9);
   pwmMotor1.write(0.0);
   pwmMotor1.enable(true);
   //assert(pwmMotor1 != NULL);
-  dir1 = mraa::Gpio(8);
+  // dir1 = mraa::Gpio(8);
   //assert(dir1 != NULL);
   dir1.dir(mraa::DIR_OUT);
   dir1.write(0);
   
   speed1 = 0;
 
-  pwmMotor2 = mraa::Pwm(6);
+  // pwmMotor2 = mraa::Pwm(6);
   pwmMotor2.write(0.0);
   pwmMotor2.enable(true);
   //assert(pwmMotor2 != NULL);
-  dir2 = mraa::Gpio(7);
+  // dir2 = mraa::Gpio(7);
   //assert(dir2 != NULL);
   dir2.dir(mraa::DIR_OUT);
   dir2.write(0);
