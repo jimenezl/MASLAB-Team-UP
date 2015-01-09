@@ -36,7 +36,7 @@ void setMotorSpeed(mraa::Pwm& pwm, mraa::Gpio& dir, double speed) {
 }
 
 static double distance = -1.0;
-static double alpha = .3;
+static double alpha = .7;
 
 void echo_handler(void* args) {
   // Grab end time first, for accuracy
@@ -98,13 +98,13 @@ int main() {
     trig.write(0);
 
     if (distance > 0.2) {
-      std::cout << "Setting motor speed: " << 1.0 - distance << std::endl;
-      setMotorSpeed(motPwm, motDir, 1.0 - distance);
-      setMotorSpeed(motPwm2, motDir2, 1.0 - distance);
+      std::cout << "Setting motor speed: " << distance << std::endl;
+      setMotorSpeed(motPwm, motDir, -1*(distance));
+      setMotorSpeed(motPwm2, motDir2, distance);
     }
     else {
-      setMotorSpeed(motPwm, motDir, -1*(1.0 - distance));
-      setMotorSpeed(motPwm2, motDir2, 1.0 - distance);
+      setMotorSpeed(motPwm, motDir, distance);
+      setMotorSpeed(motPwm2, motDir2, distance);
     }
 
     // Must pause at least 60ms between measurements
