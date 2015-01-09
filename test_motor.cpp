@@ -43,25 +43,31 @@ int main() {
   //assert(dir != NULL);
   dir.dir(mraa::DIR_OUT);
   dir.write(0);
+
+  mraa::Pwm pwm2 = mraa::Pwm(6);
+  pwm2.write(0.0);
+  pwm2.enable(true);
+  //assert(pwm2 != NULL);
+  mraa::Gpio dir2 = mraa::Gpio(7);
+  //assert(dir != NULL);
+  dir2.dir(mraa::DIR_OUT);
+  dir2.write(0);
   
   double speed = -1.0;
   while (running) {
     std::cout << "Speed: " << speed << std::endl;
     setMotorSpeed(pwm, dir, speed);
+    setMotorSpeed(pwm2, dir2, speed);
 
     speed += 0.1;
     if (speed > 1.0) {
       speed = -1.0;
       // Let the motor spin down
       setMotorSpeed(pwm, dir, 0.0);
+      setMotorSpeed(pwm2, dir2, 0.0);
       sleep(2.0);
     }
     usleep(100000);
-
-    // 20us trigger pulse (must be at least 10us)
-    trig->write(1);
-    usleep(20);
-    trig->write(0);
     
   }
 }
