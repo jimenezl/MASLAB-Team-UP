@@ -5,7 +5,8 @@
 #include <sys/time.h>
 
 #include "mraa.hpp"
-
+//compile with: 
+//g++ test_motor_feedback.cpp -o test_motor_feedback -lmraa
 
 int running = 1;
 
@@ -18,6 +19,12 @@ void sig_handler(int signo)
 }
 
 void setMotorSpeed(mraa::Pwm& pwm, mraa::Gpio& dir, double speed) {
+  if(-1.0 >= speed){
+    speed = -1;
+  }
+  if(speed >= 1.0){
+    speed = 1;
+  }
   assert(-1.0 <= speed && speed <= 1.0);
   if (speed < 0) {
     dir.write(1);
