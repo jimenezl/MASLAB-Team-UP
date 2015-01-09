@@ -57,7 +57,7 @@ int main() {
   while (running) {
     std::cout << "Speed: " << speed << std::endl;
     setMotorSpeed(pwm, dir, speed);
-    setMotorSpeed(pwm2, dir2, speed);
+    setMotorSpeed(pwm2, dir2, -1*speed);
 
     speed += 0.1;
     if (speed > 1.0) {
