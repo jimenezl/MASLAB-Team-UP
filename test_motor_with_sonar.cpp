@@ -116,8 +116,8 @@ int main() {
     }
 
     std::cout << "Speed: " << speed1 << std::endl;
-    setMotorSpeed(pwm, dir, speed1);
-    setMotorSpeed(pwm2, dir2, -1*speed2);
+    setMotorSpeed(pwm, dir, -1*speed1);
+    setMotorSpeed(pwm2, dir2, speed2);
 
     
     usleep(100000);
