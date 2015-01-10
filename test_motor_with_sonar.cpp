@@ -7,6 +7,7 @@
 #include <cmath>
 #include <csignal>
 #include <iostream>
+#include <sys/time.h>
 
 #include "mraa.hpp"
 
@@ -103,7 +104,7 @@ int main() {
     setMotorSpeed(pwm2, dir2, -1*speed);
 
     if (distance < .2) {
-      speed = -.5
+      speed = -.5;
     }
     usleep(100000);
 
