@@ -35,7 +35,9 @@ void echo_handler(void* args) {
     double diffTime = (double)diffSec + 0.000001*diffUSec;
     std::cout << "Diff time: " << diffTime << std::endl;
     // Speed of sound conversion: 340m/s * 0.5 (round trip)
-    distance = (distance*alpha) + (diffTime * 170.0 * (1.0 - alpha));
+    if ((diffTime * 170.0 ) < 5){
+      distance = (distance*alpha) + (diffTime * 170.0 * (1.0 - alpha));
+  }
     std::cout << "Distance: " <<  distance << "m" << std::endl;
   }
 }
@@ -105,13 +107,16 @@ int main() {
     trig.write(0);
 
     speed = distance;
-    std::cout << "Speed: " << speed << std::endl;
-    setMotorSpeed(pwm, dir, speed);
-    setMotorSpeed(pwm2, dir2, -1*speed);
 
     if (distance < .2) {
       speed = -.5;
     }
+    
+    std::cout << "Speed: " << speed << std::endl;
+    setMotorSpeed(pwm, dir, speed);
+    setMotorSpeed(pwm2, dir2, -1*speed);
+
+    
     usleep(100000);
 
     // Must pause at least 60ms between measurements
