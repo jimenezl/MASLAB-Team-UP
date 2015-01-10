@@ -98,7 +98,8 @@ int main() {
   // echo pulse
   echo.isr(mraa::EDGE_BOTH, echo_handler, &echo);
   
-  double speed = 1.0;
+  double speed1 = 1.0;
+  double speed2 = 1.0;
   while (running) {
 
     // 20us trigger pulse (must be at least 10us)
@@ -106,15 +107,17 @@ int main() {
     usleep(20);
     trig.write(0);
 
-    speed = distance;
+    speed1 = distance;
+    speed2 = distance;
 
     if (distance < .2) {
-      speed = -.5;
+      speed1 = -.5;
+      speed2 = .5;
     }
-    
-    std::cout << "Speed: " << speed << std::endl;
-    setMotorSpeed(pwm, dir, speed);
-    setMotorSpeed(pwm2, dir2, -1*speed);
+
+    std::cout << "Speed: " << speed1 << std::endl;
+    setMotorSpeed(pwm, dir, speed1);
+    setMotorSpeed(pwm2, dir2, -1*speed2);
 
     
     usleep(100000);
