@@ -41,7 +41,13 @@ void echo_handler(void* args) {
 }
 
 void setMotorSpeed(mraa::Pwm& pwm, mraa::Gpio& dir, double speed) {
-  assert(-1.0 <= speed && speed <= 1.0);
+  if(-1.0 >= speed){
+    speed = -1.0;
+  }
+  if(1.0 <= speed){
+    speed = 1.0;
+  }
+  // assert(-1.0 <= speed && speed <= 1.0);
   if (speed < 0) {
     dir.write(1);
   }
