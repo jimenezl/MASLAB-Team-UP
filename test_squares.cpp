@@ -139,7 +139,7 @@ int main()
     }
     usleep(10 * MS);
 
-    if ((timevaldiff(lastTurnTime, tv)> timeBetweenTurns) && (!isTurning)){
+    if ((timevaldiff(lastTurnTime, tv)> (timeBetweenTurns*1000)) && (!isTurning)){
       startAngle = total;
       setMotorSpeed(pwm, dir, speed);
       setMotorSpeed(pwm2, dir2, speed);
