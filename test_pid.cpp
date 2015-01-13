@@ -125,7 +125,7 @@ int main()
   float msf = (float)msi;
   timeBetweenReadings = -msf;
   rf = (float)reading;
-        total += -0.001 * msf * ((rf / 80.0) - gyroBias); // -(rf/80.0) is angular rate (deg/sec)
+        total += -0.001 * msf * ((rf / 80.0) + gyroBias); // -(rf/80.0) is angular rate (deg/sec)
         printf("Total: %f, Reading: %f, Time: %f\n", total, rf, -msf);
       }
       else {
