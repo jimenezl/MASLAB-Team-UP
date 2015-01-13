@@ -94,9 +94,9 @@ int main()
   float power = 0;
   float derivative = 0;
   float timeBetweenReadings = 0;
-  float P_CONSTANT = 1;
+  float P_CONSTANT = 25;
   float I_CONSTANT = 0;
-  float D_CONSTANT = 1;
+  float D_CONSTANT = 25;
 
 
   while (running) {
@@ -140,8 +140,8 @@ int main()
     derivative = (rf/80.0);
     power = speed * ((P_CONSTANT*diffAngle/360.0) + (I_CONSTANT*integral) + (D_CONSTANT*derivative/180.0)); //make sure to convert angles > 360 to proper angles
 
-    setMotorSpeed(pwm, dir, power);
-    setMotorSpeed(pwm2, dir2, power);
+    setMotorSpeed(pwm, dir, -1*power);
+    setMotorSpeed(pwm2, dir2, -1*power);
     printf("Set power to: %f\n", power);
 
   }
