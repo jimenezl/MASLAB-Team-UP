@@ -30,8 +30,10 @@ void sig_handler(int signo)
 {
   if (signo == SIGINT) {
     printf("closing spi nicely\n");
-    setMotorSpeed(pwm, dir, 0);
-    setMotorSpeed(pwm2, dir2, 0);
+    mraa::Pwm pwm = mraa::Pwm(9);
+    mraa::Pwm pwm2 = mraa::Pwm(6);
+    pwm.write(0);
+    pwm2.write(0);
     running = 0;
   }
 }
