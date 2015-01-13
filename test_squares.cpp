@@ -45,14 +45,6 @@ void setMotorSpeed(mraa::Pwm& pwm, mraa::Gpio& dir, double speed) {
   pwm.write(fabs(speed));
 }
 
-long timevaldiff(struct timeval *starttime, struct timeval *finishtime)
-{
-  long msec;
-  msec=(finishtime->tv_sec-starttime->tv_sec)*1000;
-  msec+=(finishtime->tv_usec-starttime->tv_usec)/1000;
-  return msec;
-}
-
 int main()
 {
   // Handle Ctrl-C quit
@@ -138,8 +130,10 @@ int main()
       printf("No recv\n");
     }
     usleep(10 * MS);
-
-    if ((timevaldiff(lastTurnTime, tv)> (timeBetweenTurns*1000)) && (!isTurning)){
+    long msec;
+    msec=(tv.tv_sec-lastTurnTime.tv_sec)*1000;
+    msec+=(tv.tv_usec-lastTurnTime.tv_usec)/1000;
+    if ((msec > (timeBetweenTurns*1000)) && (!isTurning)){
       startAngle = total;
       setMotorSpeed(pwm, dir, speed);
       setMotorSpeed(pwm2, dir2, speed);
