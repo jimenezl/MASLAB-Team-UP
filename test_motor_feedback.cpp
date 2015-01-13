@@ -87,7 +87,7 @@ int main() {
   mraa::Pwm motPwm2 = mraa::Pwm(6);
   motPwm2.write(0.0);
   motPwm2.enable(true);
-  mraa::Gpio motDir2 = mraa::Gpio(7);
+  mraa::Gpio motDir2 = mraa::Gpio(5);
   motDir2.dir(mraa::DIR_OUT);
   motDir2.write(0);
 

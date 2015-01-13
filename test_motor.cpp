@@ -48,7 +48,7 @@ int main() {
   pwm2.write(0.0);
   pwm2.enable(true);
   //assert(pwm2 != NULL);
-  mraa::Gpio dir2 = mraa::Gpio(7);
+  mraa::Gpio dir2 = mraa::Gpio(5);
   //assert(dir != NULL);
   dir2.dir(mraa::DIR_OUT);
   dir2.write(0);
