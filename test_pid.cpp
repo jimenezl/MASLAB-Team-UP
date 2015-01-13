@@ -96,7 +96,7 @@ int main()
   float timeBetweenReadings = 0;
   float P_CONSTANT = 25;
   float I_CONSTANT = 0;
-  float D_CONSTANT = 25;
+  float D_CONSTANT = 0;
 
 
   while (running) {
