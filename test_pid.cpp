@@ -30,6 +30,8 @@ void sig_handler(int signo)
 {
   if (signo == SIGINT) {
     printf("closing spi nicely\n");
+    setMotorSpeed(pwm, dir, 0);
+    setMotorSpeed(pwm2, dir2, 0);
     running = 0;
   }
 }
@@ -141,10 +143,10 @@ int main()
     diffAngle = desiredAngle - total;
     integral += diffAngle*0.001*timeBetweenReadings;
     derivative = (rf/80.0);
-    power = speed*((P_CONSTANT*diffAngle/360.0) + (I_CONSTANT*integral) + (D_CONSTANT*derivative/180.0)) + forwardBias; //make sure to convert angles > 360 to proper angles
+    power = speed*((P_CONSTANT*diffAngle/360.0) + (I_CONSTANT*integral) + (D_CONSTANT*derivative/180.0)); //make sure to convert angles > 360 to proper angles
 
-    setMotorSpeed(pwm, dir, -1*power);
-    setMotorSpeed(pwm2, dir2, -1*power);
+    setMotorSpeed(pwm, dir, -1*power - forwardBias);
+    setMotorSpeed(pwm2, dir2, -1*power + forwardBias);
     printf("Set power to: %f\n", power);
 
   }
