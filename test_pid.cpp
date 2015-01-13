@@ -1,5 +1,5 @@
 // Build with:
-// g++ test_squares.cpp -o test_squares -lmraa
+// g++ test_pid.cpp -o test_pid -lmraa
 // SPI pins are:
 // - IO10: SS
 // - IO11: MOSI
@@ -93,6 +93,7 @@ int main()
   float integral = 0;
   float power = 0;
   float derivative = 0;
+  float timeBetweenReadings = 0;
   float P_CONSTANT = 1;
   float I_CONSTANT = 0;
   float D_CONSTANT = 1;
@@ -119,6 +120,7 @@ int main()
     (unsigned long long)(tv.tv_usec) / 1000;
   int msi = (int)ms;
   float msf = (float)msi;
+  timeBetweenReadings = -msf;
   rf = (float)reading;
         total += -0.001 * msf * (rf / 80.0); // -(rf/80.0) is angular rate (deg/sec)
         printf("Total: %f, Reading: %f, Time: %f\n", total, rf, -msf);
@@ -134,8 +136,8 @@ int main()
     usleep(10 * MS);
 
     diffAngle = desiredAngle - total;
-    integral += diffAngle*0.001*msf;
-    derivative = -1*(rf/80.0);
+    integral += diffAngle*0.001*timeBetweenReadings;
+    derivative = (rf/80.0);
     power = speed * ((P_CONSTANT*diffAngle/360.0) + (I_CONSTANT*integral) + (D_CONSTANT*derivative/180.0)); //make sure to convert angles > 360 to proper angles
 
     setMotorSpeed(pwm, dir, power);
