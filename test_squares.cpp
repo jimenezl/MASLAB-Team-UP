@@ -15,6 +15,7 @@
 #include <cmath>
 #include <csignal>
 #include <iostream>
+#include <math.h>
 
 #include "mraa.hpp"
 
@@ -138,7 +139,7 @@ int main()
     }
 
     if (isTurning){
-      if ((rf - startAngle) >= 90.0){
+      if (fabs(rf - startAngle) >= 90.0){
         isTurning = false;
         setMotorSpeed(pwm, dir, -1*speed);
         setMotorSpeed(pwm2, dir2, speed);
