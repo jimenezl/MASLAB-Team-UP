@@ -1,5 +1,5 @@
 // Build with:
-// g++ test_spi.cpp -o test_spi -lmraa
+// g++ test_squares.cpp -o test_squares -lmraa
 // SPI pins are:
 // - IO10: SS
 // - IO11: MOSI
@@ -63,6 +63,7 @@ int main()
   float total = 0;
   struct timeval tv;
   int init = 0;
+  float rf;
 
   signal(SIGINT, sig_handler);
 
@@ -115,7 +116,7 @@ int main()
 		(unsigned long long)(tv.tv_usec) / 1000;
 	int msi = (int)ms;
 	float msf = (float)msi;
-	float rf = (float)reading;
+	rf = (float)reading;
         total += -0.001 * msf * (rf / 80.0);
         printf("Total: %f, Reading: %f, Time: %f\n", total, rf, -msf);
       }
