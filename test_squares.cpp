@@ -89,7 +89,10 @@ int main()
   gettimeofday(&lastTurnTime, NULL);
   float startAngle = 0;
   bool isTurning = false;
-  float speed = .5
+  float speed = .5;
+  float timeBetweenTurns = 3;
+  setMotorSpeed(pwm, dir, -1*speed);
+  setMotorSpeed(pwm2, dir2, speed);
 
   while (running) {
     chipSelect->write(0);
@@ -126,7 +129,7 @@ int main()
     }
     usleep(10 * MS);
 
-    if (((tv.tv_sec - lastTurnTime.tv_sec)> 1.0) && (!isTurning)){
+    if (((tv.tv_sec - lastTurnTime.tv_sec)> timeBetweenTurns) && (!isTurning)){
       startAngle = rf;
       setMotorSpeed(pwm, dir, speed);
       setMotorSpeed(pwm2, dir2, speed);
