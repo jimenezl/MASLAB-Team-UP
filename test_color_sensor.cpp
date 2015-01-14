@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_aio.cpp -o test_aio -lmraa
+// g++ test_color_sensor.cpp -o test_color_sensor -lmraa
 // Repeatedly reads pin A0 and prints the result.
 
 #include <csignal>
@@ -27,11 +27,11 @@ int main() {
     int val = aio.read();
     std::cout << "Read: " << val << std::endl;
     if (val > 315){
-      printf("Green Light")
+      printf("Green Light");
     }
 
     else{
-      printf("Red Light")
+      printf("Red Light");
     }
     sleep(1);
   }
