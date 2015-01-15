@@ -18,7 +18,10 @@
 int running = 1;
 #define MS 1000
 
-uint8_t registers[2]; 
+uint8_t timee[2]; 
+uint8_t gain[2];
+uint8_t enable[2];
+
 
 void sig_handler(int signo) {
     if (signo == SIGINT) {
@@ -29,17 +32,22 @@ void sig_handler(int signo) {
 
 void init_TCS34725(mraa::I2c *i2c) { 
 	
-	//Sensor Address
 	
-	registers[0] = ATimeAddress;
-	registers[1] = 0xf6;
+	timee[0] = ATimeAddress;
+	timee[1] = 0xf6;
+
+	gain[0] = ControlAddress;
+	gain[1] = 0x00;
+
+	enable[0] = EnableAddress;
+	enable[1] = 0x03;
 
 
 
 	assert(0 == i2c->address(SensorAddress));  
-	mraa::printError(i2c->write(registers, 2)); 
-	assert(0 == i2c->writeReg(ControlAddress, 0x00)); 
-	assert(0 == i2c->writeReg(EnableAddress, 0x03));
+	assert(0 == i2c->write(timee, 2)); 
+	assert(0 == i2c->write(gain, 2)); 
+	assert(0 == i2c->write(enable, 2));
 }
 
 void get_Colors(mraa::I2c *i2c){
