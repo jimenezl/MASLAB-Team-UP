@@ -168,7 +168,7 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
                 drawObject(x,y,cameraFeed);
                 lastRedXPosition = x;
                 lastRedYPosition = y;
-                printf("X: %f, Y: %f\n", x, y);
+                printf("X: %i, Y: %i\n", x, y);
             }
 
         }else printf("Too much noise\n");;
@@ -245,6 +245,7 @@ int main() {
     Mat cameraFeed;
     Mat threshold;
     Mat HSV;
+    bool calibrationMode = true;
 
     //video capture object to acquire webcam feed
     VideoCapture capture;
@@ -264,10 +265,14 @@ int main() {
         //convert frame from BGR to HSV colorspace
         cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
 
+        if(calibrationMode==true){
+        //if in calibration mode, we track objects based on the HSV slider values.
         cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
         inRange(HSV,Scalar(H_MIN,S_MIN,V_MIN),Scalar(H_MAX,S_MAX,V_MAX),threshold);
         morphOps(threshold);
+        // imshow(windowName2,threshold);
         trackFilteredObject(threshold,HSV,cameraFeed);
+        }
         
 
         diffAngle = X_ZERO_POS - lastRedXPosition;
