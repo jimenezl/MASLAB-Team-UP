@@ -30,10 +30,13 @@ void sig_handler(int signo) {
 void init_TCS34725(mraa::I2c *i2c) { 
 	
 	i2c->address(SensorAddress); //Sensor Address
-
-	assert(0 == i2c->writeReg(ATimeAddress, 0xf6));  //Integration Time
-	assert(0 == i2c->writeReg(ControlAddress, 0x00)); //Gain
-	assert(0 == i2c->writeReg(EnableAddress, 0x03)); //Colors?
+	writeReg(ATimeAddress, 0xf6);
+	writeReg(ControlAddress, 0x00);
+	i2c->writeReg(EnableAddress, 0x03);
+	/*assert(0 == i2c->);  //Integration Time
+	assert(0 == i2c->); //Gain
+	assert(0 == ); //Colors?
+	*/
 }
 
 void get_Colors(mraa::I2c *i2c){
