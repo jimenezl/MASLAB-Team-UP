@@ -36,13 +36,14 @@ void init_TCS34725(mraa::I2c *i2c) {
 	assert(0 == i2c->writeReg(EnableAddress, 0x03)); //Colors?
 }
 
-void get_Colors(void){
+void get_Colors(mraa::I2c *i2c){
 	unsigned int clear_color = 0;
  	unsigned int red_color = 0;
  	unsigned int green_color = 0;
  	unsigned int blue_color = 0;
 
  	i2c->address(SensorAddress);
+
  	int color_value = int(i2c->readWordReg(ColorAddress));
  	printf("color_value\n");
  }
@@ -55,7 +56,7 @@ int main(){
     mraa::I2c *i2c = new mraa::I2c(6);
     assert(i2c != NULL);
     init_TCS34725(i2c);
-    
+
     while (running){
     	get_Colors();
     }
