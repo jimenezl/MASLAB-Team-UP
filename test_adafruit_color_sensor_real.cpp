@@ -29,14 +29,13 @@ void sig_handler(int signo) {
 
 void init_TCS34725(mraa::I2c *i2c) { 
 	
-	i2c->address(SensorAddress); //Sensor Address
-	i2c->writeReg(ATimeAddress, 0xf6);
-	i2c->writeReg(ControlAddress, 0x00);
-	i2c->writeReg(EnableAddress, 0x03);
-	/*assert(0 == );  //Integration Time
-	assert(0 == ); //Gain
-	assert(0 == ); //Colors?
-	*/
+	//Sensor Address
+	
+	
+	assert(0 == i2c->address(SensorAddress));  
+	assert(0 == i2c->writeReg(ATimeAddress, 0xf6)); 
+	assert(0 == i2c->writeReg(ControlAddress, 0x00)); 
+	assert(0 == i2c->writeReg(EnableAddress, 0x03));
 }
 
 void get_Colors(mraa::I2c *i2c){
@@ -46,19 +45,21 @@ void get_Colors(mraa::I2c *i2c){
  	unsigned int blue_color = 0;
 	
 	i2c->address(SensorAddress); 
-
  	uint16_t clear_value = i2c->readWordReg(ColorAddress);
  	//printf("uint%d", color_value);
  	printf("clear_value%d\n", (int)clear_value);
 
+ 	i2c->address(SensorAddress); 
  	uint16_t red_value = i2c->readWordReg(ColorAddress + 2);
  	//printf("uint%d", color_value);
  	printf("red_value%d\n", (int)red_value);
 
+	i2c->address(SensorAddress); 
  	uint16_t blue_value = i2c->readWordReg(ColorAddress + 4);
  	//printf("uint%d", color_value);
  	printf("blue_value%d\n", (int)blue_value);
 
+ 	i2c->address(SensorAddress); 
  	uint16_t green_value = i2c->readWordReg(ColorAddress + 6);
  	//printf("uint%d", color_value);
  	printf("green_value%d\n", (int)green_value);
