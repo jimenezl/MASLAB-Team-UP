@@ -98,8 +98,8 @@ int main() {
     float gyroBias = 1.0;
     float forwardBias = .1;
     float P_CONSTANT = 25;
-    float I_CONSTANT = 10;
-    float D_CONSTANT = 0;
+    float I_CONSTANT = 0;
+    float D_CONSTANT = 10;
 
     while (running) {
         chipSelect->write(0);
