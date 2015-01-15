@@ -58,6 +58,6 @@ int main(){
     init_TCS34725(i2c);
 
     while (running){
-    	get_Colors();
+    	get_Colors(i2c);
     }
 }
