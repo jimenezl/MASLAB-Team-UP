@@ -33,7 +33,7 @@ void init_TCS34725(mraa::I2c *i2c) {
 	
 	
 	assert(0 == i2c->address(SensorAddress));  
-	assert(0 == i2c->writeReg(ATimeAddress, 0xf6)); 
+	std::cout<< i2c->writeReg(ATimeAddress, 0xf6)<<std::endl; 
 	assert(0 == i2c->writeReg(ControlAddress, 0x00)); 
 	assert(0 == i2c->writeReg(EnableAddress, 0x03));
 }
