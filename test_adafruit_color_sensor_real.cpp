@@ -62,22 +62,22 @@ void get_Colors(mraa::I2c *i2c){
 	i2c->address(SensorAddress); 
  	uint16_t clear_value = i2c->readWordReg(ColorAddress);
  	//printf("uint%d", color_value);
- 	//printf("clear_value%d\n", (int)clear_value);
+ 	printf("clear_value%d\n", (int)clear_value);
 
  	i2c->address(SensorAddress); 
  	uint16_t red_value = i2c->readWordReg(ColorAddress + 2);
  	//printf("uint%d", color_value);
- 	//printf("red_value%d\n", (int)red_value);
+ 	printf("red_value%d\n", (int)red_value);
 
 	i2c->address(SensorAddress); 
  	uint16_t blue_value = i2c->readWordReg(ColorAddress + 4);
  	//printf("uint%d", color_value);
- 	//printf("blue_value%d\n", (int)blue_value);
+ 	printf("blue_value%d\n", (int)blue_value);
 
  	i2c->address(SensorAddress); 
  	uint16_t green_value = i2c->readWordReg(ColorAddress + 6);
  	//printf("uint%d", color_value);
- 	//printf("green_value%d\n", (int)green_value);
+ 	printf("green_value%d\n", (int)green_value);
  }
 
 int main(){
