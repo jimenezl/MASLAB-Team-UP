@@ -8,8 +8,6 @@
 #include <iostream>
 
 
-const int ledPin = 8;  // used to drive the white illumination LED
-
 #define SensorAddress 0x29 //
 #define EnableAddress 0xa0 // register address + command bits
 #define ATimeAddress 0xa1 // register address + command bits
@@ -29,7 +27,7 @@ void sig_handler(int signo) {
     }
 }
 
-void init_TCS34725(mraa::I2c *i2c){
+void init_TCS34725(mraa::I2c *i2c) { 
 	
 	i2c->address(SensorAddress); //Sensor Address
 
@@ -56,7 +54,8 @@ int main(){
     // Edison i2c bus is 6
     mraa::I2c *i2c = new mraa::I2c(6);
     assert(i2c != NULL);
-
+    init_TCS34725(i2c);
+    
     while (running){
     	get_Colors();
     }
