@@ -38,9 +38,9 @@ void sig_handler(int signo) {
 }
 
 void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
-    if (speed > .5){
+    if (speed > .5) {
         speed = .5;
-    } else (speed < -.5){
+    } else (speed < -.5) {
         speed = -.5;
     }
     assert(-1.0 <= speed && speed <= 1.0);
