@@ -98,8 +98,8 @@ int main() {
     float gyroBias = 1.0;
     float forwardBias = .1;
     float P_CONSTANT = 25;
-    float I_CONSTANT = 10;
-    float D_CONSTANT = 0;
+    float I_CONSTANT = 0;
+    float D_CONSTANT = -1;
 
     while (running) {
         chipSelect->write(0);
@@ -151,6 +151,11 @@ int main() {
         derivative = (rf / 80.0);
         power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
+        if (power > .5) {
+            power = .5;
+        } else if (power < -.5) {
+            power = -.5;
+        }
         setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
         printf("Set power to: %f\n", power);
