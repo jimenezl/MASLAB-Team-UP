@@ -30,7 +30,7 @@ int main() {
       printf("Green Light");
     }
 
-    else{
+    else { 
       printf("Red Light");
     }
     sleep(1);

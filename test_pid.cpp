@@ -98,7 +98,7 @@ int main() {
     float gyroBias = 1.0;
     float forwardBias = .1;
     float P_CONSTANT = 25;
-    float I_CONSTANT = 0;
+    float I_CONSTANT = 10;
     float D_CONSTANT = 0;
 
     while (running) {
@@ -134,6 +134,17 @@ int main() {
             printf("No recv\n");
         }
         usleep(10 * MS);
+
+        //Fix angle readings over 360
+        if (total > 360) {
+            error = total/360
+            total = total - error*360
+        }
+
+        else if (total < -360) {
+            error = fabs(total)/360
+            total = total + 360*error
+        }
 
         diffAngle = desiredAngle - total;
         integral += diffAngle * 0.001 * timeBetweenReadings;
