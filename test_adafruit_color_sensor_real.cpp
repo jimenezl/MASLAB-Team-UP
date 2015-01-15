@@ -18,7 +18,7 @@
 int running = 1;
 #define MS 1000
 
-char registers[2]; 
+uint8_t registers[2]; 
 
 void sig_handler(int signo) {
     if (signo == SIGINT) {
