@@ -1,12 +1,12 @@
 // Compile with:
-// g++ test_adafruit_color_sensor_real.cpp -o test_adafruit_color_sensor -lmraa
+// g++ test_adafruit_color_sensor_real.cpp -o test_adafruit_color_sensor_real -lmraa
 // Controls carousel depending on color of block.
 
 #include "mraa.hpp"
 #include <cassert>
 #include <csignal>
 #include <iostream>
-#include <Math.h>
+
 
 const int ledPin = 8;  // used to drive the white illumination LED
 
