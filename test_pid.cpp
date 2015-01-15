@@ -137,13 +137,13 @@ int main() {
 
         //Fix angle readings over 360
         if (total > 360) {
-            error = total/360
-            total = total - error*360
+            error = total/360;
+            total = total - error*360;
         }
 
         else if (total < -360) {
-            error = fabs(total)/360
-            total = total + 360*error
+            error = fabs(total)/360;
+            total = total + 360*error;
         }
 
         diffAngle = desiredAngle - total;
