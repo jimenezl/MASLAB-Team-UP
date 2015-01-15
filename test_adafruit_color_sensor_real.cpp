@@ -31,7 +31,7 @@ void sig_handler(int signo) {
 
 void init_TCS34725(void){
 	
-	i2c->address(SensorAddress) //Sensor Address
+	i2c->address(SensorAddress); //Sensor Address
 
 	assert(0 == i2c->writeReg(ATimeAddress, 0xf6));  //Integration Time
 	assert(0 == i2c->writeReg(ControlAddress, 0x00)); //Gain
@@ -44,8 +44,8 @@ void get_Colors(void){
  	unsigned int green_color = 0;
  	unsigned int blue_color = 0;
 
- 	i2c->address(SensorAddress)
- 	color_value = i2c->readWordReg(ColorAddress)
+ 	i2c->address(SensorAddress);
+ 	color_value = i2c->readWordReg(ColorAddress);
  	printf("color_value\n");
  }
 
@@ -58,7 +58,6 @@ int main(){
     assert(i2c != NULL);
 
     while (running){
-    	get_Colors()
+    	get_Colors();
     }
-
 }
