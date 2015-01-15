@@ -47,8 +47,9 @@ void get_Colors(mraa::I2c *i2c){
 	
 	i2c->address(SensorAddress); 
 
- 	int color_value = int(i2c->readWordReg(ColorAddress));
- 	printf("color_value\n", color_value);
+ 	color_value = i2c->readWordReg(ColorAddress);
+ 	printf("uint\n", color_value);
+ 	printf("color_value\n", int(color_value));
  }
 
 int main(){
