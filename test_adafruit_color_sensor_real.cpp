@@ -45,7 +45,7 @@ void init_TCS34725(mraa::I2c *i2c) {
 
 	assert(0 == i2c->address(SensorAddress));  
 	mraa::printError(i2c->write(timee, 2)); 
-	assert(0 == i2c->write(gain, 2)); 
+	mraa::printError(i2c->write(gain, 2)); 
 	assert(0 == i2c->write(enable, 2));
 }
 
