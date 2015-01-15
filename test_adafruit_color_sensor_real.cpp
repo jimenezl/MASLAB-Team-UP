@@ -32,6 +32,7 @@ void sig_handler(int signo) {
 
 void init_TCS34725(mraa::I2c *i2c) { 
 	
+	//Sensor Address
 	
 	timee[0] = ATimeAddress;
 	timee[1] = 0xf6;
@@ -45,9 +46,9 @@ void init_TCS34725(mraa::I2c *i2c) {
 
 
 	assert(0 == i2c->address(SensorAddress));  
-	assert(0 == i2c->write(timee, 2)); 
+	mraa::printError(i2c->write(timee, 2)); 
 	assert(0 == i2c->write(gain, 2)); 
-	assert(0 == i2c->write(enable, 2));
+	assert(0 == i2c->writeReg(enable, 2));
 }
 
 void get_Colors(mraa::I2c *i2c){
