@@ -29,7 +29,7 @@ void sig_handler(int signo) {
     }
 }
 
-void init_TCS34725(void){
+void init_TCS34725(mraa::I2c *i2c){
 	
 	i2c->address(SensorAddress); //Sensor Address
 
@@ -45,7 +45,7 @@ void get_Colors(void){
  	unsigned int blue_color = 0;
 
  	i2c->address(SensorAddress);
- 	color_value = i2c->readWordReg(ColorAddress);
+ 	int color_value = int(i2c->readWordReg(ColorAddress));
  	printf("color_value\n");
  }
 
