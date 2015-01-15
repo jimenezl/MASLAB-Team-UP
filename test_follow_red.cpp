@@ -1,5 +1,5 @@
 // Build with:
-// g++ test_pid.cpp -o test_pid -lmraa
+// // g++ test_follow_red.cpp -o test_follow_red `pkg-config opencv --cflags --libs` -lpthread -lmraa
 // SPI pins are:
 // - IO10: SS
 // - IO11: MOSI
@@ -272,7 +272,7 @@ int main() {
         diffAngle = X_ZERO_POS - lastRedXPosition;
         // integral += diffAngle * 0.001 * timeBetweenReadings;
         // derivative = (rf / 80.0);
-        power = speed * ((P_CONSTANT * diffAngle / 360.0); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        power = speed * ((P_CONSTANT * diffAngle / 360.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
         if (power > .5) {
             power = .5;
