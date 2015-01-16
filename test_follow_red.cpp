@@ -260,7 +260,7 @@ void cameraThreadLoop() {
         desiredAngle = currentAngle + (diffPixel * DEG_PER_PIXEL);
         printf("Desired Angle: %f\n", desiredAngle);
 
-        usleep(1000 * MS);
+        usleep(500 * MS);
     }
 }
 
@@ -383,6 +383,7 @@ int main() {
         setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
         printf("Set power to: %f\n", power);
+        printf("Desired Angle: %f\n", desiredAngle);
 
     }
 
