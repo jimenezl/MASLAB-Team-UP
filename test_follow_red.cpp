@@ -95,6 +95,8 @@ int lastRedYPosition = 240;
 float desiredAngle = 0.0;
 float DEG_PER_PIXEL = 0.121875;
 
+float total = 0; //current angle belief
+
 
 string intToString(int number){
 
@@ -280,7 +282,7 @@ int main() {
     writeBuf[1] = (sensorRead >> 8) & 0xff;
     writeBuf[2] = (sensorRead >> 16) & 0xff;
     writeBuf[3] = (sensorRead >> 24) & 0xff;
-    float total = 0;
+    // float total = 0; made this global for camera thread
     struct timeval tv;
     int init = 0;
     float rf;
