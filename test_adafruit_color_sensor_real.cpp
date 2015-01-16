@@ -84,9 +84,10 @@ void get_Colors(mraa::I2c *i2c){
  	unsigned int green_color = 0;
  	unsigned int blue_color = 0;
 
+ 	int i = 0;
 	i2c->address(SensorAddress); 
  	uint8_t color_values[8];
-	for (i =0; i<8; i++){
+	for (i = 0; i<8; i++){
 		color_values[i] = i2c->read(colors, 1);
 	}
  	printf("color values%d\n", color_values);
