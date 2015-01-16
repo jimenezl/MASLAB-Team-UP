@@ -11,7 +11,7 @@ See the user datasheet at www.solutions-cubed.com for additional information.
 #include <cassert>
 #include <csignal>
 #include <iostream>
-#include <Math.h>
+
 
 const int ledPin = 8;  // used to drive the white illumination LED
 
@@ -31,7 +31,7 @@ then call this routine with appropriate address and command
 bits and the number of bytes you are writing.
 */
 
-uint8_t registers[2]
+uint8_t registers[2]; 
 
 void sig_handler(int signo) {
     if (signo == SIGINT) {

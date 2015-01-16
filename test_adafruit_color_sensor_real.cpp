@@ -15,13 +15,38 @@
 #define IDAddress 0xb2 // register address + command bits
 #define ColorAddress 0xb4 // register address + command bits
 
+/*Individual Color Addresses 
+#define RedLowAddress 0x16
+#define RedHighddress 0x17
+
+#define BlueLowAddress 0x1A
+#define BlueHighAddress 0x1B
+
+#define GreenLowAddress 0x18
+#define GreenHighAddress 0x19
+*/
+
+
 int running = 1;
 #define MS 1000
 
+
+//Initialize Registers 
 uint8_t timee[2]; 
 uint8_t gain[2];
 uint8_t enable[2];
+uint8_t colors[8];
 
+/*
+uint8_t red_low[2];
+uint8_t red_high[2];
+
+uint8_t blue_low[2];
+uint8_t blue_high[2];
+
+uint8_t green_low[2];
+uint8_t green_high[2];
+*/
 
 void sig_handler(int signo) {
     if (signo == SIGINT) {
@@ -32,7 +57,7 @@ void sig_handler(int signo) {
 
 void init_TCS34725(mraa::I2c *i2c) { 
 	
-	//Sensor Address
+	//Pass in Addresses and Data to Registers 
 	
 	timee[0] = ATimeAddress;
 	timee[1] = 0xf6;
@@ -58,26 +83,42 @@ void get_Colors(mraa::I2c *i2c){
  	unsigned int red_color = 0;
  	unsigned int green_color = 0;
  	unsigned int blue_color = 0;
-	
+
+	i2c->address(SensorAddress); 
+ 	color_values =  i2c->read(colors, 8);
+ 	printf("color values%d\n", color_values);
+
+ 	clear_color = (unsigned int)(color_values[1]<<8) + (unsigned int)color_values[0];
+  	red_color = (unsigned int)(color_values[3]<<8) + (unsigned int)color_values[2];
+  	green_color = (unsigned int)(color_values[5]<<8) + (unsigned int)color_values[4];
+  	blue_color = (unsigned int)(color_values[7]<<8) + (unsigned int)color_values[6];
+
+
+  	printf("clear_color:%d\n", (int)clear_color);
+  	printf("red_color:%d\n", (int)red_color);
+  	printf("blue_color%d\n", (int)blue_color);
+  	printf("green_color%d\n", (int)green_color);
+	/*
 	i2c->address(SensorAddress); 
  	uint16_t clear_value = i2c->readWordReg(ColorAddress);
  	//printf("uint%d", color_value);
- 	printf("clear_value%d\n", (int)clear_value);
+ 	
 
  	i2c->address(SensorAddress); 
  	uint16_t red_value = i2c->readWordReg(ColorAddress + 2);
  	//printf("uint%d", color_value);
- 	printf("red_value%d\n", (int)red_value);
+ 	
 
 	i2c->address(SensorAddress); 
  	uint16_t blue_value = i2c->readWordReg(ColorAddress + 4);
  	//printf("uint%d", color_value);
- 	printf("blue_value%d\n", (int)blue_value);
+ 	
 
  	i2c->address(SensorAddress); 
  	uint16_t green_value = i2c->readWordReg(ColorAddress + 6);
  	//printf("uint%d", color_value);
- 	printf("green_value%d\n", (int)green_value);
+ 	
+ 	*/
  }
 
 int main(){
