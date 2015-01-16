@@ -19,6 +19,8 @@
 
 #include "mraa.hpp"
 
+#include <thread> //multithreading
+
 //opencv libs
 
 #include <sstream>
@@ -89,6 +91,9 @@ const int Y_ZERO_POS = 240;
 const int X_ALPHA = .3;
 int lastRedXPosition = 320;
 int lastRedYPosition = 240;
+
+float desiredAngle = 0.0;
+float DEG_PER_PIXEL = 0.121875;
 
 
 string intToString(int number){
@@ -204,9 +209,63 @@ Mat& filterRed(Mat& I)
     return I;
 }
 
+void cameraThreadLoop() {
+    //
+    //opencv stuff
+    //
+
+    //Matrix to store each frame of the webcam feed
+    Mat cameraFeed;
+    Mat threshold;
+    Mat HSV;
+    bool calibrationMode = true;
+
+    float diffPixel = 0.0;
+
+    //video capture object to acquire webcam feed
+    VideoCapture capture;
+    //open capture object at location zero (default location for webcam)
+    capture.open(0);
+    //set height and width of capture frame
+    capture.set(CV_CAP_PROP_FRAME_WIDTH, FRAME_WIDTH);
+    capture.set(CV_CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT);
+    //start an infinite loop where webcam feed is copied to cameraFeed matrix
+    //all of our operations will be performed within this loop
+
+    while (running) {
+        //store image to matrix
+        capture.read(cameraFeed);
+        // flip(cameraFeed,cameraFeed,1); //flip camera
+        cameraFeed = filterRed(cameraFeed);
+        //convert frame from BGR to HSV colorspace
+        cvtColor(cameraFeed, HSV, COLOR_BGR2HSV);
+
+        if (calibrationMode == true) {
+            //if in calibration mode, we track objects based on the HSV slider values.
+            cvtColor(cameraFeed, HSV, COLOR_BGR2HSV);
+            inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN), Scalar(H_MAX, S_MAX, V_MAX), threshold);
+            morphOps(threshold);
+            // imshow(windowName2,threshold);
+            trackFilteredObject(threshold, HSV, cameraFeed);
+        }
+
+
+        diffPixel = float(lastRedXPosition - X_ZERO_POS);
+        // integral += diffAngle * 0.001 * timeBetweenReadings;
+        // derivative = (rf / 80.0);
+        // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        desiredAngle = total + (diffPixel * DEG_PER_PIXEL);
+        printf("Desired Angle: %d\n", desiredAngle);
+
+        // usleep(10 * MS);
+    }
+}
+
 int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
+
+    std::thread cameraThread(cameraThreadLoop);
 
     //gyro stuff
     mraa::Gpio *chipSelect = new mraa::Gpio(10);
@@ -246,9 +305,8 @@ int main() {
     dir2.write(0);
 
     float speed = .05;
-    float desiredAngle = 0.0;
+    // float desiredAngle = 0.0; //making this global so camera thread can use and change it
     float diffAngle = 0.0;
-    float diffPixel = 0.0;
     float integral = 0;
     float power = 0;
     float derivative = 0;
@@ -258,53 +316,11 @@ int main() {
     float P_CONSTANT = 25;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
-    float DEG_PER_PIXEL = 0.121875;
 
-    //
-    //opencv stuff
-    //
-
-    //Matrix to store each frame of the webcam feed
-    Mat cameraFeed;
-    Mat threshold;
-    Mat HSV;
-    bool calibrationMode = true;
-
-    //video capture object to acquire webcam feed
-    VideoCapture capture;
-    //open capture object at location zero (default location for webcam)
-    capture.open(0);
-    //set height and width of capture frame
-    capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
-    capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
-    //start an infinite loop where webcam feed is copied to cameraFeed matrix
-    //all of our operations will be performed within this loop
+    
 
     while (running) {
-        //store image to matrix
-        capture.read(cameraFeed);
-        // flip(cameraFeed,cameraFeed,1); //flip camera
-        cameraFeed = filterRed(cameraFeed);
-        //convert frame from BGR to HSV colorspace
-        cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
-
-        if(calibrationMode==true){
-        //if in calibration mode, we track objects based on the HSV slider values.
-        cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
-        inRange(HSV,Scalar(H_MIN,S_MIN,V_MIN),Scalar(H_MAX,S_MAX,V_MAX),threshold);
-        morphOps(threshold);
-        // imshow(windowName2,threshold);
-        trackFilteredObject(threshold,HSV,cameraFeed);
-        }
         
-
-        diffPixel = float(lastRedXPosition - X_ZERO_POS);
-        // integral += diffAngle * 0.001 * timeBetweenReadings;
-        // derivative = (rf / 80.0);
-        // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
-        desiredAngle = total + (diffPixel * DEG_PER_PIXEL);
-        
-        // usleep(10 * MS);
         
         //gyro stuff 
         chipSelect->write(0);
