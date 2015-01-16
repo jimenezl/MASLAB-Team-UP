@@ -50,6 +50,7 @@ const string trackbarWindowName = "Trackbars";
 const int X_ZERO_POS = 320;
 const int Y_ZERO_POS = 240;
 
+const int X_ALPHA = .3;
 int lastRedXPosition = 320;
 int lastRedYPosition = 240;
 
@@ -129,7 +130,9 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
 			if(objectFound ==true){
 				//draw object location on screen
 				drawObject(x,y,cameraFeed);}
-				lastRedXPosition = x;
+				if (x!=0) {
+					lastRedXPosition = (lastRedXPosition*X_ALPHA) +  (x * (1 - X_ALPHA));
+				}
                 lastRedYPosition = y;
                 printf("X: %i, Y: %i\n", x, y);
 
