@@ -245,7 +245,7 @@ int main() {
     dir2.dir(mraa::DIR_OUT);
     dir2.write(0);
 
-    float speed = .1;
+    float speed = .01;
     float desiredAngle = 0.0;
     float diffAngle = 0.0;
     float diffPixel = 0.0;
