@@ -7,8 +7,7 @@
 #include <csignal>
 #include <iostream>
 
-int running = 1;
-#define MS 1000
+
 
 #define SensorAddress 0x29 //
 #define EnableAddress 0xa0 // register address + command bits
@@ -16,6 +15,10 @@ int running = 1;
 #define ControlAddress 0xaf // register address + command bits
 #define IDAddress 0xb2 // register address + command bits
 #define ColorAddress 0xb4 // register address + command bits
+
+
+int running = 1;
+#define MS 1000
 
 uint8_t timee[2]; 
 uint8_t gain[2];
