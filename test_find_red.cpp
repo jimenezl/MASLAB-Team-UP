@@ -12,6 +12,9 @@
 //FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
 //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 //IN THE SOFTWARE.
+//
+//compile with:
+//g++ test_find_red.cpp -o test_find_red `pkg-config opencv --cflags --libs` -lpthread
 
 #include <sstream>
 #include <string>
@@ -130,11 +133,11 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
 			if(objectFound ==true){
 				//draw object location on screen
 				drawObject(x,y,cameraFeed);}
-				if (x!=0) {
+				if (x!=0 && y!=0) {
 					lastRedXPosition = (lastRedXPosition*X_ALPHA) +  (x * (1 - X_ALPHA));
+					lastRedYPosition = (lastRedYPosition*X_ALPHA) +  (y * (1 - X_ALPHA));
 				}
-                lastRedYPosition = y;
-                printf("X: %i, Y: %i\n", x, y);
+                printf("X: %i, Y: %i\n", lastRedXPosition, lastRedYPosition);
 
 		}else printf("Too much noise\n");;
 	}
