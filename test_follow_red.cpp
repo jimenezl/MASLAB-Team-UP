@@ -260,7 +260,7 @@ void cameraThreadLoop() {
         desiredAngle = currentAngle + (diffPixel * DEG_PER_PIXEL);
         printf("Desired Angle: %f\n", desiredAngle);
 
-        usleep(500 * MS);
+        usleep(100 * MS);
     }
 }
 
