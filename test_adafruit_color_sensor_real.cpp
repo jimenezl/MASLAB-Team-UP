@@ -90,7 +90,8 @@ void get_Colors(mraa::I2c *i2c){
 	colors[1] = 0x16;
 	i2c->address(SensorAddress); 
 	i2c->write(colors, 2);
-	uint8_t store = i2c->readByte();
+	i2c->address(SensorAddress);
+	uint8_t store = i2c->read(colors,2);
 	printf("Data:%d\n", store);
 
 	/*
