@@ -258,7 +258,7 @@ void cameraThreadLoop() {
         // derivative = (rf / 80.0);
         // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         desiredAngle = currentAngle + (diffPixel * DEG_PER_PIXEL);
-        printf("Desired Angle: %d\n", desiredAngle);
+        printf("Desired Angle: %f\n", desiredAngle);
 
         // usleep(10 * MS);
     }
@@ -335,7 +335,7 @@ int main() {
             recvVal = (recvVal << 8) | ((uint8_t)recv[2] & 0xFF);
             recvVal = (recvVal << 8) | ((uint8_t)recv[1] & 0xFF);
             recvVal = (recvVal << 8) | ((uint8_t)recv[0] & 0xFF);
-            printf("Received: 0x%.8x, ", recvVal);
+            // printf("Received: 0x%.8x, ", recvVal);
             // Sensor reading
             short reading = (recvVal >> 10) & 0xffff;
             if (init) {
@@ -349,7 +349,7 @@ int main() {
                 timeBetweenReadings = -msf;
                 rf = (float)reading;
                 total += -0.001 * msf * ((rf / 80.0) + gyroBias); // -(rf/80.0) is angular rate (deg/sec)
-                printf("Total: %f, Reading: %f, Time: %f\n", total, rf, -msf);
+                printf("Total: %f\n", total);
             } else {
                 init = 1;
                 gettimeofday(&tv, NULL);
