@@ -8,6 +8,7 @@
 #include <iostream>
 
 
+
 #define SensorAddress 0x29 //
 #define EnableAddress 0xa0 // register address + command bits
 #define ATimeAddress 0xa1 // register address + command bits
@@ -15,10 +16,14 @@
 #define IDAddress 0xb2 // register address + command bits
 #define ColorAddress 0xb4 // register address + command bits
 
+
+int running = 1;
+#define MS 1000
+
 uint8_t timee[2]; 
 uint8_t gain[2];
 uint8_t enable[2];
-uint8_t colors[2]
+uint8_t clear[2];
 
 void sig_handler(int signo) {
     if (signo == SIGINT) {
