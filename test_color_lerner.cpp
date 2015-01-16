@@ -18,7 +18,7 @@
 uint8_t timee[2]; 
 uint8_t gain[2];
 uint8_t enable[2];
-uint8_t colors[2]
+uint8_t colors[2];
 
 void sig_handler(int signo) {
     if (signo == SIGINT) {
