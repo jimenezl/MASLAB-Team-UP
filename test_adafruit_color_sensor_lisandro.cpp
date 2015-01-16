@@ -89,7 +89,7 @@ void get_Colors(mraa::I2c *i2c){
 	colors[0] = ColorAddress;
 	colors[1] = 0x16;
 	std::cout << i2c->address(SensorAddress) << std::endl; 
-	i2c->write(ColorAddress , 1);
+	i2c->writeByte(ColorAddress);
 
 	for (int i = 0; i<9; i++){
 		uint8_t returnData = i2c->readByte();
