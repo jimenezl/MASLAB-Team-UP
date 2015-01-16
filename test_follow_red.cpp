@@ -1,5 +1,5 @@
 // Build with:
-// // g++ test_follow_red.cpp -o test_follow_red `pkg-config opencv --cflags --libs` -lpthread -lmraa
+// // g++ test_follow_red.cpp -o test_follow_red `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
 // SPI pins are:
 // - IO10: SS
 // - IO11: MOSI
@@ -235,6 +235,7 @@ void cameraThreadLoop() {
     //all of our operations will be performed within this loop
 
     while (running) {
+        float currentAngle = total; 
         //store image to matrix
         capture.read(cameraFeed);
         // flip(cameraFeed,cameraFeed,1); //flip camera
@@ -256,7 +257,7 @@ void cameraThreadLoop() {
         // integral += diffAngle * 0.001 * timeBetweenReadings;
         // derivative = (rf / 80.0);
         // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
-        desiredAngle = total + (diffPixel * DEG_PER_PIXEL);
+        desiredAngle = currentAngle + (diffPixel * DEG_PER_PIXEL);
         printf("Desired Angle: %d\n", desiredAngle);
 
         // usleep(10 * MS);
