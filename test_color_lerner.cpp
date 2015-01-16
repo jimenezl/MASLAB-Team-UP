@@ -7,6 +7,8 @@
 #include <csignal>
 #include <iostream>
 
+int running = 1;
+#define MS 1000
 
 #define SensorAddress 0x29 //
 #define EnableAddress 0xa0 // register address + command bits
