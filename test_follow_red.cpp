@@ -208,6 +208,24 @@ int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
 
+    //gyro stuff
+    mraa::Gpio *chipSelect = new mraa::Gpio(10);
+    chipSelect->dir(mraa::DIR_OUT);
+    chipSelect->write(1);
+    mraa::Spi *spi = new mraa::Spi(0);
+    spi->bitPerWord(32);
+    char rxBuf[2];
+    char writeBuf[4];
+    unsigned int sensorRead = 0x20000000;
+    writeBuf[0] = sensorRead & 0xff;
+    writeBuf[1] = (sensorRead >> 8) & 0xff;
+    writeBuf[2] = (sensorRead >> 16) & 0xff;
+    writeBuf[3] = (sensorRead >> 24) & 0xff;
+    float total = 0;
+    struct timeval tv;
+    int init = 0;
+    float rf;
+
     //Motor Stuff
     mraa::Pwm pwm = mraa::Pwm(9);
     pwm.write(0.0);
@@ -230,6 +248,7 @@ int main() {
     float speed = .1;
     float desiredAngle = 0.0;
     float diffAngle = 0.0;
+    float diffPixel = 0.0;
     float integral = 0;
     float power = 0;
     float derivative = 0;
@@ -239,6 +258,7 @@ int main() {
     float P_CONSTANT = 25;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
+    float DEG_PER_PIXEL = 0.121875;
 
     //
     //opencv stuff
@@ -278,21 +298,72 @@ int main() {
         }
         
 
-        diffAngle = float(lastRedXPosition - X_ZERO_POS);
+        diffPixel = float(lastRedXPosition - X_ZERO_POS);
         // integral += diffAngle * 0.001 * timeBetweenReadings;
         // derivative = (rf / 80.0);
-        power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        desiredAngle = total + (diffPixel * DEG_PER_PIXEL);
+        
+        // usleep(10 * MS);
+        
+        //gyro stuff 
+        chipSelect->write(0);
+        char *recv = spi->write(writeBuf, 4);
+        chipSelect->write(1);
+        //    printf("%x %x %x %x\r\n", recv[0], recv[1], recv[2], recv[3]);
+        if (recv != NULL) {
+            unsigned int recvVal = ((uint8_t) recv[3] & 0xFF);
+            recvVal = (recvVal << 8) | ((uint8_t)recv[2] & 0xFF);
+            recvVal = (recvVal << 8) | ((uint8_t)recv[1] & 0xFF);
+            recvVal = (recvVal << 8) | ((uint8_t)recv[0] & 0xFF);
+            printf("Received: 0x%.8x, ", recvVal);
+            // Sensor reading
+            short reading = (recvVal >> 10) & 0xffff;
+            if (init) {
+                unsigned long long ms = (unsigned long long)(tv.tv_sec) * 1000 +
+                                        (unsigned long long)(tv.tv_usec) / 1000;
+                gettimeofday(&tv, NULL);
+                ms -= (unsigned long long)(tv.tv_sec) * 1000 +
+                      (unsigned long long)(tv.tv_usec) / 1000;
+                int msi = (int)ms;
+                float msf = (float)msi;
+                timeBetweenReadings = -msf;
+                rf = (float)reading;
+                total += -0.001 * msf * ((rf / 80.0) + gyroBias); // -(rf/80.0) is angular rate (deg/sec)
+                printf("Total: %f, Reading: %f, Time: %f\n", total, rf, -msf);
+            } else {
+                init = 1;
+                gettimeofday(&tv, NULL);
+            }
+        } else {
+            printf("No recv\n");
+        }
+        usleep(10 * MS);
+
+        //Fix angle readings over 360
+        if (total > 360) {
+            int error = total/360;
+            total = total - error*360;
+        }
+
+        else if (total < -360) {
+            int error = fabs(total)/360;
+            total = total + 360*error;
+        }
+
+        diffAngle = desiredAngle - total;
+        integral += diffAngle * 0.001 * timeBetweenReadings;
+        derivative = (rf / 80.0);
+        power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
         if (power > .3) {
             power = .3;
         } else if (power < -.3) {
             power = -.3;
         }
-
         setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
         printf("Set power to: %f\n", power);
-        // usleep(10 * MS);
 
     }
 
