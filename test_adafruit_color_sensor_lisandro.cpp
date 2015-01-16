@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_adafruit_color_sensor_real.cpp -o test_adafruit_color_sensor_real -lmraa
+// g++ test_adafruit_color_sensor_lisandro.cpp -o test_adafruit_color_sensor_lisandro -lmraa
 // Controls carousel depending on color of block.
 
 #include "mraa.hpp"
@@ -89,7 +89,7 @@ void get_Colors(mraa::I2c *i2c){
 	colors[0] = ColorAddress;
 	colors[1] = 0x16;
 	i2c->address(SensorAddress); 
-	uint8_t returnData = i2c->readReg(colors[1]);
+	uint8_t returnData = i2c->readReg(0x13);
 	printf("Data:%d\n", returnData);
 
 	/*
