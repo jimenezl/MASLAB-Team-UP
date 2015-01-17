@@ -202,8 +202,6 @@ Mat& filterRed(Mat& filteredImage)
 
 int main(int argc, char* argv[])
 {
-	//if we would like to calibrate our filter values, set to true.
-	bool calibrationMode = true;
 	
 	//Matrix to store each frame of the webcam feed
 	Mat cameraFeed;
@@ -226,17 +224,11 @@ int main(int argc, char* argv[])
 		filteredImage = cameraFeed.clone();
 		filteredImage = filterRed(filteredImage);
 		
-		//convert frame from BGR to HSV colorspace
-		// cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
-
-		if(calibrationMode==true){
-		//if in calibration mode, we track objects based on the HSV slider values.
-		// cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
 		inRange(filteredImage,Scalar(254,254,254),Scalar(255,255,255),threshold);
-		morphOps(threshold);
-		// imshow(windowName2,threshold);
+		// morphOps(threshold);
+
 		trackFilteredObject(threshold,filteredImage,cameraFeed);
-		}
+		
 
 		//show frames 
 		// imshow(windowName2,threshold);
@@ -248,6 +240,7 @@ int main(int argc, char* argv[])
 		//delay 30ms so that screen can refresh.
 		//image will not appear without this waitKey() command
 		// waitKey(30);
+		usleep(20 * 1000);
 	}
 
 
