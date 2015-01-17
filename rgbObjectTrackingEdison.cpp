@@ -31,14 +31,14 @@ int S_MIN = 0;
 int S_MAX = 256;
 int V_MIN = 0;
 int V_MAX = 256;
-int GREEN_THRESHHOLD = 256;
-int BLUE_THRESHHOLD = 256;
-int erodeElementSize = 3;
-int dilateElementSize = 8;
+int GREEN_THRESHHOLD = 73;
+int BLUE_THRESHHOLD = 44;
+int erodeElementSize = 5;
+int dilateElementSize = 13;
 
 //default capture width and height
-const int FRAME_WIDTH = 640;
-const int FRAME_HEIGHT = 480;
+const int FRAME_WIDTH = 320;
+const int FRAME_HEIGHT = 240;
 //max number of objects to be detected in frame
 const int MAX_NUM_OBJECTS=50;
 //minimum and maximum object area
