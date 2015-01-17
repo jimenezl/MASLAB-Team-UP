@@ -121,7 +121,7 @@ void morphOps(Mat &thresh){
 
 
 }
-void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
+void trackFilteredObject(Mat threshold){
 
 	int x,y;
 
@@ -209,6 +209,8 @@ int main(int argc, char* argv[])
 	Mat threshold;
 	Mat filteredImage;
 
+	int count = 0;
+
 	//video capture object to acquire webcam feed
 	VideoCapture capture;
 	//open capture object at location zero (default location for webcam)
@@ -226,23 +228,14 @@ int main(int argc, char* argv[])
 		filteredImage = cameraFeed.clone();
 		filteredImage = filterRed(filteredImage);
 		
-		inRange(filteredImage,Scalar(254,254,254),Scalar(255,255,255),threshold);
+		cvtColor(filteredImage,threshold,CV_RGB2GRAY);
 		// morphOps(threshold);
 
-		trackFilteredObject(threshold,filteredImage,cameraFeed);
-		
+		trackFilteredObject(threshold);
+		count += 1;
+		printf("Processes One Frame: total %d\n", count);
 
-		//show frames 
-		// imshow(windowName2,threshold);
-
-		// imshow(windowName,cameraFeed);
-		// imshow(windowName1,filteredImage);
-
-
-		//delay 30ms so that screen can refresh.
-		//image will not appear without this waitKey() command
-		// waitKey(30);
-		usleep(20 * 1000);
+		// usleep(20 * 1000);
 	}
 
 
