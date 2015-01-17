@@ -12,6 +12,8 @@
 //FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
 //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 //IN THE SOFTWARE.
+//compile with:
+//g++ rgbObjectTrackingEdison.cpp -o rgbObjectTrackingEdison `pkg-config opencv --cflags --libs` -lpthread
 
 #include <sstream>
 #include <string>
@@ -245,7 +247,7 @@ int main(int argc, char* argv[])
 
 		//delay 30ms so that screen can refresh.
 		//image will not appear without this waitKey() command
-		waitKey(30);
+		// waitKey(30);
 	}
 
 
