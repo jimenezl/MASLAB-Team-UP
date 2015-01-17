@@ -263,7 +263,7 @@ void cameraThreadLoop() {
         float distanceToCube = 11.0 + lastRedYPosition*25.0;
 
         desiredAngle = currentAngle + (atan2(diffPixel,distanceToCube) * 180 / PI);
-        printf("predicted Angle: %f\n", diffPixel * DEG_PER_PIXEL);
+        printf("predicted Angle: %f\n", (atan2(diffPixel,distanceToCube) * 180 / PI));
         printf("Desired Angle: %f\n", desiredAngle);
 
         usleep(100 * MS);
