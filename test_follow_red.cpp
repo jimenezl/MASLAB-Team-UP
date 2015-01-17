@@ -257,8 +257,10 @@ void cameraThreadLoop() {
         // integral += diffAngle * 0.001 * timeBetweenReadings;
         // derivative = (rf / 80.0);
         // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
-        desiredAngle = currentAngle + (diffPixel * DEG_PER_PIXEL);
-        printf("Desired Angle: %f\n", diffPixel * DEG_PER_PIXEL);
+        float distanceToCube = 11.0 + lastRedYPosition*25.0
+
+        desiredAngle = currentAngle + atan2(diffPixel/distanceToCube);
+        printf("predicted Angle: %f\n", diffPixel * DEG_PER_PIXEL);
         printf("Desired Angle: %f\n", desiredAngle);
 
         usleep(100 * MS);
