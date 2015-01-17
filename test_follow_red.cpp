@@ -34,6 +34,7 @@
 
 #define GYRO_DATA_OKAY_MASK 0x0C000000
 #define GYRO_DATA_OKAY 0x04000000
+#define PI 3.14159265
 
 
 using namespace cv;
@@ -96,6 +97,8 @@ float desiredAngle = 0.0;
 float DEG_PER_PIXEL = 0.121875;
 
 float total = 0; //current angle belief
+
+
 
 
 string intToString(int number){
@@ -259,7 +262,7 @@ void cameraThreadLoop() {
         // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         float distanceToCube = 11.0 + lastRedYPosition*25.0;
 
-        desiredAngle = currentAngle + atan2(diffPixel,distanceToCube);
+        desiredAngle = currentAngle + (atan2(diffPixel,distanceToCube) * 180 / PI);
         printf("predicted Angle: %f\n", diffPixel * DEG_PER_PIXEL);
         printf("Desired Angle: %f\n", desiredAngle);
 
