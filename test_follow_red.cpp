@@ -1,5 +1,5 @@
 // Build with:
-// // g++ test_follow_red.cpp -o test_follow_red `pkg-config opencv --cflags --libs` -lpthread -lmraa
+// // g++ test_follow_red.cpp -o test_follow_red `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
 // SPI pins are:
 // - IO10: SS
 // - IO11: MOSI
@@ -19,6 +19,8 @@
 
 #include "mraa.hpp"
 
+#include <thread> //multithreading
+
 //opencv libs
 
 #include <sstream>
@@ -32,6 +34,7 @@
 
 #define GYRO_DATA_OKAY_MASK 0x0C000000
 #define GYRO_DATA_OKAY 0x04000000
+#define PI 3.14159265
 
 
 using namespace cv;
@@ -86,8 +89,16 @@ const int MAX_OBJECT_AREA = FRAME_HEIGHT*FRAME_WIDTH/1.5;
 const int X_ZERO_POS = 320;
 const int Y_ZERO_POS = 240;
 
+const int X_ALPHA = .3;
 int lastRedXPosition = 320;
 int lastRedYPosition = 240;
+
+float desiredAngle = 0.0;
+float DEG_PER_PIXEL = 0.121875;
+
+float total = 0; //current angle belief
+
+
 
 
 string intToString(int number){
@@ -166,9 +177,11 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
             if(objectFound ==true){
                 //draw object location on screen
                 drawObject(x,y,cameraFeed);
-                lastRedXPosition = x;
-                lastRedYPosition = y;
-                printf("X: %i, Y: %i\n", x, y);
+                if (x!=0 && y!=0) {
+                    lastRedXPosition = (lastRedXPosition*X_ALPHA) +  (x * (1 - X_ALPHA));
+                    lastRedYPosition = (lastRedYPosition*X_ALPHA) +  (y * (1 - X_ALPHA));
+                }
+                printf("X: %i, Y: %i\n", lastRedXPosition, lastRedYPosition);
             }
 
         }else printf("Too much noise\n");;
@@ -201,9 +214,85 @@ Mat& filterRed(Mat& I)
     return I;
 }
 
+void cameraThreadLoop() {
+    //
+    //opencv stuff
+    //
+
+    //Matrix to store each frame of the webcam feed
+    Mat cameraFeed;
+    Mat threshold;
+    Mat HSV;
+    bool calibrationMode = true;
+
+    float diffPixel = 0.0;
+
+    //video capture object to acquire webcam feed
+    VideoCapture capture;
+    //open capture object at location zero (default location for webcam)
+    capture.open(0);
+    //set height and width of capture frame
+    capture.set(CV_CAP_PROP_FRAME_WIDTH, FRAME_WIDTH);
+    capture.set(CV_CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT);
+    //start an infinite loop where webcam feed is copied to cameraFeed matrix
+    //all of our operations will be performed within this loop
+
+    while (running) {
+        float currentAngle = total; 
+        //store image to matrix
+        capture.read(cameraFeed);
+        // flip(cameraFeed,cameraFeed,1); //flip camera
+        cameraFeed = filterRed(cameraFeed);
+        //convert frame from BGR to HSV colorspace
+        cvtColor(cameraFeed, HSV, COLOR_BGR2HSV);
+
+        if (calibrationMode == true) {
+            //if in calibration mode, we track objects based on the HSV slider values.
+            cvtColor(cameraFeed, HSV, COLOR_BGR2HSV);
+            inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN), Scalar(H_MAX, S_MAX, V_MAX), threshold);
+            morphOps(threshold);
+            // imshow(windowName2,threshold);
+            trackFilteredObject(threshold, HSV, cameraFeed);
+        }
+
+
+        diffPixel = float(lastRedXPosition - X_ZERO_POS);
+        // integral += diffAngle * 0.001 * timeBetweenReadings;
+        // derivative = (rf / 80.0);
+        // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        float distanceToCube = 11.0 + lastRedYPosition*25.0;
+
+        desiredAngle = currentAngle + (atan2(diffPixel,distanceToCube) * 180 / PI);
+        printf("predicted Angle: %f\n", (atan2(diffPixel,distanceToCube) * 180 / PI));
+        printf("Desired Angle: %f\n", desiredAngle);
+
+        usleep(100 * MS);
+    }
+}
+
 int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
+
+    std::thread cameraThread(cameraThreadLoop);
+
+    //gyro stuff
+    mraa::Gpio *chipSelect = new mraa::Gpio(10);
+    chipSelect->dir(mraa::DIR_OUT);
+    chipSelect->write(1);
+    mraa::Spi *spi = new mraa::Spi(0);
+    spi->bitPerWord(32);
+    char rxBuf[2];
+    char writeBuf[4];
+    unsigned int sensorRead = 0x20000000;
+    writeBuf[0] = sensorRead & 0xff;
+    writeBuf[1] = (sensorRead >> 8) & 0xff;
+    writeBuf[2] = (sensorRead >> 16) & 0xff;
+    writeBuf[3] = (sensorRead >> 24) & 0xff;
+    // float total = 0; made this global for camera thread
+    struct timeval tv;
+    int init = 0;
+    float rf;
 
     //Motor Stuff
     mraa::Pwm pwm = mraa::Pwm(9);
@@ -224,8 +313,8 @@ int main() {
     dir2.dir(mraa::DIR_OUT);
     dir2.write(0);
 
-    float speed = .1;
-    float desiredAngle = 0.0;
+    float speed = .05;
+    // float desiredAngle = 0.0; //making this global so camera thread can use and change it
     float diffAngle = 0.0;
     float integral = 0;
     float power = 0;
@@ -233,63 +322,74 @@ int main() {
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
     float forwardBias = 0;
-    float P_CONSTANT = 25;
+    float P_CONSTANT = 45;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
 
-    //
-    //opencv stuff
-    //
-
-    //Matrix to store each frame of the webcam feed
-    Mat cameraFeed;
-    Mat threshold;
-    Mat HSV;
-    bool calibrationMode = true;
-
-    //video capture object to acquire webcam feed
-    VideoCapture capture;
-    //open capture object at location zero (default location for webcam)
-    capture.open(0);
-    //set height and width of capture frame
-    capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
-    capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
-    //start an infinite loop where webcam feed is copied to cameraFeed matrix
-    //all of our operations will be performed within this loop
+    
 
     while (running) {
-        //store image to matrix
-        capture.read(cameraFeed);
-        // flip(cameraFeed,cameraFeed,1); //flip camera
-        cameraFeed = filterRed(cameraFeed);
-        //convert frame from BGR to HSV colorspace
-        cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
-
-        if(calibrationMode==true){
-        //if in calibration mode, we track objects based on the HSV slider values.
-        cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
-        inRange(HSV,Scalar(H_MIN,S_MIN,V_MIN),Scalar(H_MAX,S_MAX,V_MAX),threshold);
-        morphOps(threshold);
-        // imshow(windowName2,threshold);
-        trackFilteredObject(threshold,HSV,cameraFeed);
-        }
         
+        
+        //gyro stuff 
+        chipSelect->write(0);
+        char *recv = spi->write(writeBuf, 4);
+        chipSelect->write(1);
+        //    printf("%x %x %x %x\r\n", recv[0], recv[1], recv[2], recv[3]);
+        if (recv != NULL) {
+            unsigned int recvVal = ((uint8_t) recv[3] & 0xFF);
+            recvVal = (recvVal << 8) | ((uint8_t)recv[2] & 0xFF);
+            recvVal = (recvVal << 8) | ((uint8_t)recv[1] & 0xFF);
+            recvVal = (recvVal << 8) | ((uint8_t)recv[0] & 0xFF);
+            // printf("Received: 0x%.8x, ", recvVal);
+            // Sensor reading
+            short reading = (recvVal >> 10) & 0xffff;
+            if (init) {
+                unsigned long long ms = (unsigned long long)(tv.tv_sec) * 1000 +
+                                        (unsigned long long)(tv.tv_usec) / 1000;
+                gettimeofday(&tv, NULL);
+                ms -= (unsigned long long)(tv.tv_sec) * 1000 +
+                      (unsigned long long)(tv.tv_usec) / 1000;
+                int msi = (int)ms;
+                float msf = (float)msi;
+                timeBetweenReadings = -msf;
+                rf = (float)reading;
+                total += -0.001 * msf * ((rf / 80.0) + gyroBias); // -(rf/80.0) is angular rate (deg/sec)
+                printf("Total: %f\n", total);
+            } else {
+                init = 1;
+                gettimeofday(&tv, NULL);
+            }
+        } else {
+            printf("No recv\n");
+        }
+        usleep(10 * MS);
 
-        diffAngle = float(X_ZERO_POS - lastRedXPosition);
-        // integral += diffAngle * 0.001 * timeBetweenReadings;
-        // derivative = (rf / 80.0);
-        power = speed * ((P_CONSTANT * diffAngle / 5000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        //Fix angle readings over 360
+        if (total > 360) {
+            int error = total/360;
+            total = total - error*360;
+        }
+
+        else if (total < -360) {
+            int error = fabs(total)/360;
+            total = total + 360*error;
+        }
+
+        diffAngle = desiredAngle - total;
+        integral += diffAngle * 0.001 * timeBetweenReadings;
+        derivative = (rf / 80.0);
+        power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
         if (power > .3) {
             power = .3;
         } else if (power < -.3) {
             power = -.3;
         }
-
         setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
         printf("Set power to: %f\n", power);
-        usleep(10 * MS);
+        printf("Desired Angle: %f\n", desiredAngle);
 
     }
 
