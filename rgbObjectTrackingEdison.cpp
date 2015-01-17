@@ -138,7 +138,7 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
 	if (hierarchy.size() > 0) {
 		int numObjects = hierarchy.size();
 		//if number of objects greater than MAX_NUM_OBJECTS we have a noisy filter
-		if(numObjects<MAX_NUM_OBJECTS){
+		// if(numObjects<MAX_NUM_OBJECTS){
 			for (int index = 0; index >= 0; index = hierarchy[index][0]) {
 
 				Moments moment = moments((cv::Mat)contours[index]);
@@ -166,7 +166,7 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
 				printf("object found at %d, %d\n", x, y);
 			}
 
-		}else printf("Too much noise\n");;
+		// }else printf("Too much noise\n");
 	}
 }
 
