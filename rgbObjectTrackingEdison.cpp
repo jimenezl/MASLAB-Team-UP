@@ -221,6 +221,7 @@ int main(int argc, char* argv[])
 	while(1){
 		//store image to matrix
 		capture.read(cameraFeed);
+		resize(cameraFeed, cameraFeed, Size(FRAME_WIDTH, FRAME_HEIGHT), 0, 0, INTER_CUBIC);
 		// flip(cameraFeed,cameraFeed,1); //flip camera
 		filteredImage = cameraFeed.clone();
 		filteredImage = filterRed(filteredImage);
