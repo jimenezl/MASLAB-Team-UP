@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <opencv2/highgui/highgui.hpp>
 #include "opencv2/opencv.hpp"
+#include <sys/time.h>
 
 using namespace cv;
 //initial min and max HSV filter values.
