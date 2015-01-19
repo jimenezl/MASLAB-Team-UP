@@ -51,15 +51,7 @@ const string windowName1 = "HSV Image";
 const string windowName2 = "Thresholded Image";
 const string windowName3 = "After Morphological Operations";
 const string trackbarWindowName = "Trackbars";
-void on_trackbar( int, void* )
-{//This function gets called whenever a
-	// trackbar position is changed
 
-
-
-
-
-}
 string intToString(int number){
 
 
@@ -67,35 +59,7 @@ string intToString(int number){
 	ss << number;
 	return ss.str();
 }
-// void createTrackbars(){
-// 	//create window for trackbars
 
-
-// 	namedWindow(trackbarWindowName,0);
-// 	//create memory to store trackbar name on window
-// 	char TrackbarName[50];
-// 	sprintf( TrackbarName, "H_MIN", H_MIN);
-// 	sprintf( TrackbarName, "H_MAX", H_MAX);
-// 	sprintf( TrackbarName, "S_MIN", S_MIN);
-// 	sprintf( TrackbarName, "S_MAX", S_MAX);
-// 	sprintf( TrackbarName, "V_MIN", V_MIN);
-// 	sprintf( TrackbarName, "V_MAX", V_MAX);
-// 	sprintf( TrackbarName, "GREEN_THRESHHOLD", GREEN_THRESHHOLD);
-// 	sprintf( TrackbarName, "BLUE_THRESHHOLD", BLUE_THRESHHOLD);
-// 	sprintf( TrackbarName, "erodeElementSize", erodeElementSize);
-// 	//create trackbars and insert them into window
-// 	//3 parameters are: the address of the variable that is changing when the trackbar is moved(eg.H_LOW),
-// 	//the max value the trackbar can move (eg. H_HIGH), 
-// 	//and the function that is called whenever the trackbar is moved(eg. on_trackbar)
-// 	//
-
-// 	createTrackbar( "GREEN_THRESHHOLD", trackbarWindowName, &GREEN_THRESHHOLD, GREEN_THRESHHOLD, on_trackbar );
-// 	createTrackbar( "BLUE_THRESHHOLD", trackbarWindowName, &BLUE_THRESHHOLD, BLUE_THRESHHOLD, on_trackbar );
-// 	createTrackbar( "erodeElementSize", trackbarWindowName, &erodeElementSize, 20, on_trackbar );
-// 	createTrackbar( "dilateElementSize", trackbarWindowName, &dilateElementSize, 20, on_trackbar );
-
-
-// }
 void drawObject(int x,int y,Mat &frame){
 
 	cv::circle(frame,cv::Point(x,y),10,cv::Scalar(0,0,255));
@@ -170,6 +134,65 @@ void trackFilteredObject(Mat threshold){
 	}
 }
 
+void floodFilling(Mat *threshold, Mat *cameraFeed, int row, int col, long int & xTotal, long int & yTotal, long int & floodPixelCount){
+
+	// printf("at %d, %d\n", row, col);
+	// std::cout << "value: " << threshold->at<bool>(row,col-1) << std::endl;
+	threshold->at<uint8_t>(row,col) = 0; 
+	cameraFeed->at<Vec3b>(row,col) = Vec3b(0,255,0);
+	xTotal +=col;
+	yTotal +=row;
+	floodPixelCount +=1;
+
+	if ( ((col>1)&&(col<(FRAME_WIDTH-1))) && ((row>1)&&(row<(FRAME_HEIGHT-1))) ){
+		if (threshold->at<bool>(row,col+1)){
+			floodFilling(threshold,cameraFeed, row, col+1, xTotal, yTotal, floodPixelCount);
+		}
+		if (threshold->at<bool>(row,col-1)){
+			floodFilling(threshold,cameraFeed, row, col-1, xTotal, yTotal, floodPixelCount);
+		}
+		if (threshold->at<bool>(row+1,col)){
+			floodFilling(threshold,cameraFeed, row+1, col, xTotal, yTotal, floodPixelCount);
+		}
+		if (threshold->at<bool>(row-1,col)){
+			floodFilling(threshold,cameraFeed, row-1, col, xTotal, yTotal, floodPixelCount);
+		}
+	}
+}
+
+void floodFillTracking(Mat *threshold, Mat *cameraFeed){
+	printf("flood filling...\n");
+	// std::cout << "depth: " << threshold->depth() << std::endl;
+	// std::cout << "channel: " << threshold->channels() << std::endl;
+	// std::cout << format(*threshold, "numpy") << std::endl;
+	long int maxXCoord = 0;
+	long int maxYCoord = 0;
+	long int maxFloodPixelCount = 0;
+	for (int row = 0; row < FRAME_HEIGHT; row=row+10){
+		for (int col = 0; col < FRAME_WIDTH; col=col+10){
+			// std::cout<<threshold->at<bool>(row,col) <<std::endl; //prints out 0 or 255
+			bool value = threshold->at<bool>(row,col);
+			long int xTotal = 0;
+			long int yTotal = 0;
+			long int floodPixelCount = 0;
+			if (value==true){
+				floodFilling(threshold, cameraFeed, row, col, xTotal, yTotal, floodPixelCount);
+				// cameraFeed->at<Vec3b>(row,col) = Vec3b(0,255,0);
+				// threshold->at<uint8_t>(row,col) = 0;
+
+			}
+			if (floodPixelCount>maxFloodPixelCount){
+				maxXCoord = int(float(xTotal)/float(floodPixelCount));
+				maxYCoord = int(float(yTotal)/float(floodPixelCount));
+				maxFloodPixelCount = floodPixelCount;
+			}
+			
+		}
+	}
+	printf("object found at %d, %d\n", maxXCoord, maxYCoord);
+
+}
+
 Mat& filterRed(Mat& filteredImage)
 {
     // accept only char type matrices
@@ -229,9 +252,10 @@ int main(int argc, char* argv[])
 		filteredImage = filterRed(filteredImage);
 		
 		cvtColor(filteredImage,threshold,CV_RGB2GRAY);
+		floodFillTracking(&threshold, &cameraFeed);
 		// morphOps(threshold);
 
-		trackFilteredObject(threshold);
+		// trackFilteredObject(threshold);
 		count += 1;
 		printf("Processes One Frame: total %d\n", count);
 
