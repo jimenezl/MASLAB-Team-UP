@@ -31,7 +31,7 @@ int V_MIN = 0;
 int V_MAX = 256;
 int GREEN_THRESHHOLD = 73;
 int BLUE_THRESHHOLD = 44;
-int erodeElementSize = 5;
+int erodeElementSize = 15;
 int dilateElementSize = 13;
 
 //default capture width and height
@@ -119,7 +119,7 @@ void morphOps(Mat &thresh){
 
 }
 
-void floodFilling(Mat *threshold, Mat *cameraFeed, int row, int col, long int & xTotal, long int & yTotal, long int & floodPixelCount){
+void floodFilling(Mat *threshold, Mat *cameraFeed, int row, int col, long int & xTotal, long int & yTotal, long int & floodPixelCount, int & minX, int & minY, int & maxX, int & maxY){
 
 	// printf("at %d, %d\n", row, col);
 	// std::cout << "value: " << threshold->at<bool>(row,col-1) << std::endl;
@@ -129,18 +129,27 @@ void floodFilling(Mat *threshold, Mat *cameraFeed, int row, int col, long int & 
 	yTotal +=row;
 	floodPixelCount +=1;
 
+	if (minX+minY > col+row){
+		minX = col;
+		minY = row;
+	}
+	if (maxX+maxY < col+row){
+		maxX = col;
+		maxY = row;
+	}
+
 	if ( ((col>1)&&(col<(FRAME_WIDTH-1))) && ((row>1)&&(row<(FRAME_HEIGHT-1))) ){
 		if (threshold->at<bool>(row,col+1)){
-			floodFilling(threshold,cameraFeed, row, col+1, xTotal, yTotal, floodPixelCount);
+			floodFilling(threshold,cameraFeed, row, col+1, xTotal, yTotal, floodPixelCount, minX, minY, maxX, maxY);
 		}
 		if (threshold->at<bool>(row,col-1)){
-			floodFilling(threshold,cameraFeed, row, col-1, xTotal, yTotal, floodPixelCount);
+			floodFilling(threshold,cameraFeed, row, col-1, xTotal, yTotal, floodPixelCount, minX, minY, maxX, maxY);
 		}
 		if (threshold->at<bool>(row+1,col)){
-			floodFilling(threshold,cameraFeed, row+1, col, xTotal, yTotal, floodPixelCount);
+			floodFilling(threshold,cameraFeed, row+1, col, xTotal, yTotal, floodPixelCount, minX, minY, maxX, maxY);
 		}
 		if (threshold->at<bool>(row-1,col)){
-			floodFilling(threshold,cameraFeed, row-1, col, xTotal, yTotal, floodPixelCount);
+			floodFilling(threshold,cameraFeed, row-1, col, xTotal, yTotal, floodPixelCount, minX, minY, maxX, maxY);
 		}
 	}
 }
@@ -150,8 +159,13 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 	// std::cout << "depth: " << threshold->depth() << std::endl;
 	// std::cout << "channel: " << threshold->channels() << std::endl;
 	// std::cout << format(*threshold, "numpy") << std::endl;
-	long int maxXCoord = 0;
-	long int maxYCoord = 0;
+	long int objectXCoord = 0;
+	long int objectYCoord = 0;
+	int objectMaxX = 0;
+	int objectMaxY = 0;
+	int objectMinX = 0;
+	int objectMinY = 0;
+
 	long int maxFloodPixelCount = 0;
 	for (int row = 0; row < FRAME_HEIGHT; row=row+10){
 		for (int col = 0; col < FRAME_WIDTH; col=col+10){
@@ -160,21 +174,43 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 			long int xTotal = 0;
 			long int yTotal = 0;
 			long int floodPixelCount = 0;
+			int maxX = 0;
+			int maxY = 0;
+			int minX = 320;
+			int minY = 240;
+
 			if (value==true){
-				floodFilling(threshold, cameraFeed, row, col, xTotal, yTotal, floodPixelCount);
+				floodFilling(threshold, cameraFeed, row, col, xTotal, yTotal, floodPixelCount, minX, minY, maxX, maxY);
 				// cameraFeed->at<Vec3b>(row,col) = Vec3b(0,255,0);
 				// threshold->at<uint8_t>(row,col) = 0;
 
 			}
 			if (floodPixelCount>maxFloodPixelCount){
-				maxXCoord = int(float(xTotal)/float(floodPixelCount));
-				maxYCoord = int(float(yTotal)/float(floodPixelCount));
+				objectXCoord = int(float(xTotal)/float(floodPixelCount));
+				objectYCoord = int(float(yTotal)/float(floodPixelCount));
 				maxFloodPixelCount = floodPixelCount;
+
+				objectMaxX = maxX;
+				objectMaxY = maxY;
+				objectMinX = minX;
+				objectMinY = minY;
 			}
 			
 		}
 	}
-	drawObject(maxXCoord,maxYCoord,*cameraFeed);
+	
+	printf("object found at %d, %d, pixel count: %d\n", objectXCoord, objectYCoord, maxFloodPixelCount);
+	printf("border coordinates: (%d,%d) , (%d,%d)\n", objectMinX, objectMinY, objectMaxX, objectMaxY);
+	drawObject(objectMinX, objectMinY,*cameraFeed);
+	drawObject(objectMaxX, objectMaxY,*cameraFeed);
+
+	if (float(objectMaxX-objectMinX)*float(erodeElementSize)/10.0<(objectMaxY- objectMinY)){
+		drawObject(objectXCoord, objectYCoord+int((objectMaxY-objectMinY)*.25),*cameraFeed);
+		drawObject(objectXCoord, objectYCoord-int((objectMaxY-objectMinY)*.25),*cameraFeed);
+	}
+	else {
+		drawObject(objectXCoord,objectYCoord,*cameraFeed);
+	}
 
 }
 
