@@ -119,12 +119,15 @@ void morphOps(Mat &thresh){
 
 }
 
-void floodFilling(Mat *threshold, Mat *cameraFeed, int row, int col){
+void floodFilling(Mat *threshold, Mat *cameraFeed, int row, int col, long int & xTotal, long int & yTotal, long int & floodPixelCount){
 
 	// printf("at %d, %d\n", row, col);
 	// std::cout << "value: " << threshold->at<bool>(row,col-1) << std::endl;
 	threshold->at<uint8_t>(row,col) = 0; 
 	cameraFeed->at<Vec3b>(row,col) = Vec3b(0,255,0);
+	xTotal +=1;
+	yTotal +=1;
+	floodPixelCount +=1;
 
 	if ( ((col>1)&&(col<(FRAME_WIDTH-1))) && ((row>1)&&(row<(FRAME_HEIGHT-1))) ){
 		if (threshold->at<bool>(row,col+1)){
@@ -151,8 +154,11 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 		for (int col = 0; col < FRAME_WIDTH; col=col+10){
 			// std::cout<<threshold->at<bool>(row,col) <<std::endl; //prints out 0 or 255
 			bool value = threshold->at<bool>(row,col);
+			long int xTotal = 0;
+			long int yTotal = 0;
+			long int floodPixelCount = 0;
 			if (value==true){
-				floodFilling(threshold, cameraFeed, row, col);
+				floodFilling(threshold, cameraFeed, row, col, );
 				// cameraFeed->at<Vec3b>(row,col) = Vec3b(0,255,0);
 				// threshold->at<uint8_t>(row,col) = 0;
 
