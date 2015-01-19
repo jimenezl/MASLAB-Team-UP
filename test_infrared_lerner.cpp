@@ -1,6 +1,6 @@
 // Compile with:
-// g++ test_aio.cpp -o test_aio -lmraa
-// Repeatedly reads pin A0 and prints the result.
+// g++ test_infrared_lerner.cpp -o test_infrared_lerner -lmraa
+// Repeatedly reads pin A2 and prints the result.
 
 #include <csignal>
 #include <iostream>
@@ -21,7 +21,7 @@ int main() {
   // Handle Ctrl-C quit
   signal(SIGINT, sig_handler);
 
-  mraa::Aio aio = mraa::Aio(0);
+  mraa::Aio aio = mraa::Aio(2);
 
   while (running) {
     int val = aio.read();
