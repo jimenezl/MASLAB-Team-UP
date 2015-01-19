@@ -125,22 +125,22 @@ void floodFilling(Mat *threshold, Mat *cameraFeed, int row, int col, long int & 
 	// std::cout << "value: " << threshold->at<bool>(row,col-1) << std::endl;
 	threshold->at<uint8_t>(row,col) = 0; 
 	cameraFeed->at<Vec3b>(row,col) = Vec3b(0,255,0);
-	xTotal +=1;
-	yTotal +=1;
+	xTotal +=col;
+	yTotal +=row;
 	floodPixelCount +=1;
 
 	if ( ((col>1)&&(col<(FRAME_WIDTH-1))) && ((row>1)&&(row<(FRAME_HEIGHT-1))) ){
 		if (threshold->at<bool>(row,col+1)){
-			floodFilling(threshold,cameraFeed, row, col+1);
+			floodFilling(threshold,cameraFeed, row, col+1, xTotal, yTotal, floodPixelCount);
 		}
 		if (threshold->at<bool>(row,col-1)){
-			floodFilling(threshold,cameraFeed, row, col-1);
+			floodFilling(threshold,cameraFeed, row, col-1, xTotal, yTotal, floodPixelCount);
 		}
 		if (threshold->at<bool>(row+1,col)){
-			floodFilling(threshold,cameraFeed, row+1, col);
+			floodFilling(threshold,cameraFeed, row+1, col, xTotal, yTotal, floodPixelCount);
 		}
 		if (threshold->at<bool>(row-1,col)){
-			floodFilling(threshold,cameraFeed, row-1, col);
+			floodFilling(threshold,cameraFeed, row-1, col, xTotal, yTotal, floodPixelCount);
 		}
 	}
 }
@@ -150,6 +150,9 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 	// std::cout << "depth: " << threshold->depth() << std::endl;
 	// std::cout << "channel: " << threshold->channels() << std::endl;
 	// std::cout << format(*threshold, "numpy") << std::endl;
+	long int maxXCoord = 0;
+	long int maxYCoord = 0;
+	long int maxFloodPixelCount = 0;
 	for (int row = 0; row < FRAME_HEIGHT; row=row+10){
 		for (int col = 0; col < FRAME_WIDTH; col=col+10){
 			// std::cout<<threshold->at<bool>(row,col) <<std::endl; //prints out 0 or 255
@@ -158,14 +161,20 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 			long int yTotal = 0;
 			long int floodPixelCount = 0;
 			if (value==true){
-				floodFilling(threshold, cameraFeed, row, col, );
+				floodFilling(threshold, cameraFeed, row, col, xTotal, yTotal, floodPixelCount);
 				// cameraFeed->at<Vec3b>(row,col) = Vec3b(0,255,0);
 				// threshold->at<uint8_t>(row,col) = 0;
 
 			}
+			if (floodPixelCount>maxFloodPixelCount){
+				maxXCoord = int(float(xTotal)/float(floodPixelCount));
+				maxYCoord = int(float(yTotal)/float(floodPixelCount));
+				maxFloodPixelCount = floodPixelCount;
+			}
 			
 		}
 	}
+	drawObject(maxXCoord,maxYCoord,*cameraFeed);
 
 }
 
