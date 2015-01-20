@@ -28,14 +28,20 @@ int main() {
     std::cout << "Read: " << val << std::endl;
     
 
-    /*if (val > 315){
-      printf("Green Light");
+    if (val > 950 && val < 1000 ){
+      printf("Red Light\n");
     }
 
-    else { 
-      printf("Red Light");
+    else if (val < 950){ 
+      printf("Green Light\n");
     }
-    */
+
+    else{
+      printf("No Block\n");
+    }
+
+  }
+    
     sleep(1);
   }
 }
