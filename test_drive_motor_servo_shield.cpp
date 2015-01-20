@@ -115,15 +115,19 @@ int main() {
     initPWM(i2c);
 
     while (running) {
-        setMotorPosition(i2c, 0, .75);
+        setMotorPosition(i2c, 0, .5);
         int val = aio.read();
         std::cout << "Read: " << val << std::endl;
 
 
-        if (val > 100){
+        while (val > 100){
           printf("hi\n");
           setMotorPosition(i2c, 0, 0.05);
-          
+
+          val = aio.read();
+          std::cout << "Read New: " << val << std::endl;
+
+        sleep(1.0);
         }
 
     }
