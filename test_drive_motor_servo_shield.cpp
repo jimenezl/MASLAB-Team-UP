@@ -113,11 +113,11 @@ int main() {
     mraa::Aio aio = mraa::Aio(2);
 
     //PWM initalize
-    mraa::Pwm pwm = mraa::Pwm(12);
+    /*mraa::Pwm pwm = mraa::Pwm(12);
     pwm.write(0.0);
     pwm.enable(true);
     printf("(pin 12 initialized)\n");
-
+  */
     // Edison i2c bus is 6
     mraa::I2c *i2c = new mraa::I2c(6);
     assert(i2c != NULL);
@@ -140,21 +140,9 @@ int main() {
           printf("hi\n");
           double speed = 0.3;
           
-          setMotorSpeed(pwm, dir, speed);
+          setMotorSpeed(12, dir, speed);
           sleep(1.0);
         }
-        // Alternate two locations with 2-sec delay
-        /*
-        std::cout << "Speed: " << speed << std::endl;
-        setMotorSpeed(pwm, dir, speed);
-        setMotorSpeed(pwm2, dir2, -1 * speed);
 
-        if (speed > 1.0) {
-            speed = -1.0;
-            // Let the motor spin down
-            setMotorSpeed(pwm, dir, 0.0);
-            setMotorSpeed(pwm2, dir2, 0.0);
-            sleep(2.0);
-            */
     }
 }
