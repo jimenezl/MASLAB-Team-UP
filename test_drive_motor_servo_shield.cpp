@@ -90,7 +90,7 @@ void writePWM(mraa::I2c *i2c, int index, double duty) {
     i2c->write(writeBuf, 5);
 }
 
-void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
+/*void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
     assert(-1.0 <= speed && speed <= 1.0);
     if (speed < 0) {
         dir.write(1);
@@ -99,7 +99,7 @@ void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
     }
     pwm.write(fabs(speed));
 }
-
+*/
 
 void setServoPosition(mraa::I2c *i2c, int index, double duty) {
     writePWM(i2c, index, .04 * duty + .04);
@@ -140,7 +140,7 @@ int main() {
           printf("hi\n");
           double speed = 0.3;
           
-          setMotorSpeed(12, dir, speed);
+          setServoPosition(i2c, 12, 0.6)
           sleep(1.0);
         }
 
