@@ -28,11 +28,11 @@ int main() {
     std::cout << "Read: " << val << std::endl;
     
 
-    if (val > 930 && val < 1000){
+    if (val > 900 && val < 1000){
       printf("Red Light\n");
     }
 
-    else if (val <= 930){ 
+    else if (val <= 900){ 
       printf("Green Light\n");
     }
 
