@@ -134,13 +134,11 @@ int main() {
         int val = aio.read();
         std::cout << "Read: " << val << std::endl;
 
-        
-
         while(val > 100){
           printf("hi\n");
           
           for (double i = 0; i<1.5, i += .1){
-            setServoPosition(i2c, 12, count);
+            setServoPosition(i2c, 12, i);
             sleep(1.0); 
           }
           
