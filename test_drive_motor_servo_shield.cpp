@@ -130,20 +130,20 @@ int main() {
     initPWM(i2c);
 
     while (running) {
-
+        
         int val = aio.read();
         std::cout << "Read: " << val << std::endl;
 
-        while(val > 100){
+        if (val > 100){
           printf("hi\n");
           double i = 0.4;
-          
-          setMotorSpeed(pwm, 12, , dir, 0.3)
-          sleep(1.0); 
-          int val = aio.read();
-          teststd::cout << "Read: " << val << std::endl;
-          
-          
+          setServoPosition(i2c, 12, 0.6);
+          setServoPosition(i2c, 12, 1.2);
+          setServoPosition(i2c, 12, 0.6);
+          setServoPosition(i2c, 12, 0);
+          //setMotorSpeed(pwm, 12, , dir, 0.3)
+          //sleep(1.0); 
+      
         }
 
     }
