@@ -53,17 +53,19 @@ int main() {
 
     double speed = -1.0;
     while (running) {
+        double speed = 0.3
         std::cout << "Speed: " << speed << std::endl;
         setMotorSpeed(pwm, dir, speed);
         setMotorSpeed(pwm2, dir2, -1 * speed);
 
-        speed += 0.1;
+        /*speed += 0.1;
         if (speed > 1.0) {
             speed = -1.0;
             // Let the motor spin down
             setMotorSpeed(pwm, dir, 0.0);
             setMotorSpeed(pwm2, dir2, 0.0);
             sleep(2.0);
+        */
         }
         usleep(100000);
 
