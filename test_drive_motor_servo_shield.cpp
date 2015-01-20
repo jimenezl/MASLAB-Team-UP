@@ -140,7 +140,7 @@ int main() {
           printf("hi\n");
           double speed = 0.3;
           
-          setServoPosition(i2c, 12, 0.6)
+          setServoPosition(i2c, 12, 0.6);
           sleep(1.0);
         }
 
