@@ -2,10 +2,18 @@
 // g++ test_drive_motor_servo_shield.cpp -o test_drive -lmraa
 // Controls a servo on port 0 of the servo shield.
 
-#include "mraa.hpp"
+#include <unistd.h>
+#include <stdint.h>
+#include <signal.h>
+#include <sys/time.h>
+
 #include <cassert>
+#include <cmath>
 #include <csignal>
 #include <iostream>
+#include <math.h>
+
+#include "mraa.hpp"
 
 #define SHIELD_I2C_ADDR 0x40
 
