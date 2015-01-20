@@ -32,15 +32,15 @@ int main() {
       printf("Red Light\n");
     }
 
-    else if (val < 950){ 
+    else if (val < 930){ 
       printf("Green Light\n");
     }
 
     else{
       printf("No Block\n");
     }
-
+    sleep(1);
   }
     
-    sleep(1);
+    
 }
