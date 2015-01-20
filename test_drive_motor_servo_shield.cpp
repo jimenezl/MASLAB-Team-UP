@@ -136,11 +136,11 @@ int main() {
 
         while(val > 100){
           printf("hi\n");
-          double i = 0;
-          for (i = 0, i < 1.5, i += .1){
-            setServoPosition(i2c, 12, i);
-            sleep(1.0); 
-          }
+          double i = 0.4;
+          
+          setServoPosition(i2c, 12, i);
+          sleep(1.0); 
+          
           
         }
 
