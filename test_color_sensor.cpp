@@ -26,13 +26,16 @@ int main() {
   while (running) {
     int val = aio.read();
     std::cout << "Read: " << val << std::endl;
-    if (val > 315){
+    
+
+    /*if (val > 315){
       printf("Green Light");
     }
 
     else { 
       printf("Red Light");
     }
+    */
     sleep(1);
   }
 }
