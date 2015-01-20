@@ -137,7 +137,7 @@ int main() {
         while(val > 100){
           printf("hi\n");
           
-          for (double i = 0; i<1.5, i += .1){
+          for (double i = 0, i<1.5, i += .1){
             setServoPosition(i2c, 12, i);
             sleep(1.0); 
           }
