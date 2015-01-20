@@ -15,16 +15,20 @@
 #define IDAddress 0xb2 // register address + command bits
 #define ColorAddress 0xb4 // register address + command bits
 
-/*Individual Color Addresses 
+//Individual Color Addresses 
+
+#define ClearLowAddress 0x14
+#define ClearHighAddress 0x15
+
 #define RedLowAddress 0x16
-#define RedHighddress 0x17
+#define RedHighAddress 0x17
 
 #define BlueLowAddress 0x1A
 #define BlueHighAddress 0x1B
 
 #define GreenLowAddress 0x18
 #define GreenHighAddress 0x19
-*/
+
 
 
 int running = 1;
@@ -35,18 +39,18 @@ int running = 1;
 uint8_t timee[2]; 
 uint8_t gain[2];
 uint8_t enable[2];
-uint8_t colors[2];
+uint8_t colors[9]{
+	ColorAddress,
+	ClearLowAddress,
+	ClearHighAddress,
+	RedLowAddress,
+	RedHighAddress,
+	BlueLowAddress,
+	BlueHighAddress, 
+	GreenLowAddress,
+	GreenHighAddress
+};
 
-/*
-uint8_t red_low[2];
-uint8_t red_high[2];
-
-uint8_t blue_low[2];
-uint8_t blue_high[2];
-
-uint8_t green_low[2];
-uint8_t green_high[2];
-*/
 
 void sig_handler(int signo) {
     if (signo == SIGINT) {
@@ -85,7 +89,13 @@ void get_Colors(mraa::I2c *i2c){
  	unsigned int blue_color = 0;
 
 	int i = 0;
+	i2c->address(SensorAddress); 
 
+	for(i = 1; i<9, i++){
+
+	}
+
+	/*
 	colors[0] = ColorAddress;
 	colors[1] = 0x16;
 	i2c->address(SensorAddress); 
@@ -93,7 +103,7 @@ void get_Colors(mraa::I2c *i2c){
 	i2c->address(SensorAddress);
 	uint8_t store = i2c->read(colors,2);
 	printf("Data:%d\n", store);
-
+	
 	/*
  	uint8_t color_values[8];
 	for (i = 0; i<8; i++){
