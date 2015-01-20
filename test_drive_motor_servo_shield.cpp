@@ -122,6 +122,12 @@ int main() {
 
         int val = aio.read();
         std::cout << "Read: " << val << std::endl;
+
+        if (val > 0){
+          double speed = 0.3;
+          setMotorSpeed(pwm, 12, dir, speed)
+          sleep(1.0)
+        }
         // Alternate two locations with 2-sec delay
         /*
         std::cout << "Speed: " << speed << std::endl;
