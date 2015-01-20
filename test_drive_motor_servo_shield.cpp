@@ -76,9 +76,10 @@ void writePWM(mraa::I2c *i2c, int index, double duty) {
     assert(0.0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
-    printf("on:\n", on);
+    std::cout << "on: " << on << std::endl;
     uint16_t onRounded = (uint16_t) on;
-    printf("onRounded:\n", onRounded);
+    std::cout << "onRounded: " << int(onRounded) << std::endl;
+    
     uint8_t writeBuf[5];
 
     // ON_L
