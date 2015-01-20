@@ -90,7 +90,7 @@ void writePWM(mraa::I2c *i2c, int index, double duty) {
     i2c->write(writeBuf, 5);
 }
 
-/*void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
+void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
     assert(-1.0 <= speed && speed <= 1.0);
     if (speed < 0) {
         dir.write(1);
@@ -99,7 +99,7 @@ void writePWM(mraa::I2c *i2c, int index, double duty) {
     }
     pwm.write(fabs(speed));
 }
-*/
+
 
 void setServoPosition(mraa::I2c *i2c, int index, double duty) {
     writePWM(i2c, index, .04 * duty + .04);
@@ -113,11 +113,11 @@ int main() {
     mraa::Aio aio = mraa::Aio(2);
 
     //PWM initalize
-    /*mraa::Pwm pwm = mraa::Pwm(12);
+    mraa::Pwm pwm = mraa::Pwm(12);
     pwm.write(0.0);
     pwm.enable(true);
     printf("(pin 12 initialized)\n");
-  */
+  
     // Edison i2c bus is 6
     mraa::I2c *i2c = new mraa::I2c(6);
     assert(i2c != NULL);
@@ -138,8 +138,10 @@ int main() {
           printf("hi\n");
           double i = 0.4;
           
-          setServoPosition(i2c, 12, i);
+          setMotorSpeed(pwm, 12, , dir, 0.3)
           sleep(1.0); 
+          int val = aio.read();
+          teststd::cout << "Read: " << val << std::endl;
           
           
         }
