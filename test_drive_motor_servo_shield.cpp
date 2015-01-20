@@ -76,8 +76,9 @@ void writePWM(mraa::I2c *i2c, int index, double duty) {
     assert(0.0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
-
+    printf("on:\n", on);
     uint16_t onRounded = (uint16_t) on;
+    printf("onRounded:\n", onRounded);
     uint8_t writeBuf[5];
 
     // ON_L
@@ -113,14 +114,15 @@ int main() {
     initPWM(i2c);
 
     while (running) {
-        
+        setMotorPosition(i2c, 0, 1);
         int val = aio.read();
         std::cout << "Read: " << val << std::endl;
 
+
         if (val > 100){
           printf("hi\n");
-          double i = 0.4;
-          setMotorPosition(i2c, 12, 0.3);
+          setMotorPosition(i2c, 0, 0);
+          
         }
 
     }
