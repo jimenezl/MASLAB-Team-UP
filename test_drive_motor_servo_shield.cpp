@@ -1,6 +1,6 @@
 // Compile with:
 // g++ test_drive_motor_servo_shield.cpp -o test_drive -lmraa
-// Controls a servo on port 0 of the servo shield.
+// Controls a servo on port 2 of the servo shield.
 
 #include <unistd.h>
 #include <stdint.h>
@@ -78,8 +78,7 @@ void writePWM(mraa::I2c *i2c, int index, double duty) {
     double on = 4095.0 * duty;
 
     uint16_t onRounded = (uint16_t) on;
-
-    char writeBuf[5];
+    uint8_t writeBuf[5];
 
     // ON_L
     writeBuf[0] = registers[index];
