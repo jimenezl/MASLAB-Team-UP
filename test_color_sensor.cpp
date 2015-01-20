@@ -28,7 +28,7 @@ int main() {
     std::cout << "Read: " << val << std::endl;
     
 
-    if (val > 950 && val < 1000 ){
+    if (val > 950 && val < 1000){
       printf("Red Light\n");
     }
 
@@ -43,5 +43,4 @@ int main() {
   }
     
     sleep(1);
-  }
 }
