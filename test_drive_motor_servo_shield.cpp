@@ -114,6 +114,9 @@ int main() {
 
     //PWM initalize
     mraa::Pwm pwm = mraa::Pwm(12);
+    pwm.write(0.0);
+    pwm.enable(true);
+    printf("(pin 12 initialized)\n");
 
     // Edison i2c bus is 6
     mraa::I2c *i2c = new mraa::I2c(6);
@@ -122,6 +125,7 @@ int main() {
     mraa::Gpio dir = mraa::Gpio(3);
     dir.dir(mraa::DIR_OUT);
     dir.write(0);
+    printf("(pin 3 initialized)\n");
 
     initPWM(i2c);
 
