@@ -112,9 +112,16 @@ int main() {
     //analog readings
     mraa::Aio aio = mraa::Aio(2);
 
+    //PWM initalize
+    mraa::Pwm pwm = mraa::Pwm(12);
+
     // Edison i2c bus is 6
     mraa::I2c *i2c = new mraa::I2c(6);
     assert(i2c != NULL);
+
+    mraa::Gpio dir = mraa::Gpio(3);
+    dir.dir(mraa::DIR_OUT);
+    dir.write(0);
 
     initPWM(i2c);
 
@@ -123,9 +130,13 @@ int main() {
         int val = aio.read();
         std::cout << "Read: " << val << std::endl;
 
+        
+
         if (val > 0){
+          printf("hi\n");
           double speed = 0.3;
-          setMotorSpeed(pwm, 12, dir, speed);
+          
+          setMotorSpeed(pwm, dir, speed);
           sleep(1.0);
         }
         // Alternate two locations with 2-sec delay
