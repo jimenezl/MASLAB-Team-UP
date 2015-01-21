@@ -101,22 +101,23 @@ void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
 
 // Check color sensors and move to hopper
 void checkColors(int colorVal){
+  mraa::I2c i2c;
   if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
       printf("Red Block Found\n");
       setMotorPosition(i2c, 15, 0.3);
-      limitSwitches(mraa::I2c *i2c, limitSwitch1, limitSwitch2);
+      limitSwitches(i2c, limitSwitch1, limitSwitch2);
     }
   else if (colorVal <= 750){ //prev. val<900 
       printf("Green Block Found\n");
       dir.write(1);
       setMotorPosition(i2c, 15, 0.3);
-      limitSwitches(mraa::I2c *i2c, limitSwitch1, limitSwitch2);
+      limitSwitches(i2c, limitSwitch1, limitSwitch2);
     }
   else {
       printf("No Block Found\n"); //prev > 1000
       dir.write(1);
       setMotorPosition(i2c, 15, 0.3);
-      servoRun = false; 
+      bool servoRun = false; 
 
     }
 }
@@ -143,8 +144,9 @@ void limitSwitches(mraa::I2c *i2c, int switch1, int switch2){
       setServoPosition(i2c, 1, 0.4);
       sleep(0.5);
       setServoPosition(i2c, 1, -1.2);
-  }
+    }
     checkColors(colorVal);
+  }
 }
 
 
@@ -187,7 +189,5 @@ int main() {
 
     checkColors(colorVal); //checking color sensor
     sleep(3.0);
-  }
-    
-    
+  } 
 }
