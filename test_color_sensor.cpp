@@ -10,9 +10,10 @@
 
 // Global Variables
 int running = 1;
-int colorVal = aio.read();
-int limitSwitch1 = aio2.read()
-int limitSwitch2 = aio3.read()
+int cvalOne = aio.read();
+int cvalTwo = cvalOne;
+int limitSwitch1 = aio2.read();
+int limitSwitch2 = aio3.read();
 bool servoRun = true;
 
 mraa::Gpio dir = mraa::Gpio(3);
@@ -99,30 +100,8 @@ void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
 }
 // End Motor Setup
 
-// Check color sensors and move to hopper
-void checkColors(int colorVal){
-  mraa::I2c i2c;
-  if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
-      printf("Red Block Found\n");
-      setMotorPosition(i2c, 15, 0.3);
-      limitSwitches(i2c, limitSwitch1, limitSwitch2);
-    }
-  else if (colorVal <= 750){ //prev. val<900 
-      printf("Green Block Found\n");
-      dir.write(1);
-      setMotorPosition(i2c, 15, 0.3);
-      limitSwitches(i2c, limitSwitch1, limitSwitch2);
-    }
-  else {
-      printf("No Block Found\n"); //prev > 1000
-      dir.write(1);
-      setMotorPosition(i2c, 15, 0.3);
-      bool servoRun = false; 
-
-    }
-}
-
-void limitSwitches(mraa::I2c *i2c, int switch1, int switch2){
+// Limit Switches
+void limitSwitches(mraa::I2c *i2c, int switch1, int switch2, bool servoRun){
 
   if (switch1 > 100) {
     printf("Turning off motor\n");
@@ -135,6 +114,32 @@ void limitSwitches(mraa::I2c *i2c, int switch1, int switch2){
     }
     checkColors(colorVal);
   }
+
+// Check color sensors and move to hopper
+void checkColors(int colorVal){
+  mraa::I2c *i2c;
+ 
+  if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
+      printf("Red Block Found\n");
+      setMotorPosition(i2c, 15, 0.3);
+      limitSwitches(i2c, limitSwitch1, limitSwitch2, servoRun);
+    }
+  else if (colorVal <= 750){ //prev. val<900 
+      printf("Green Block Found\n");
+      dir.write(1);
+      setMotorPosition(i2c, 15, 0.3);
+      limitSwitches(i2c, limitSwitch1, limitSwitch2, servoRun);
+    }
+  else {
+      printf("No Block Found\n"); //prev > 1000
+      dir.write(1);
+      setMotorPosition(i2c, 15, 0.3);
+      servoRun = false; 
+
+    }
+}
+
+
 
   else if (switch2 > 100){
     printf("Turning off motor\n");
@@ -176,12 +181,8 @@ int main() {
   while (running) {
 
     //(last reading)* alpha + reading*(1-alpha)
-    int cvalOne = aio.read();
-    int cvalTwo = cvalOne;
-
-    colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
-    limitSwitch1 = aio2.read();
-    limitSwitch2 = aio3.read();
+    int colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
+    
 
     std::cout << "Colors: " << colorVal << std::endl;
     std::cout << "Switch 1: " << limitSwitch1 << std::endl;
