@@ -19,6 +19,8 @@ int limitSwitch1 = 0;
 int limitSwitch2 = 0; 
 bool servoRun = true;
 
+mraa::I2c *i2c;
+
 mraa::Gpio dir = mraa::Gpio(3);
 
 #define SHIELD_I2C_ADDR 0x40
@@ -52,7 +54,7 @@ uint8_t registers[] = {
     66   // output 15
 };
 
-void initPWM(mraa::I2c *i2c) {
+void initPWM() {
     uint8_t writeBuf[2] = {0};
     writeBuf[0] = 0x00; // Write to MODE 1 Register;
     writeBuf[1] = 1 << 4; // Enable Sleep Mode
@@ -77,7 +79,7 @@ void initPWM(mraa::I2c *i2c) {
 }
 
 
-void writePWM(mraa::I2c *i2c, int index, double duty) {
+void writePWM(int index, double duty) {
     assert(0.0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
@@ -96,20 +98,20 @@ void writePWM(mraa::I2c *i2c, int index, double duty) {
 }
 
 
-void setServoPosition(mraa::I2c *i2c, int index, double duty) {
+void setServoPosition(int index, double duty) {
     writePWM(i2c, index, .04 * duty + .04);
 }
-void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
+void setMotorPosition(int index, double duty) {
     writePWM(i2c, index, duty);
 }
 // End Motor Setup
 
 // Forward declarations of checkColors limitSwitches
 void checkColors(int colorVal);
-void limitSwitches(mraa::I2c *i2c, int switch1, int switch2, bool servoRun);
+void limitSwitches(int switch1, int switch2, bool servoRun);
 
 // Limit Switches
-void limitSwitches(mraa::I2c *i2c, int switch1, int switch2, bool servoRun){
+void limitSwitches(int switch1, int switch2, bool servoRun){
 
   if (switch1 > 100) {
     printf("Turning off motor\n");
@@ -137,7 +139,7 @@ void limitSwitches(mraa::I2c *i2c, int switch1, int switch2, bool servoRun){
 
 // Check color sensors and move to hopper
 void checkColors(int colorVal){
-  mraa::I2c *i2c;
+  
  
   if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
       printf("Red Block Found\n");
@@ -172,7 +174,7 @@ int main() {
   mraa::Aio aio3 = mraa::Aio(3);
 
   // Edison i2c bus is 6
-  mraa::I2c *i2c = new mraa::I2c(6);
+  *i2c = new mraa::I2c(6);
   assert(i2c != NULL);
 
   //Turntable motor
