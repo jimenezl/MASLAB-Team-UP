@@ -72,7 +72,7 @@ void initPWM() {
 
 
 void writePWM(int index, double duty) {
-    assert(0.0 <= duty && duty <= 1.0);
+    assert(-1.5 <= duty && duty <= 1.5);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
     uint16_t onRounded = (uint16_t) on;
@@ -107,7 +107,7 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
 
   if (switch1 > 100) {
     printf("Turning off motor\n");
-    setMotorPosition(15, 0.05);
+    setMotorPosition(15, 0.01);
 
     if (servoRun){
       setServoPosition(1, 0.4);
@@ -118,7 +118,7 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
   }
   else if (switch2 > 100){
     printf("Turning off motor\n");
-    setMotorPosition(15, 0.05);
+    setMotorPosition(15, 0.01);
     
     if (servoRun){
       setServoPosition(1, 0.4);
