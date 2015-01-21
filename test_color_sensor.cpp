@@ -99,10 +99,10 @@ void writePWM(int index, double duty) {
 
 
 void setServoPosition(int index, double duty) {
-    writePWM(i2c, index, .04 * duty + .04);
+    writePWM(index, .04 * duty + .04);
 }
 void setMotorPosition(int index, double duty) {
-    writePWM(i2c, index, duty);
+    writePWM(index, duty);
 }
 // End Motor Setup
 
@@ -115,23 +115,23 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
 
   if (switch1 > 100) {
     printf("Turning off motor\n");
-    setMotorPosition(i2c, 15, 0.001);
+    setMotorPosition(15, 0.001);
 
     if (servoRun){
-      setServoPosition(i2c, 1, 0.4);
+      setServoPosition(1, 0.4);
       sleep(0.5);
-      setServoPosition(i2c, 1, -1.2); 
+      setServoPosition(1, -1.2); 
     }
     checkColors(colorVal);
   }
   else if (switch2 > 100){
     printf("Turning off motor\n");
-    setMotorPosition(i2c, 15, 0.001);
+    setMotorPosition(15, 0.001);
     
     if (servoRun){
-      setServoPosition(i2c, 1, 0.4);
+      setServoPosition(1, 0.4);
       sleep(0.5);
-      setServoPosition(i2c, 1, -1.2);
+      setServoPosition(1, -1.2);
     }
     checkColors(colorVal);
   }
@@ -143,8 +143,8 @@ void checkColors(int colorVal){
  
   if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
       printf("Red Block Found\n");
-      setMotorPosition(i2c, 15, 0.3);
-      limitSwitches(i2c, limitSwitch1, limitSwitch2, servoRun);
+      setMotorPosition(15, 0.3);
+      limitSwitches(limitSwitch1, limitSwitch2, servoRun);
     }
   else if (colorVal <= 750){ //prev. val<900 
       printf("Green Block Found\n");
@@ -155,7 +155,7 @@ void checkColors(int colorVal){
   else {
       printf("No Block Found\n"); //prev > 1000
       dir.write(1);
-      setMotorPosition(i2c, 15, 0.3);
+      setMotorPosition(15, 0.3);
       servoRun = false; 
     }
 }
