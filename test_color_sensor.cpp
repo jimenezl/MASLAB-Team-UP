@@ -147,8 +147,8 @@ void checkColors(int colorVal){
   else if (colorVal <= 750){ //prev. val<900 
       printf("Green Block Found\n");
       dir.write(1);
-      setMotorPosition(i2c, 15, 0.3);
-      limitSwitches(i2c, limitSwitch1, limitSwitch2, servoRun);
+      //setMotorPosition(i2c, 15, 0.3);
+      //limitSwitches(i2c, limitSwitch1, limitSwitch2, servoRun);
     }
   else {
       printf("No Block Found\n"); //prev > 1000
