@@ -174,14 +174,14 @@ int main() {
   mraa::Aio aio3 = mraa::Aio(3);
 
   // Edison i2c bus is 6
-  *i2c = new mraa::I2c(6);
+  i2c = new mraa::I2c(6);
   assert(i2c != NULL);
 
   //Turntable motor
   dir.dir(mraa::DIR_OUT);
   dir.write(0);
 
-  initPWM(i2c);
+  initPWM();
 
   while (running) {
     cvalOne = aio.read();
