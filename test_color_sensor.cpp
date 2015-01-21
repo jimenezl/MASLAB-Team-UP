@@ -148,8 +148,8 @@ void checkColors(int colorVal){
   else if (colorVal <= 750){ //prev. val<900 
       printf("Green Block Found\n");
       dir.write(1);
-      setMotorPosition(i2c, 15, 0.15);
-      limitSwitches(i2c, limitSwitch1, limitSwitch2, servoRun);
+      setMotorPosition(15, 0.15);
+      limitSwitches(limitSwitch1, limitSwitch2, servoRun);
     }
   else {
       printf("No Block Found\n"); //prev > 1000
@@ -164,7 +164,7 @@ int main() {
   signal(SIGINT, sig_handler);
 
   //alpha for low pass filter
-  alpha = 0.7;
+  alpha = 0.3;
 
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 2, Pin 3
@@ -194,6 +194,6 @@ int main() {
     std::cout << "Switch 2: " << limitSwitch2 << std::endl;
 
     checkColors(colorVal); //checking color sensor
-    sleep(3.0);
+    sleep(1.0);
   } 
 }
