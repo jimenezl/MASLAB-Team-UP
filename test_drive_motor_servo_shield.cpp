@@ -122,7 +122,7 @@ int main() {
 
         while (val > 100){
           printf("hi\n");
-          setMotorPosition(i2c, 0, 0.01);
+          setMotorPosition(i2c, 0, 0.05);
 
           val = aio.read();
           std::cout << "Read New: " << val << std::endl;
