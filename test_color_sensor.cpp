@@ -48,7 +48,7 @@ uint8_t registers[] = {
 };
 
 void initPWM(mraa::I2c *i2c) {
-    char writeBuf[2] = {0};
+    uint8_t writeBuf[2] = {0};
     writeBuf[0] = 0x00; // Write to MODE 1 Register;
     writeBuf[1] = 1 << 4; // Enable Sleep Mode
 
@@ -78,7 +78,7 @@ void writePWM(mraa::I2c *i2c, int index, double duty) {
     double on = 4095.0 * duty;
     uint16_t onRounded = (uint16_t) on;
 
-    char writeBuf[5];
+    uint8_t writeBuf[5];
 
     // ON_L
     writeBuf[0] = registers[index];
@@ -100,20 +100,20 @@ void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
 // End Motor Setup
 
 // Check color sensors and move to hopper
-void checkColors(colorVal){
-  if (colorVal > 900 && colorVal < 1000){
+void checkColors(int colorVal){
+  if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
       printf("Red Block Found\n");
       setMotorPosition(i2c, 15, 0.3);
       limitSwitches(mraa::I2c *i2c, limitSwitch1, limitSwitch2);
     }
-  else if (colorVal <= 900){ 
+  else if (colorVal <= 750){ //prev. val<900 
       printf("Green Block Found\n");
       dir.write(1);
       setMotorPosition(i2c, 15, 0.3);
       limitSwitches(mraa::I2c *i2c, limitSwitch1, limitSwitch2);
     }
   else {
-      printf("No Block Found\n");
+      printf("No Block Found\n"); //prev > 1000
       dir.write(1);
       setMotorPosition(i2c, 15, 0.3);
       servoRun = false; 
