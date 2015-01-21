@@ -105,8 +105,9 @@ void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
 }
 // End Motor Setup
 
-// Forward declaration of checkColors
+// Forward declarations of checkColors limitSwitches
 void checkColors(int colorVal);
+void limitSwitches(mraa::I2c *i2c, int switch1, int switch2, bool servoRun);
 
 // Limit Switches
 void limitSwitches(mraa::I2c *i2c, int switch1, int switch2, bool servoRun){
@@ -163,7 +164,7 @@ int main() {
   signal(SIGINT, sig_handler);
 
   //alpha for low pass filter
-  alpha = 0.7
+  alpha = 0.7;
 
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 2, Pin 3
