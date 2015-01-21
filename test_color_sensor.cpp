@@ -72,7 +72,7 @@ void initPWM() {
 
 
 void writePWM(int index, double duty) {
-    assert(-1.5 <= duty && duty <= 1.5);
+    assert(0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
     uint16_t onRounded = (uint16_t) on;
@@ -91,6 +91,7 @@ void writePWM(int index, double duty) {
 
 
 void setServoPosition(int index, double duty) {
+  printf("Duty:\n", duty);
     writePWM(index, .04 * duty + .04);
 }
 void setMotorPosition(int index, double duty) {
