@@ -11,10 +11,9 @@
 // Global Variables
 int running = 1;
 
-int alpha = 0
-int cvalOne = 0 
-
-int colorVal = 0
+int alpha = 0;
+int cvalOne = 0;
+int colorVal = 0;
 
 int limitSwitch1 = 0;
 int limitSwitch2 = 0; 
