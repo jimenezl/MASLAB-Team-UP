@@ -26,15 +26,6 @@ mraa::Gpio dir = mraa::Gpio(3);
 #define SHIELD_I2C_ADDR 0x40
 #define MS 1000
 
-void sig_handler(int signo)
-{
-  if (signo == SIGINT) {
-    setMotorPosition(15, 0.0);
-    printf("closing spi nicely\n");
-    running = 0;
-  }
-}
-
 // Motor Setup
 uint8_t registers[] = {
     6,   // output 0
@@ -157,6 +148,15 @@ void checkColors(int colorVal){
       setMotorPosition(15, 0.15);
       servoRun = false; 
     }
+}
+
+void sig_handler(int signo)
+{
+  if (signo == SIGINT) {
+    setMotorPosition(15, 0.0);
+    printf("closing spi nicely\n");
+    running = 0;
+  }
 }
 
 int main() {
