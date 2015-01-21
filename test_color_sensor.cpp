@@ -116,7 +116,7 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
 
   if (switch1 > 100) {
     printf("Turning off motor\n");
-    setMotorPosition(15, 0.001);
+    setMotorPosition(15, 0.05);
 
     if (servoRun){
       setServoPosition(1, 0.4);
@@ -127,7 +127,7 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
   }
   else if (switch2 > 100){
     printf("Turning off motor\n");
-    setMotorPosition(15, 0.001);
+    setMotorPosition(15, 0.05);
     
     if (servoRun){
       setServoPosition(1, 0.4);
@@ -142,19 +142,19 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
 void checkColors(int colorVal){
   if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
       printf("Red Block Found\n");
-      setMotorPosition(15, 0.3);
+      setMotorPosition(15, 0.15);
       limitSwitches(limitSwitch1, limitSwitch2, servoRun);
     }
   else if (colorVal <= 750){ //prev. val<900 
       printf("Green Block Found\n");
       dir.write(1);
-      setMotorPosition(i2c, 15, 0.3);
+      setMotorPosition(i2c, 15, 0.15);
       limitSwitches(i2c, limitSwitch1, limitSwitch2, servoRun);
     }
   else {
       printf("No Block Found\n"); //prev > 1000
       dir.write(1);
-      setMotorPosition(15, 0.3);
+      setMotorPosition(15, 0.15);
       servoRun = false; 
     }
 }
