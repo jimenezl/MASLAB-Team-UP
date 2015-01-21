@@ -133,6 +133,7 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
 void checkColors(int colorVal){
   if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
       printf("Red Block Found\n");
+      dir.write(0);
       setMotorPosition(15, 0.15);
       limitSwitches(limitSwitch1, limitSwitch2, servoRun);
     }
