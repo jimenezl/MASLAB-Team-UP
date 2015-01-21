@@ -12,12 +12,15 @@
 int running = 1;
 int cvalOne = aio.read();
 int cvalTwo = cvalOne;
+int colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
+
 int limitSwitch1 = aio2.read();
 int limitSwitch2 = aio3.read();
 bool servoRun = true;
 
 mraa::Gpio dir = mraa::Gpio(3);
 
+#define SHIELD_I2C_ADDR 0x40
 #define MS 1000
 
 void sig_handler(int signo)
@@ -114,6 +117,18 @@ void limitSwitches(mraa::I2c *i2c, int switch1, int switch2, bool servoRun){
     }
     checkColors(colorVal);
   }
+  else if (switch2 > 100){
+    printf("Turning off motor\n");
+    setMotorPosition(i2c, 15, 0.001);
+    
+    if (servoRun){
+      setServoPosition(i2c, 1, 0.4);
+      sleep(0.5);
+      setServoPosition(i2c, 1, -1.2);
+    }
+    checkColors(colorVal);
+  }
+}
 
 // Check color sensors and move to hopper
 void checkColors(int colorVal){
@@ -135,25 +150,8 @@ void checkColors(int colorVal){
       dir.write(1);
       setMotorPosition(i2c, 15, 0.3);
       servoRun = false; 
-
     }
 }
-
-
-
-  else if (switch2 > 100){
-    printf("Turning off motor\n");
-    setMotorPosition(i2c, 15, 0.001);
-    
-    if (servoRun){
-      setServoPosition(i2c, 1, 0.4);
-      sleep(0.5);
-      setServoPosition(i2c, 1, -1.2);
-    }
-    checkColors(colorVal);
-  }
-}
-
 
 int main() {
   // Handle Ctrl-C quit
@@ -179,11 +177,6 @@ int main() {
   initPWM(i2c);
 
   while (running) {
-
-    //(last reading)* alpha + reading*(1-alpha)
-    int colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
-    
-
     std::cout << "Colors: " << colorVal << std::endl;
     std::cout << "Switch 1: " << limitSwitch1 << std::endl;
     std::cout << "Switch 2: " << limitSwitch2 << std::endl;
