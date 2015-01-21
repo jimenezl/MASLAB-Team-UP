@@ -10,12 +10,14 @@
 
 // Global Variables
 int running = 1;
-int cvalOne = aio.read();
-int cvalTwo = cvalOne;
-int colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
 
-int limitSwitch1 = aio2.read();
-int limitSwitch2 = aio3.read();
+int alpha = 0
+int cvalOne = 0 
+
+int colorVal = 0
+
+int limitSwitch1 = 0;
+int limitSwitch2 = 0; 
 bool servoRun = true;
 
 mraa::Gpio dir = mraa::Gpio(3);
@@ -103,6 +105,9 @@ void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
 }
 // End Motor Setup
 
+// Forward declaration of checkColors
+void checkColors(int colorVal);
+
 // Limit Switches
 void limitSwitches(mraa::I2c *i2c, int switch1, int switch2, bool servoRun){
 
@@ -158,7 +163,7 @@ int main() {
   signal(SIGINT, sig_handler);
 
   //alpha for low pass filter
-  int alpha = 0.7;
+  alpha = 0.7
 
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 2, Pin 3
@@ -177,6 +182,12 @@ int main() {
   initPWM(i2c);
 
   while (running) {
+    cvalOne = aio.read();
+    int cvalTwo = cvalOne; 
+    colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
+    limitSwitch1 = aio2.read();
+    limitSwitch2 = aio3.read();
+
     std::cout << "Colors: " << colorVal << std::endl;
     std::cout << "Switch 1: " << limitSwitch1 << std::endl;
     std::cout << "Switch 2: " << limitSwitch2 << std::endl;
