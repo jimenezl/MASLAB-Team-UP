@@ -25,6 +25,6 @@ int main() {
   while (running) {
     int val = aio.read();
     std::cout << "Read: " << val << std::endl;
-    
+    usleep(1000*500);
   }
 }
