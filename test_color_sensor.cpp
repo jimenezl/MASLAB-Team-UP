@@ -166,6 +166,7 @@ void checkColors(int colorVal){
       if (greenSwitch > 100){
       setMotorPosition(15, 0.15);
       servoRun = false; 
+      }
     }
 }
 
