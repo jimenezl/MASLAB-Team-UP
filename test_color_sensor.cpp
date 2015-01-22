@@ -173,7 +173,7 @@ void checkColors(float colorVal){
     }
 }
 
-void sig_handler(float signo)
+void sig_handler(int signo)
 {
   if (signo == SIGINT) {
     setMotorPosition(15, 0.0);
