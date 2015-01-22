@@ -205,9 +205,9 @@ int main() {
   initPWM();
 
   while (running) {
-    cvalOne = aio.read();
+    colorVal = aio.read();
     float cvalTwo = cvalOne; 
-    colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
+    //colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
     greenSwitch = aio2.read(); //Green block canister
     redSwitch = aio3.read();
 
