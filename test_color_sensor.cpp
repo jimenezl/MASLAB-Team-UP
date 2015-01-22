@@ -15,8 +15,8 @@ int alpha = 0;
 int cvalOne = 0;
 int colorVal = 0;
 
-int limitSwitch1 = 0;
-int limitSwitch2 = 0; 
+int greenSwitch = 0;
+int redSwitch = 0; 
 bool servoRun = true;
 
 mraa::I2c *i2c;
@@ -72,7 +72,7 @@ void initPWM() {
 
 
 void writePWM(int index, double duty) {
-    assert(-1.5 <= duty && duty <= 1.5);
+    assert(0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
     uint16_t onRounded = (uint16_t) on;
@@ -91,6 +91,7 @@ void writePWM(int index, double duty) {
 
 
 void setServoPosition(int index, double duty) {
+    printf("Duty:\n", duty);
     writePWM(index, .04 * duty + .04);
 }
 void setMotorPosition(int index, double duty) {
@@ -107,23 +108,25 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
 
   if (switch1 > 100) {
     printf("Turning off motor\n");
-    setMotorPosition(15, 0.01);
+    setMotorPosition(15, 0.0);
 
     if (servoRun){
-      setServoPosition(1, 0.4);
+      setServoPosition(0, 0.4);
+      printf("Pushing block\n");
       sleep(0.5);
-      setServoPosition(1, -1.2); 
+      setServoPosition(0, -.99); 
     }
     checkColors(colorVal);
   }
   else if (switch2 > 100){
     printf("Turning off motor\n");
-    setMotorPosition(15, 0.01);
+    setMotorPosition(15, 0.0);
     
     if (servoRun){
-      setServoPosition(1, 0.4);
+      setServoPosition(0, 0.4);
+      printf("Pushing block\n");
       sleep(0.5);
-      setServoPosition(1, -1.2);
+      setServoPosition(0, -.99);
     }
     checkColors(colorVal);
   }
@@ -134,18 +137,33 @@ void checkColors(int colorVal){
   if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
       printf("Red Block Found\n");
       dir.write(0);
-      setMotorPosition(15, 0.15);
-      limitSwitches(limitSwitch1, limitSwitch2, servoRun);
+
+      // adding in check for already being at red station
+      if (redSwitch > 100){
+        limitSwitches(greenSwitch, redSwitch, servoRun);
+      }
+      else {
+        setMotorPosition(15, 0.15);
+        limitSwitches(greenSwitch, redSwitch, servoRun);
+      }
     }
   else if (colorVal <= 750){ //prev. val<900 
       printf("Green Block Found\n");
       dir.write(1);
+       // adding in check for already being at green station
+      if (greenSwitch > 100){
+        limitSwitches(greenSwitch, redSwitch, servoRun);
+      }
+      else { 
       setMotorPosition(15, 0.15);
-      limitSwitches(limitSwitch1, limitSwitch2, servoRun);
+      limitSwitches(greenSwitch, redSwitch, servoRun);
+      }
     }
   else {
       printf("No Block Found\n"); //prev > 1000
       dir.write(1);
+      // adding in check for already being at green station
+      if (greenSwitch > 100){
       setMotorPosition(15, 0.15);
       servoRun = false; 
     }
@@ -187,12 +205,12 @@ int main() {
     cvalOne = aio.read();
     int cvalTwo = cvalOne; 
     colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
-    limitSwitch1 = aio2.read();
-    limitSwitch2 = aio3.read();
+    greenSwitch = aio2.read(); //Green block canister
+    redSwitch = aio3.read();
 
     std::cout << "Colors: " << colorVal << std::endl;
-    std::cout << "Switch 1: " << limitSwitch1 << std::endl;
-    std::cout << "Switch 2: " << limitSwitch2 << std::endl;
+    std::cout << "Switch 1: " << greenSwitch << std::endl;
+    std::cout << "Switch 2: " << redSwitch << std::endl;
 
     checkColors(colorVal); //checking color sensor
     sleep(1.0);
