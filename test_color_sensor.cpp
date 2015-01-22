@@ -131,13 +131,10 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
   }
 }
 
-// > red == 890
-// 910 -- no block
-// 850 -- green
-// 
+// 885 no block, 860 for red to 830
 // Check color sensors and move to hopper
 void checkColors(float colorVal){
-  if (colorVal > 850 && colorVal < 890){ //prev 900 to 1000
+  if (colorVal > 830 && colorVal < 860){ //prev 900 to 1000
       printf("Red Block Found\n");
       dir.write(0);
 
@@ -150,7 +147,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal <= 850){ //prev. val<900 
+  else if (colorVal <= 830){ //prev. val<900 
       printf("Green Block Found\n");
       dir.write(1);
        // adding in check for already being at green station
@@ -162,7 +159,7 @@ void checkColors(float colorVal){
       limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal >= 905){
+  else if (colorVal >= 880){
       printf("No Block Found\n"); //prev > 1000
       dir.write(1);
       // adding in check for already being at green station
