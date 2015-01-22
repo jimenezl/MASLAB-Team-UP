@@ -12,6 +12,12 @@
 //FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
 //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 //IN THE SOFTWARE.
+//
+//Compile on PC:
+//g++ -ggdb `pkg-config --cflags opencv` -o `basename rgbObjectTrackingEdisonMultithread.cpp` rgbObjectTrackingEdisonMultithread `pkg-config --libs opencv`
+//Compile on Edison:
+//g++ rgbObjectTrackingEdisonMultithread.cpp -o rgbObjectTrackingEdisonMultithread `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
+
 
 #include <sstream>
 #include <string>
@@ -19,6 +25,9 @@
 #include <stdio.h>
 // #include <opencv2/highgui/highgui.hpp>
 #include "opencv2/opencv.hpp"
+
+#include <unistd.h>
+#include <thread> //multithreading
 
 using namespace cv;
 //initial min and max HSV filter values.
@@ -48,6 +57,8 @@ const int MAX_NUM_OBJECTS=50;
 //minimum and maximum object area
 const int MIN_OBJECT_AREA = 40*40;
 const int MAX_OBJECT_AREA = FRAME_HEIGHT*FRAME_WIDTH/1.5;
+
+float objectAngle = 0.0;
 
 //GUI Constants
 //names that will appear at the top of each window
@@ -287,6 +298,7 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 	printf("object found at %d, %d, pixel count: %d\n", objectXCoord, objectYCoord, maxFloodPixelCount);
 	printf("border coordinates: (%d,%d) , (%d,%d)\n", objectMinX, objectMinY, objectMaxX, objectMaxY);
 	printf("object angle: %f\n", float(objectXCoord-160) * 0.2125);
+	objectAngle = float(objectXCoord-160) * 0.2125;
 	// drawObject(objectMinX, objectMinY,*cameraFeed);
 	// drawObject(objectMaxX, objectMaxY,*cameraFeed);
 
@@ -438,8 +450,7 @@ Mat& filterBlock(Mat& filteredImage)
 
 
 
-int main(int argc, char* argv[])
-{
+void cameraThreadLoop() {
 	long int frameCount = 0; 
 	//Matrix to store each frame of the webcam feed
 	Mat cameraFeed;
@@ -453,7 +464,7 @@ int main(int argc, char* argv[])
 	//video capture object to acquire webcam feed
 	VideoCapture capture;
 	//open capture object at location zero (default location for webcam)
-	capture.open(1);
+	capture.open(0);
 	//set height and width of capture frame
 	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
@@ -496,6 +507,17 @@ int main(int argc, char* argv[])
 		// // delay 30ms so that screen can refresh.
 		// //image will not appear without this waitKey() command
 		// waitKey(30);
+	}
+}
+
+int main(int argc, char* argv[]){
+	std::thread cameraThread(cameraThreadLoop);
+	int mainLoopCount = 0;
+	while(1){
+		printf("Main Loop count: %d\n", mainLoopCount);
+		printf("Block angle: %f\n", objectAngle);
+		usleep(1000 * 1000);
+		mainLoopCount++;
 	}
 
 	return 0;
