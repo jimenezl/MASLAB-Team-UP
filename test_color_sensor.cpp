@@ -11,12 +11,12 @@
 // Global Variables
 int running = 1;
 
-int alpha = 0;
-int cvalOne = 0;
-int colorVal = 0;
+float alpha = 0;
+float cvalOne = 0;
+float colorVal = 0;
 
-int greenSwitch = 0;
-int redSwitch = 0; 
+float greenSwitch = 0;
+float redSwitch = 0; 
 bool servoRun = true;
 
 mraa::I2c *i2c;
@@ -100,11 +100,11 @@ void setMotorPosition(int index, double duty) {
 // End Motor Setup
 
 // Forward declarations of checkColors limitSwitches
-void checkColors(int colorVal);
-void limitSwitches(int switch1, int switch2, bool servoRun);
+void checkColors(float colorVal);
+void limitSwitches(float switch1, float switch2, bool servoRun);
 
 // Limit Switches
-void limitSwitches(int switch1, int switch2, bool servoRun){
+void limitSwitches(float switch1, float switch2, bool servoRun){
 
   if (switch1 > 100) {
     printf("Turning off motor\n");
@@ -116,7 +116,7 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
       sleep(0.5);
       setServoPosition(0, -.99); 
     }
-    checkColors(colorVal);
+
   }
   else if (switch2 > 100){
     printf("Turning off motor\n");
@@ -128,7 +128,6 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
       sleep(0.5);
       setServoPosition(0, -.99);
     }
-    checkColors(colorVal);
   }
 }
 
@@ -137,8 +136,8 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
 // 850 -- green
 // 
 // Check color sensors and move to hopper
-void checkColors(int colorVal){
-  if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
+void checkColors(float colorVal){
+  if (colorVal > 850 && colorVal < 890){ //prev 900 to 1000
       printf("Red Block Found\n");
       dir.write(0);
 
@@ -151,7 +150,7 @@ void checkColors(int colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal <= 750){ //prev. val<900 
+  else if (colorVal <= 850){ //prev. val<900 
       printf("Green Block Found\n");
       dir.write(1);
        // adding in check for already being at green station
@@ -163,7 +162,7 @@ void checkColors(int colorVal){
       limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else {
+  else if (colorVal >= 905){
       printf("No Block Found\n"); //prev > 1000
       dir.write(1);
       // adding in check for already being at green station
@@ -174,7 +173,7 @@ void checkColors(int colorVal){
     }
 }
 
-void sig_handler(int signo)
+void sig_handler(float signo)
 {
   if (signo == SIGINT) {
     setMotorPosition(15, 0.0);
@@ -208,7 +207,7 @@ int main() {
 
   while (running) {
     cvalOne = aio.read();
-    int cvalTwo = cvalOne; 
+    float cvalTwo = cvalOne; 
     colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
     greenSwitch = aio2.read(); //Green block canister
     redSwitch = aio3.read();
