@@ -132,6 +132,10 @@ void limitSwitches(int switch1, int switch2, bool servoRun){
   }
 }
 
+// > red == 890
+// 910 -- no block
+// 850 -- green
+// 
 // Check color sensors and move to hopper
 void checkColors(int colorVal){
   if (colorVal > 750 && colorVal < 840){ //prev 900 to 1000
