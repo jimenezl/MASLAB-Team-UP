@@ -136,6 +136,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 void checkColors(float colorVal){
   if (colorVal > 830 && colorVal < 880){ //prev 900 to 1000
       printf("Red Block Found\n");
+      servoRun = true;
       dir.write(0);
 
       // adding in check for already being at red station
@@ -149,6 +150,7 @@ void checkColors(float colorVal){
     }
   else if (colorVal <= 830){ //prev. val<900 
       printf("Green Block Found\n");
+      servoRun = true;
       dir.write(1);
        // adding in check for already being at green station
       if (greenSwitch > 100){
