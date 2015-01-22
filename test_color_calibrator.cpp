@@ -25,6 +25,6 @@ int main() {
   while (running) {
     int val = aio.read();
     std::cout << "Read: " << val << std::endl;
-    sleep(0.1);
+    
   }
 }
