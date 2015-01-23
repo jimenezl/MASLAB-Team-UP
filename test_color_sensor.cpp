@@ -91,7 +91,7 @@ void writePWM(int index, double duty) {
 
 
 void setServoPosition(int index, double duty) {
-    printf("Duty:\n", duty);
+    //printf("Duty:\n", duty);
     writePWM(index, .04 * duty + .04);
 }
 void setMotorPosition(int index, double duty) {
@@ -111,10 +111,10 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     setMotorPosition(15, 0.0);
 
     if (servoRun){
-      setServoPosition(0, 0.4);
+      setServoPosition(0, 0.9);
       printf("Pushing block\n");
       sleep(0.5);
-      setServoPosition(0, -.99); 
+      setServoPosition(0, -0.3); 
     }
 
   }
@@ -123,10 +123,10 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     setMotorPosition(15, 0.0);
     
     if (servoRun){
-      setServoPosition(0, 0.4);
+      setServoPosition(0, 0.9);
       printf("Pushing block\n");
       sleep(0.5);
-      setServoPosition(0, -.99);
+      setServoPosition(0, -0.3);
     }
   }
 }
@@ -134,8 +134,9 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 // 885 no block, 860 for red to 830
 // Check color sensors and move to hopper
 void checkColors(float colorVal){
-  if (colorVal > 830 && colorVal < 880){ //prev 900 to 1000
+  if (colorVal > 360 && colorVal < 500){ //prev 900 to 1000
       printf("Red Block Found\n");
+      servoRun = true;
       dir.write(0);
 
       // adding in check for already being at red station
@@ -147,8 +148,9 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal <= 830){ //prev. val<900 
+  else if (colorVal <= 360){ //prev. val<900 
       printf("Green Block Found\n");
+      servoRun = true;
       dir.write(1);
        // adding in check for already being at green station
       if (greenSwitch > 100){
@@ -159,7 +161,7 @@ void checkColors(float colorVal){
       limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal >= 880){
+  else if (colorVal >= 600){
       printf("No Block Found\n"); //prev > 1000
       dir.write(1);
       // adding in check for already being at green station
@@ -184,7 +186,7 @@ int main() {
   signal(SIGINT, sig_handler);
 
   //alpha for low pass filter
-  alpha = 0.3;
+  alpha = 0.5;
 
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 2, Pin 3
@@ -203,15 +205,15 @@ int main() {
   initPWM();
 
   while (running) {
-    cvalOne = aio.read();
+    colorVal = aio.read();
     float cvalTwo = cvalOne; 
-    colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
+    //colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
     greenSwitch = aio2.read(); //Green block canister
     redSwitch = aio3.read();
 
     std::cout << "Colors: " << colorVal << std::endl;
-    std::cout << "Switch 1: " << greenSwitch << std::endl;
-    std::cout << "Switch 2: " << redSwitch << std::endl;
+    //std::cout << "Switch 1: " << greenSwitch << std::endl;
+    //std::cout << "Switch 2: " << redSwitch << std::endl;
 
     checkColors(colorVal); //checking color sensor
     sleep(1.0);
