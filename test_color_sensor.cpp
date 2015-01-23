@@ -106,27 +106,29 @@ void limitSwitches(float switch1, float switch2, bool servoRun);
 // Limit Switches
 void limitSwitches(float switch1, float switch2, bool servoRun){
 
-  if (switch1 > 100) {
+  if (switch1 > 50) {
     printf("Turning off motor\n");
     setMotorPosition(15, 0.0);
 
     if (servoRun){
-      setServoPosition(0, 0.9);
-      printf("Pushing block\n");
+      printf("Pushing red block\n");
+
+      setServoPosition(0, 1.4); 
       sleep(0.5);
-      setServoPosition(0, -0.3); 
+      setServoPosition(0, -0.2); // return to home position
     }
 
   }
-  else if (switch2 > 100){
+  else if (switch2 > 50){
     printf("Turning off motor\n");
     setMotorPosition(15, 0.0);
     
     if (servoRun){
-      setServoPosition(0, 0.9);
-      printf("Pushing block\n");
+      printf("Pushing green block\n");
+
+      setServoPosition(0, 1.4;
       sleep(0.5);
-      setServoPosition(0, -0.3);
+      setServoPosition(0, -0.2); //return to home position
     }
   }
 }
@@ -140,7 +142,7 @@ void checkColors(float colorVal){
       dir.write(0);
 
       // adding in check for already being at red station
-      if (redSwitch > 100){
+      if (redSwitch > 50){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else {
@@ -153,7 +155,7 @@ void checkColors(float colorVal){
       servoRun = true;
       dir.write(1);
        // adding in check for already being at green station
-      if (greenSwitch > 100){
+      if (greenSwitch > 50){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else { 
@@ -165,7 +167,7 @@ void checkColors(float colorVal){
       printf("No Block Found\n"); //prev > 1000
       dir.write(1);
       // adding in check for already being at green station
-      if (greenSwitch > 100){
+      if (greenSwitch > 50){
       setMotorPosition(15, 0.15);
       servoRun = false; 
       }
@@ -212,8 +214,8 @@ int main() {
     redSwitch = aio3.read();
 
     std::cout << "Colors: " << colorVal << std::endl;
-    //std::cout << "Switch 1: " << greenSwitch << std::endl;
-    //std::cout << "Switch 2: " << redSwitch << std::endl;
+    std::cout << "Switch 1: " << greenSwitch << std::endl;
+    std::cout << "Switch 2: " << redSwitch << std::endl;
 
     checkColors(colorVal); //checking color sensor
     sleep(1.0);
