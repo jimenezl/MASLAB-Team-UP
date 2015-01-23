@@ -71,7 +71,7 @@ float objectAngle = 0.0;
 float ANGLE_ALPHA = .3;
 
 float desiredAngle = 0.0;
-float DEGREES_PER_PIXEL = 0.16;
+float DEGREES_PER_PIXEL = 0.14;
 
 float total = 0; //current angle belief
 
