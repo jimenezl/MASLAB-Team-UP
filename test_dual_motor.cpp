@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_servo_shield.cpp -o test_servo_shield -lmraa
+// g++ test_dual_motor.cpp -o test_dual -lmraa
 // Controls a servo on port 0 of the servo shield.
 
 #include "mraa.hpp"
@@ -8,6 +8,7 @@
 #include <iostream>
 
 #define SHIELD_I2C_ADDR 0x40
+
 
 int running = 1;
 #define MS 1000
@@ -88,6 +89,10 @@ void setServoPosition(mraa::I2c *i2c, int index, double duty) {
   writePWM(i2c, index, .04 * duty + .04);
 }
 
+void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
+    writePWM(i2c, index, duty);
+}
+
 int main()
 {
   // Handle Ctrl-C quit
@@ -99,11 +104,20 @@ int main()
 
   initPWM(i2c);
 
+
+  // Turntable motor
+  mraa::Gpio dir = mraa::Gpio(3);
+  dir.dir(mraa::DIR_OUT);
+  dir.write(0);
+
   while (running) {
     // Alternate two locations with 2-sec delay
-    setServoPosition(i2c, 0, 1.2);  // open// -0.2 to 1.4 max with servo head parallel to servo
-    sleep(2.0); 
-    setServoPosition(i2c, 0, 0.5); // close
+    setMotorPosition(15, 0.20);
+    setServoPosition(i2c, 0, -0.2); 
+    dir.write(0);// -0.2 to 1.4 max with servo head parallel to servo
+    sleep(2.0);
+    setServoPosition(i2c, 0, 1.4);
+    dir.write(1);
     sleep(2.0);
 
   }
