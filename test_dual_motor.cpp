@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_servo_shield.cpp -o test_servo_shield -lmraa
+// g++ test_dual_motor.cpp -o test_dual -lmraa
 // Controls a servo on port 0 of the servo shield.
 
 #include "mraa.hpp"
