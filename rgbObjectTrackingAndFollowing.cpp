@@ -654,7 +654,7 @@ int main() {
         diffAngle = desiredAngle - total;
         integral += diffAngle * 0.001 * timeBetweenReadings;
         derivative = (rf / 80.0);
-        power = speed * ((P_CONSTANT * diffAngle / 360.0));// + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        power = speed * ((P_CONSTANT * diffAngle / 360.0)) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
         if (power > .2) {
             power = .2;
