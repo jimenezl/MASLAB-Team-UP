@@ -114,7 +114,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
       setServoPosition(0, 0.9);
       printf("Pushing block\n");
       sleep(0.5);
-      setServoPosition(0, -.0.3); 
+      setServoPosition(0, -0.3); 
     }
 
   }
@@ -126,7 +126,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
       setServoPosition(0, 0.9);
       printf("Pushing block\n");
       sleep(0.5);
-      setServoPosition(0, -.30);
+      setServoPosition(0, -0.3);
     }
   }
 }
