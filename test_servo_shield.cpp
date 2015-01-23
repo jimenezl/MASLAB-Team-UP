@@ -85,7 +85,6 @@ void writePWM(mraa::I2c* i2c, int index, double duty) {
 
 
 void setServoPosition(mraa::I2c *i2c, int index, double duty) {
-  printf("(Duty changed:)\n", .04 * duty + .04);
   writePWM(i2c, index, .04 * duty + .04);
 }
 
@@ -104,7 +103,7 @@ int main()
     // Alternate two locations with 2-sec delay
     setServoPosition(i2c, 0, 0.4);
     sleep(2.0);
-    setServoPosition(i2c, 0, -.0.9);
+    setServoPosition(i2c, 0, -0.9);
     sleep(2.0);
   }
 }
