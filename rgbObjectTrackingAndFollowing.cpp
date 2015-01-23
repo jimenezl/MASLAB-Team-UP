@@ -39,6 +39,7 @@
 #include <math.h>
 
 #include "mraa.hpp"
+#define MS 1000
 
 using namespace cv;
 //initial min and max HSV filter values.
@@ -76,6 +77,7 @@ float total = 0; //current angle belief
 
 
 //motor stuff
+int running = 1;
 
 void sig_handler(int signo) {
     if (signo == SIGINT) {
@@ -128,21 +130,21 @@ void drawObject(int x,int y,Mat &frame){
 	cv::putText(frame,intToString(x)+ " , " + intToString(y),cv::Point(x,y+20),1,1,Scalar(0,255,0));
 
 }
-void morphOps(Mat &thresh){
+// void morphOps(Mat &thresh){
 
-	//create structuring element that will be used to "dilate" and "erode" image.
-	//the element chosen here is a 3px by 3px rectangle
+// 	//create structuring element that will be used to "dilate" and "erode" image.
+// 	//the element chosen here is a 3px by 3px rectangle
 
-	Mat erodeElement = getStructuringElement( MORPH_RECT,Size(erodeElementSize,erodeElementSize));
-	//dilate with larger element so make sure object is nicely visible
-	Mat dilateElement = getStructuringElement( MORPH_RECT,Size(dilateElementSize,dilateElementSize));
+// 	Mat erodeElement = getStructuringElement( MORPH_RECT,Size(erodeElementSize,erodeElementSize));
+// 	//dilate with larger element so make sure object is nicely visible
+// 	Mat dilateElement = getStructuringElement( MORPH_RECT,Size(dilateElementSize,dilateElementSize));
 
-	erode(thresh,thresh,erodeElement);
-	erode(thresh,thresh,erodeElement);
+// 	erode(thresh,thresh,erodeElement);
+// 	erode(thresh,thresh,erodeElement);
 
-	dilate(thresh,thresh,dilateElement);
-	dilate(thresh,thresh,dilateElement);
-}
+// 	dilate(thresh,thresh,dilateElement);
+// 	dilate(thresh,thresh,dilateElement);
+// }
 
 void floodFillingWalls(Mat *threshold, Mat *cameraFeed, int row, int col, long int & xTotal, long int & yTotal, long int & floodPixelCount, int & minX, int & minY, int & maxX, int & maxY){
 
@@ -535,7 +537,7 @@ void cameraThreadLoop() {
         // power = speed * ((P_CONSTANT * diffAngle / 10000.0)); //+ (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
         desiredAngle = currentAngle + objectAngle;
-        printf("predicted Angle: %f\n", desiredAngle - currentAngle;
+        printf("predicted Angle: %f\n", desiredAngle - currentAngle);
         printf("Desired Angle: %f\n", desiredAngle);
 
         usleep(100 * MS);
@@ -651,7 +653,7 @@ int main() {
         diffAngle = desiredAngle - total;
         integral += diffAngle * 0.001 * timeBetweenReadings;
         derivative = (rf / 80.0);
-        power = speed * ((P_CONSTANT * diffAngle / 360.0);// + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        power = speed * ((P_CONSTANT * diffAngle / 360.0));// + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
         if (power > .3) {
             power = .3;
