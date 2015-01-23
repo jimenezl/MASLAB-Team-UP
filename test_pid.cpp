@@ -96,7 +96,7 @@ int main() {
     float derivative = 0;
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
-    float forwardBias = .1;
+    float forwardBias = 0;
     float P_CONSTANT = 25;
     float I_CONSTANT = .1;
     float D_CONSTANT = -1;
