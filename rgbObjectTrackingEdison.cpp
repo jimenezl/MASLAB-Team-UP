@@ -23,14 +23,14 @@
 using namespace cv;
 //initial min and max HSV filter values.
 //these will be changed using trackbars
-int GREEN_THRESHHOLD_FOR_RED = 73;
-int BLUE_THRESHHOLD_FOR_RED = 44;
-int GREEN_THRESHHOLD_FOR_BLUE = 47;
-int RED_THRESHHOLD_FOR_BLUE = 100;
-int RED_THRESHHOLD_FOR_GREEN = 59;
-int BLUE_THRESHHOLD_FOR_GREEN = 28;
-int CYAN_THRESHHOLD_FOR_YELLOW = 55;
-int MAGENTA_THRESHHOLD_FOR_YELLOW = 46;
+float GREEN_THRESHHOLD_FOR_RED = 73.0/50.0;
+float BLUE_THRESHHOLD_FOR_RED = 44.0/50.0;
+float GREEN_THRESHHOLD_FOR_BLUE = 47.0/50.0;
+float RED_THRESHHOLD_FOR_BLUE = 100.0/50.0;
+float RED_THRESHHOLD_FOR_GREEN = 59.0/50.0;
+float BLUE_THRESHHOLD_FOR_GREEN = 28.0/50.0;
+float CYAN_THRESHHOLD_FOR_YELLOW = 55.0/50.0;
+float MAGENTA_THRESHHOLD_FOR_YELLOW = 46.0/50.0;
 
 
 long int thresholdBlockSize = 12000; //Number of pixels needed for a cube to be considered "close enough" to be picked up
@@ -222,7 +222,7 @@ void floodFilling(Mat *threshold, Mat *cameraFeed, int row, int col, long int & 
 		maxY = row;
 	}
 
-	if ( ((col>1)&&(col<(FRAME_WIDTH-1))) && ((row>1)&&(row<(FRAME_HEIGHT-1))) ){
+	if ( ((col>1)&&(col<(FRAME_WIDTH-1))) && ((	row>1)&&(row<(FRAME_HEIGHT-1))) ){
 		if (threshold->at<bool>(row,col+1)){
 			floodFilling(threshold,cameraFeed, row, col+1, xTotal, yTotal, floodPixelCount, minX, minY, maxX, maxY);
 		}
@@ -358,7 +358,7 @@ void trackFilteredObject(Mat threshold, Mat &cameraFeed){
 Mat& filterBlue(Mat& filteredImage)
 {
     // accept only char type matrices
-    CV_Assert(filteredImage.depth() != sizeof(uchar));
+    // CV_Assert(filteredImage.depth() != sizeof(uchar));
 
     
     MatIterator_<Vec3b> it, end;
@@ -380,12 +380,12 @@ Mat& filterBlue(Mat& filteredImage)
     	c = g+b;
     	m = r+b;
 
-    	if ( (b > g*(float(GREEN_THRESHHOLD_FOR_BLUE)/50.0) ) && (b > r*(float(RED_THRESHHOLD_FOR_BLUE)/50.0)) ){
+    	if ( (b > g*GREEN_THRESHHOLD_FOR_BLUE ) && (b > r*RED_THRESHHOLD_FOR_BLUE) ){
     		(*it)[0] = 255;
 	        (*it)[1] = 255;
 	        (*it)[2] = 255;	
     	}
-    	// else if ( (y > c*(float(CYAN_THRESHHOLD_FOR_YELLOW)/50.0) ) && (y > m*(float(MAGENTA_THRESHHOLD_FOR_YELLOW)/50.0)) ){
+    	// else if ( (y > c*CYAN_THRESHHOLD_FOR_YELLOW ) && (y > m*MAGENTA_THRESHHOLD_FOR_YELLOW) ){
     	// 	(*it)[0] = 255;
 	    //     (*it)[1] = 255;
 	    //     (*it)[2] = 255;	
@@ -403,7 +403,7 @@ Mat& filterBlue(Mat& filteredImage)
 Mat& filterBlock(Mat& filteredImage)
 {
     // accept only char type matrices
-    CV_Assert(filteredImage.depth() != sizeof(uchar));
+    // CV_Assert(filteredImage.depth() != sizeof(uchar));
 
     
     MatIterator_<Vec3b> it, end;
@@ -416,12 +416,12 @@ Mat& filterBlock(Mat& filteredImage)
     	b = (*it)[0];
     	g = (*it)[1];
     	r = (*it)[2];
-    	if ( (r > g*(float(GREEN_THRESHHOLD_FOR_RED)/50.0) ) && (r > b*(float(BLUE_THRESHHOLD_FOR_RED)/50.0)) ){
+    	if ( (r > g*GREEN_THRESHHOLD_FOR_RED) && (r > b*BLUE_THRESHHOLD_FOR_RED) ) {
     		(*it)[0] = 255;
 	        (*it)[1] = 255;
 	        (*it)[2] = 255;	
     	}
-    	else if ( (g > r*(float(RED_THRESHHOLD_FOR_GREEN)/50.0) ) && (g > b*(float(BLUE_THRESHHOLD_FOR_GREEN)/50.0)) ){
+    	else if ( (g > r*RED_THRESHHOLD_FOR_GREEN ) && (g > b*BLUE_THRESHHOLD_FOR_GREEN) ){
     		(*it)[0] = 255;
 	        (*it)[1] = 255;
 	        (*it)[2] = 255;	

@@ -23,14 +23,14 @@
 using namespace cv;
 //initial min and max HSV filter values.
 //these will be changed using trackbars
-int GREEN_THRESHHOLD_FOR_RED = 73;
-int BLUE_THRESHHOLD_FOR_RED = 44;
-int GREEN_THRESHHOLD_FOR_BLUE = 47;
-int RED_THRESHHOLD_FOR_BLUE = 100;
-int RED_THRESHHOLD_FOR_GREEN = 59;
-int BLUE_THRESHHOLD_FOR_GREEN = 28;
-int CYAN_THRESHHOLD_FOR_YELLOW = 55;
-int MAGENTA_THRESHHOLD_FOR_YELLOW = 46;
+float GREEN_THRESHHOLD_FOR_RED = 73.0/50.0;
+float BLUE_THRESHHOLD_FOR_RED = 44.0/50.0;
+float GREEN_THRESHHOLD_FOR_BLUE = 47.0/50.0;
+float RED_THRESHHOLD_FOR_BLUE = 100.0/50.0;
+float RED_THRESHHOLD_FOR_GREEN = 59.0/50.0;
+float BLUE_THRESHHOLD_FOR_GREEN = 28.0/50.0;
+float CYAN_THRESHHOLD_FOR_YELLOW = 55.0/50.0;
+float MAGENTA_THRESHHOLD_FOR_YELLOW = 46.0/50.0;
 
 
 long int thresholdBlockSize = 12000; //Number of pixels needed for a cube to be considered "close enough" to be picked up
@@ -75,10 +75,10 @@ void createTrackbars(){
 	//create memory to store trackbar name on window
 	char TrackbarName[50];
 
-	createTrackbar( "GREEN_THRESHHOLD_FOR_RED", trackbarWindowName, &GREEN_THRESHHOLD_FOR_RED, GREEN_THRESHHOLD_FOR_RED, on_trackbar );
-	createTrackbar( "BLUE_THRESHHOLD_FOR_RED", trackbarWindowName, &BLUE_THRESHHOLD_FOR_RED, BLUE_THRESHHOLD_FOR_RED, on_trackbar );
-	createTrackbar( "erodeElementSize", trackbarWindowName, &erodeElementSize, 20, on_trackbar );
-	createTrackbar( "dilateElementSize", trackbarWindowName, &dilateElementSize, 20, on_trackbar );
+	// createTrackbar( "GREEN_THRESHHOLD_FOR_RED", trackbarWindowName, &GREEN_THRESHHOLD_FOR_RED, GREEN_THRESHHOLD_FOR_RED, on_trackbar );
+	// createTrackbar( "BLUE_THRESHHOLD_FOR_RED", trackbarWindowName, &BLUE_THRESHHOLD_FOR_RED, BLUE_THRESHHOLD_FOR_RED, on_trackbar );
+	// createTrackbar( "erodeElementSize", trackbarWindowName, &erodeElementSize, 20, on_trackbar );
+	// createTrackbar( "dilateElementSize", trackbarWindowName, &dilateElementSize, 20, on_trackbar );
 }
 
 void drawObject(int x,int y,Mat &frame){
@@ -372,12 +372,12 @@ Mat& filterBlue(Mat& filteredImage)
     	c = g+b;
     	m = r+b;
 
-    	if ( (b > g*(float(GREEN_THRESHHOLD_FOR_BLUE)/50.0) ) && (b > r*(float(RED_THRESHHOLD_FOR_BLUE)/50.0)) ){
+    	if ( (b > g*GREEN_THRESHHOLD_FOR_BLUE ) && (b > r*RED_THRESHHOLD_FOR_BLUE) ){
     		(*it)[0] = 255;
 	        (*it)[1] = 255;
 	        (*it)[2] = 255;	
     	}
-    	// else if ( (y > c*(float(CYAN_THRESHHOLD_FOR_YELLOW)/50.0) ) && (y > m*(float(MAGENTA_THRESHHOLD_FOR_YELLOW)/50.0)) ){
+    	// else if ( (y > c*CYAN_THRESHHOLD_FOR_YELLOW ) && (y > m*MAGENTA_THRESHHOLD_FOR_YELLOW) ){
     	// 	(*it)[0] = 255;
 	    //     (*it)[1] = 255;
 	    //     (*it)[2] = 255;	
@@ -408,12 +408,12 @@ Mat& filterBlock(Mat& filteredImage)
     	b = (*it)[0];
     	g = (*it)[1];
     	r = (*it)[2];
-    	if ( (r > g*(float(GREEN_THRESHHOLD_FOR_RED)/50.0) ) && (r > b*(float(BLUE_THRESHHOLD_FOR_RED)/50.0)) ){
+    	if ( (r > g*GREEN_THRESHHOLD_FOR_RED) && (r > b*BLUE_THRESHHOLD_FOR_RED) ) {
     		(*it)[0] = 255;
 	        (*it)[1] = 255;
 	        (*it)[2] = 255;	
     	}
-    	else if ( (g > r*(float(RED_THRESHHOLD_FOR_GREEN)/50.0) ) && (g > b*(float(BLUE_THRESHHOLD_FOR_GREEN)/50.0)) ){
+    	else if ( (g > r*RED_THRESHHOLD_FOR_GREEN ) && (g > b*BLUE_THRESHHOLD_FOR_GREEN) ){
     		(*it)[0] = 255;
 	        (*it)[1] = 255;
 	        (*it)[2] = 255;	
@@ -445,7 +445,7 @@ int main(int argc, char* argv[])
 	//video capture object to acquire webcam feed
 	VideoCapture capture;
 	//open capture object at location zero (default location for webcam)
-	capture.open(1);
+	capture.open(0);
 	//set height and width of capture frame
 	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
@@ -488,10 +488,6 @@ int main(int argc, char* argv[])
 		//image will not appear without this waitKey() command
 		waitKey(30);
 	}
-
-
-
-
 
 
 	return 0;
