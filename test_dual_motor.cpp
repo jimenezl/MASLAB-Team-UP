@@ -112,7 +112,7 @@ int main()
 
   while (running) {
     // Alternate two locations with 2-sec delay
-    setMotorPosition(15, 0.20);
+    setMotorPosition(i2c, 15, 0.20);
     setServoPosition(i2c, 0, -0.2); 
     dir.write(0);// -0.2 to 1.4 max with servo head parallel to servo
     sleep(2.0);
