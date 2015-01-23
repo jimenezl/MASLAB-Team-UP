@@ -114,7 +114,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
       setServoPosition(0, 0.4);
       printf("Pushing block\n");
       sleep(0.5);
-      setServoPosition(0, -.99); 
+      setServoPosition(0, -.90); 
     }
 
   }
@@ -126,7 +126,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
       setServoPosition(0, 0.4);
       printf("Pushing block\n");
       sleep(0.5);
-      setServoPosition(0, -.99);
+      setServoPosition(0, -.90);
     }
   }
 }
@@ -203,7 +203,6 @@ int main() {
   dir.write(0);
 
   initPWM();
-  setServoPosition(0, 0.4);
 
   while (running) {
     colorVal = aio.read();
