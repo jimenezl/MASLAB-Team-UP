@@ -89,7 +89,7 @@ void setServoPosition(mraa::I2c *i2c, int index, double duty) {
 }
 
 void setMotorPosition(int index, double duty) {
-    writePWM(index, duty);
+    writePWM(i2c, index, duty);
 }
 
 int main()
@@ -105,6 +105,7 @@ int main()
 
 
   // Turntable motor
+  mraa::Gpio dir = mraa::Gpio(3);
   dir.dir(mraa::DIR_OUT);
   dir.write(0);
 
