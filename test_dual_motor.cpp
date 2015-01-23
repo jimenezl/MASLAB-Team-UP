@@ -9,6 +9,7 @@
 
 #define SHIELD_I2C_ADDR 0x40
 
+
 int running = 1;
 #define MS 1000
 
@@ -88,7 +89,7 @@ void setServoPosition(mraa::I2c *i2c, int index, double duty) {
   writePWM(i2c, index, .04 * duty + .04);
 }
 
-void setMotorPosition(int index, double duty) {
+void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
     writePWM(i2c, index, duty);
 }
 
