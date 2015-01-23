@@ -598,7 +598,7 @@ int main() {
     float gyroBias = 1.0;
     float forwardBias = 0;
     float P_CONSTANT = 45;
-    float I_CONSTANT = .001;
+    float I_CONSTANT = .01;
     float D_CONSTANT = -1;
 
     
