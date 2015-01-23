@@ -71,7 +71,7 @@ float objectAngle = 0.0;
 float ANGLE_ALPHA = .3;
 
 float desiredAngle = 0.0;
-float DEG_PER_PIXEL = 0.121875;
+float DEGREES_PER_PIXEL = 0.16;
 
 float total = 0; //current angle belief
 
@@ -331,7 +331,8 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 	printf("border coordinates: (%d,%d) , (%d,%d)\n", objectMinX, objectMinY, objectMaxX, objectMaxY);
 	printf("object angle: %f\n", float(objectXCoord-160) * 0.2125);
 	// objectAngle = float(objectXCoord-160) * 0.2125;
-	objectAngle = (objectAngle*ANGLE_ALPHA) +  (float(objectXCoord-160) * 0.2125 * (1 - ANGLE_ALPHA));
+
+	objectAngle = (objectAngle*ANGLE_ALPHA) +  (float(objectXCoord-160) * DEGREES_PER_PIXEL * (1 - ANGLE_ALPHA));
 	// drawObject(objectMinX, objectMinY,*cameraFeed);
 	// drawObject(objectMaxX, objectMaxY,*cameraFeed);
 
