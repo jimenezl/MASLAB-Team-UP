@@ -587,7 +587,7 @@ int main() {
     dir2.dir(mraa::DIR_OUT);
     dir2.write(0);
 
-    float speed = .05;
+    float speed = .03;
     // float desiredAngle = 0.0; //making this global so camera thread can use and change it
     float diffAngle = 0.0;
     float integral = 0;
@@ -655,10 +655,10 @@ int main() {
         derivative = (rf / 80.0);
         power = speed * ((P_CONSTANT * diffAngle / 360.0));// + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
-        if (power > .3) {
-            power = .3;
-        } else if (power < -.3) {
-            power = -.3;
+        if (power > .2) {
+            power = .2;
+        } else if (power < -.2) {
+            power = -.2;
         }
         setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
