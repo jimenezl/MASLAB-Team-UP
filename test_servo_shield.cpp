@@ -104,8 +104,9 @@ int main()
     setServoPosition(i2c, 0, 0.4);
     printf("Position 0.4\n");
     sleep(2.0);
-    setServoPosition(i2c, 0, -0.9);
+   /* setServoPosition(i2c, 0, -0.9);
     printf("Position -0.9\n");
     sleep(2.0);
+    */
   }
 }
