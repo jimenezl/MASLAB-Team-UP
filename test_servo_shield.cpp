@@ -85,6 +85,7 @@ void writePWM(mraa::I2c* i2c, int index, double duty) {
 
 
 void setServoPosition(mraa::I2c *i2c, int index, double duty) {
+  printf("(Duty changed:)\n", .04 * duty + .04);
   writePWM(i2c, index, .04 * duty + .04);
 }
 

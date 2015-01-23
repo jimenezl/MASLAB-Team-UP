@@ -91,7 +91,7 @@ void writePWM(int index, double duty) {
 
 
 void setServoPosition(int index, double duty) {
-    printf("Duty:\n", duty);
+    //printf("Duty:\n", duty);
     writePWM(index, .04 * duty + .04);
 }
 void setMotorPosition(int index, double duty) {
@@ -203,6 +203,7 @@ int main() {
   dir.write(0);
 
   initPWM();
+  setServoPosition(0, 0.4);
 
   while (running) {
     colorVal = aio.read();
@@ -212,8 +213,8 @@ int main() {
     redSwitch = aio3.read();
 
     std::cout << "Colors: " << colorVal << std::endl;
-    std::cout << "Switch 1: " << greenSwitch << std::endl;
-    std::cout << "Switch 2: " << redSwitch << std::endl;
+    //std::cout << "Switch 1: " << greenSwitch << std::endl;
+    //std::cout << "Switch 2: " << redSwitch << std::endl;
 
     checkColors(colorVal); //checking color sensor
     sleep(1.0);
