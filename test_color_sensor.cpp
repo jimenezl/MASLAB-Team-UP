@@ -75,6 +75,8 @@ void writePWM(int index, double duty) {
     assert(0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
+    printf("duty:%f\n", duty);
+    printf("Index:%d\n", index);
     uint16_t onRounded = (uint16_t) on;
 
     uint8_t writeBuf[5];
@@ -113,9 +115,12 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     if (servoRun){
       printf("Pushing red block\n");
 
-      setServoPosition(0, 1.4); 
-      sleep(0.5);
-      setServoPosition(0, -0.2); // return to home position
+      setServoPosition(0, 1.0); 
+      printf("block pushed\n");
+      sleep(1);
+      setServoPosition(0, 0.0); 
+      printf("returning home\n"); 
+      sleep(1); // return to home position
     }
 
   }
@@ -126,14 +131,16 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     if (servoRun){
       printf("Pushing green block\n");
 
-      setServoPosition(0, 1.4;
-      sleep(0.5);
-      setServoPosition(0, -0.2); //return to home position
+      setServoPosition(0, 1.0);
+      printf("block pushed\n");
+      sleep(1);
+      setServoPosition(0, 0.0); 
+      printf("returning home\n");
+      sleep(1); //return to home position
     }
   }
 }
 
-// 885 no block, 860 for red to 830
 // Check color sensors and move to hopper
 void checkColors(float colorVal){
   if (colorVal > 360 && colorVal < 500){ //prev 900 to 1000
