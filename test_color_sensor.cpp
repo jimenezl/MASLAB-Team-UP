@@ -114,8 +114,11 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
       printf("Pushing red block\n");
 
       setServoPosition(0, 1.4); 
+      printf("block pushed\n");
       sleep(0.5);
-      setServoPosition(0, -0.2); // return to home position
+      setServoPosition(0, -0.2); 
+      printf("returning home\n"); 
+      sleep(0.5); // return to home position
     }
 
   }
@@ -127,8 +130,11 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
       printf("Pushing green block\n");
 
       setServoPosition(0, 1.4;
+      printf("block pushed\n");
       sleep(0.5);
-      setServoPosition(0, -0.2); //return to home position
+      setServoPosition(0, -0.2); 
+      printf("returning home\n");
+      sleep(0.5) //return to home position
     }
   }
 }
