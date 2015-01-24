@@ -75,6 +75,8 @@ void writePWM(int index, double duty) {
     assert(0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
+    printf("duty:%f\n", duty);
+    printf("Index:%d\n", index);
     uint16_t onRounded = (uint16_t) on;
 
     uint8_t writeBuf[5];
