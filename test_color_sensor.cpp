@@ -113,7 +113,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     if (servoRun){
       printf("Pushing red block\n");
 
-      setServoPosition(0, 1.2); 
+      setServoPosition(0, 1.0); 
       printf("block pushed\n");
       sleep(0.5);
       setServoPosition(0, 0.0); 
@@ -129,7 +129,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     if (servoRun){
       printf("Pushing green block\n");
 
-      setServoPosition(0, 1.2);
+      setServoPosition(0, 1.0);
       printf("block pushed\n");
       sleep(0.5);
       setServoPosition(0, 0.0); 
@@ -139,7 +139,6 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
   }
 }
 
-// 885 no block, 860 for red to 830
 // Check color sensors and move to hopper
 void checkColors(float colorVal){
   if (colorVal > 360 && colorVal < 500){ //prev 900 to 1000
