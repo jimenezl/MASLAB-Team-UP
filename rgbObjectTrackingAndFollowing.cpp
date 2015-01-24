@@ -600,7 +600,7 @@ int main() {
     float gyroBias = 1.0;
     float forwardBias = 0.0;
     float P_CONSTANT = 45;
-    float I_CONSTANT = 0;
+    float I_CONSTANT = .1;
     float D_CONSTANT = -1;
 
     
@@ -661,7 +661,7 @@ int main() {
         power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         
         if (diffAngle<5){
-	        forwardBias = .08 * distanceToBlock ;
+	        forwardBias = -.1 * distanceToBlock;
 	    } else {
 	    	forwardBias = 0.0;
 	    }
@@ -671,8 +671,8 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        setMotorSpeed(pwm, dir, -1 * (power + forwardBias));
-        setMotorSpeed(pwm2, dir2, -1 * (power - forwardBias));
+        setMotorSpeed(pwm, dir, -1 * power + forwardBias);
+        setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
         printf("Set power to: %f\n", power);
         printf("Desired Angle: %f\n", desiredAngle);
 
@@ -680,4 +680,3 @@ int main() {
 
     return 0;
 }
-
