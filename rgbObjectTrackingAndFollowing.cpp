@@ -69,6 +69,7 @@ const int MAX_OBJECT_AREA = FRAME_HEIGHT*FRAME_WIDTH/1.5;
 
 float objectAngle = 0.0;
 float ANGLE_ALPHA = .3;
+float distanceToBlock = 0;
 
 float desiredAngle = 0.0;
 float DEGREES_PER_PIXEL = 0.14;
@@ -352,6 +353,7 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 		// drawObject(objectXCoord,objectYCoord,*cameraFeed);
 	}
 
+	distanceToBlock = .33 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize))/3.0;
 	if (thresholdBlockSize<(numOfBlocks*maxFloodPixelCount)){
 		printf("Pick up block(s)!\n");
 	}
@@ -596,7 +598,7 @@ int main() {
     float derivative = 0;
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
-    float forwardBias = -.05;
+    float forwardBias = 0.0;
     float P_CONSTANT = 45;
     float I_CONSTANT = .1;
     float D_CONSTANT = -1;
@@ -657,11 +659,12 @@ int main() {
         integral = integral*.9 + (diffAngle * 0.001 * timeBetweenReadings);
         derivative = (rf / 80.0);
         power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        forwardBias = distanceToBlock;
 
-        if (power > .2) {
-            power = .2;
-        } else if (power < -.2) {
-            power = -.2;
+        if (power > .3) {
+            power = .3;
+        } else if (power < -.3) {
+            power = -.3;
         }
         setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
