@@ -57,6 +57,8 @@ float MAGENTA_THRESHHOLD_FOR_YELLOW = 46.0/50.0;
 long int thresholdBlockSize = 12000; //Number of pixels needed for a cube to be considered "close enough" to be picked up
 float stackedTwoBlockThreshhold = 1.2; //min amount that the vertical stack has to be greater than the horizontal for a block to be counted as a stack
 float stackedThreeBlockThreshhold = 1.8; //min amount that the vertical stack has to be greater than the horizontal for a block to be counted as a stack
+int minimumBlockSize = 20*20; //min number of pixels to be considered a block
+
 
 //default capture width and height
 const int FRAME_WIDTH = 320;
@@ -287,8 +289,8 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 	// std::cout << "depth: " << threshold->depth() << std::endl;
 	// std::cout << "channel: " << threshold->channels() << std::endl;
 	// std::cout << format(*threshold, "numpy") << std::endl;
-	long int objectXCoord = 0;
-	long int objectYCoord = 0;
+	long int objectXCoord = 320;
+	long int objectYCoord = 240;
 	int objectMaxX = 0;
 	int objectMaxY = 0;
 	int objectMinX = 0;
@@ -332,30 +334,32 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 	printf("border coordinates: (%d,%d) , (%d,%d)\n", objectMinX, objectMinY, objectMaxX, objectMaxY);
 	printf("object angle: %f\n", float(objectXCoord-160) * 0.2125);
 	// objectAngle = float(objectXCoord-160) * 0.2125;
+	// 
+	if (maxFloodPixelCount > minimumBlockSize){
+		objectAngle = (objectAngle*ANGLE_ALPHA) +  (float(objectXCoord-160) * DEGREES_PER_PIXEL * (1 - ANGLE_ALPHA));
+		// drawObject(objectMinX, objectMinY,*cameraFeed);
+		// drawObject(objectMaxX, objectMaxY,*cameraFeed);
 
-	objectAngle = (objectAngle*ANGLE_ALPHA) +  (float(objectXCoord-160) * DEGREES_PER_PIXEL * (1 - ANGLE_ALPHA));
-	// drawObject(objectMinX, objectMinY,*cameraFeed);
-	// drawObject(objectMaxX, objectMaxY,*cameraFeed);
+		int numOfBlocks = 1;
+		if (float(objectMaxX-objectMinX)*stackedThreeBlockThreshhold<(objectMaxY- objectMinY)){
+			// drawObject(objectXCoord, objectYCoord+int((objectMaxY-objectMinY)*.33),*cameraFeed);
+			// drawObject(objectXCoord, objectYCoord,*cameraFeed);
+			// drawObject(objectXCoord, objectYCoord-int((objectMaxY-objectMinY)*.33),*cameraFeed);
+			numOfBlocks = 3;
+		}
+		else if (float(objectMaxX-objectMinX)*stackedTwoBlockThreshhold<(objectMaxY- objectMinY)){
+			// drawObject(objectXCoord, objectYCoord+int((objectMaxY-objectMinY)*.25),*cameraFeed);
+			// drawObject(objectXCoord, objectYCoord-int((objectMaxY-objectMinY)*.25),*cameraFeed);
+			numOfBlocks = 2;
+		}
+		else {
+			// drawObject(objectXCoord,objectYCoord,*cameraFeed);
+		}
 
-	int numOfBlocks = 1;
-	if (float(objectMaxX-objectMinX)*stackedThreeBlockThreshhold<(objectMaxY- objectMinY)){
-		// drawObject(objectXCoord, objectYCoord+int((objectMaxY-objectMinY)*.33),*cameraFeed);
-		// drawObject(objectXCoord, objectYCoord,*cameraFeed);
-		// drawObject(objectXCoord, objectYCoord-int((objectMaxY-objectMinY)*.33),*cameraFeed);
-		numOfBlocks = 3;
-	}
-	else if (float(objectMaxX-objectMinX)*stackedTwoBlockThreshhold<(objectMaxY- objectMinY)){
-		// drawObject(objectXCoord, objectYCoord+int((objectMaxY-objectMinY)*.25),*cameraFeed);
-		// drawObject(objectXCoord, objectYCoord-int((objectMaxY-objectMinY)*.25),*cameraFeed);
-		numOfBlocks = 2;
-	}
-	else {
-		// drawObject(objectXCoord,objectYCoord,*cameraFeed);
-	}
-
-	distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
-	if (thresholdBlockSize<(numOfBlocks*maxFloodPixelCount)){
-		printf("Pick up block(s)!\n");
+		distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
+		if (thresholdBlockSize<(numOfBlocks*maxFloodPixelCount)){
+			printf("Pick up block(s)!\n");
+		}
 	}
 }
 
