@@ -111,7 +111,8 @@ int main()
   dir.write(0);
   setMotorPosition(i2c, 0, 0.20);
 
-  //while (running) {
+  while (running) {
+    setMotorPosition(i2c, 0, 0.20);
     // Alternate two locations with 2-sec delay
 
     //setServoPosition(i2c, 0, -0.2); 
@@ -121,5 +122,5 @@ int main()
     //dir.write(1);
     //sleep(2.0);
 
-  //}
+  }
 }
