@@ -588,6 +588,9 @@ void cameraThreadLoop() {
 	while(1){
 		float currentAngle = total; 
 
+		currentPosition = 0;
+		previousEncoderCount = encoderCount;
+		
 		//store image to matrix
 		capture.read(cameraFeed);
 		resize(cameraFeed, cameraFeed, Size(FRAME_WIDTH, FRAME_HEIGHT), 0, 0, INTER_CUBIC);
