@@ -691,7 +691,19 @@ int main() {
     float I_CONSTANT = .1;
     float D_CONSTANT = -1;
 
-    
+    //distance stuff:
+    float speedDistance = .1;
+	float currentPosition = 0.0;
+	float diffDistance = desiredDistance - currentPosition;
+	float previousError = diffDistance;
+	int previousEncoderCount = encoderCount;
+	float integralDistance = 0;
+	float powerDistance = 0;
+	float derivativeDistance = 0;
+	float timeBetweenReadingsDistance = .01;
+	float P_CONSTANT_DISTANCE = 25;
+	float I_CONSTANT_DISTANCE = 0;
+	float D_CONSTANT_DISTANCE = -1;
 
     while (running) {
         
@@ -749,7 +761,14 @@ int main() {
         power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         
         if (diffAngle<5){
-	        forwardBias = .1 * distanceToBlock; //TODO: put encoders pid code here
+	        // forwardBias = .1 * distanceToBlock; //TODO: put encoders pid code here
+	        currentPosition = currentPosition + ( metersPerEncoderCount*(encoderCount - previousEncoderCount) )
+		    previousError = diffDistance;
+		    previousEncoderCount = encoderCount;
+		    diffDistance = distanceToBlock - currentPosition;
+		    derivativeDistance = (diffDistance - previousError)/timeBetweenReadingsDistance; //we should make time between readings constant
+		    integralDistance = integralDistance*.9 + (diffDistance * timeBetweenReadingsDistance);
+		    powerDistance = speedDistance * ((P_CONSTANT_DISTANCE * diffAngle) + (I_CONSTANT_DISTANCE * integralDistance) + (D_CONSTANT_DISTANCE * derivativeDistance));
 	    } else {
 	    	forwardBias = 0.0;
 	    }
