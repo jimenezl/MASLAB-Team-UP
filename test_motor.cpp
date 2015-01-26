@@ -41,8 +41,8 @@ int main() {
     //assert(dir != NULL);
     dir.dir(mraa::DIR_OUT);
     dir.write(0);
-
-    mraa::Pwm pwm2 = mraa::Pwm(6);
+    
+    /*mraa::Pwm pwm2 = mraa::Pwm(6);
     pwm2.write(0.0);
     pwm2.enable(true);
     //assert(pwm2 != NULL);
@@ -50,13 +50,13 @@ int main() {
     //assert(dir != NULL);
     dir2.dir(mraa::DIR_OUT);
     dir2.write(0);
-
+    */
     double speed = -1.0;
     while (running) {
         double speed = 0.3;
         std::cout << "Speed: " << speed << std::endl;
         setMotorSpeed(pwm, dir, speed);
-        setMotorSpeed(pwm2, dir2, -1 * speed);
+        //setMotorSpeed(pwm2, dir2, -1 * speed);
 
         /*speed += 0.1;
         if (speed > 1.0) {
