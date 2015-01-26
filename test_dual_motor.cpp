@@ -1,6 +1,7 @@
 // Compile with:
 // g++ test_dual_motor.cpp -o test_dual -lmraa
 // Controls a servo on port 0 of the servo shield.
+// 18.111.18.177 
 
 #include "mraa.hpp"
 #include <cassert>
@@ -69,6 +70,7 @@ void initPWM(mraa::I2c *i2c) {
 void writePWM(mraa::I2c* i2c, int index, double duty) {
   assert(0.0 <= duty && duty <= 1.0);
   assert(0 <= index && index < 16);
+  std::cout << "Index " << index << std::endl;
   double on = 4095.0 * duty;
   uint16_t onRounded = (uint16_t) on;
 
