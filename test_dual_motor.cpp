@@ -109,17 +109,17 @@ int main()
   mraa::Gpio dir = mraa::Gpio(3);
   dir.dir(mraa::DIR_OUT);
   dir.write(0);
-  setMotorPosition(i2c, 15, 0.20);
+  setMotorPosition(i2c, 0, 0.20);
 
-  while (running) {
+  //while (running) {
     // Alternate two locations with 2-sec delay
 
-    setServoPosition(i2c, 0, -0.2); 
-    dir.write(0);// -0.2 to 1.4 max with servo head parallel to servo
-    sleep(2.0);
-    setServoPosition(i2c, 0, 1.4);
-    dir.write(1);
-    sleep(2.0);
+    //setServoPosition(i2c, 0, -0.2); 
+    //dir.write(0);// -0.2 to 1.4 max with servo head parallel to servo
+    //sleep(2.0);
+    //setServoPosition(i2c, 0, 1.4);
+    //dir.write(1);
+    //sleep(2.0);
 
-  }
+  //}
 }
