@@ -1,6 +1,10 @@
 // Compile with:
 // g++ test_color_sensor.cpp -o test_color_sensor -lmraa
 // Repeatedly reads pin A0 and prints the result.
+// brown, black, orange resistor for photoresistor
+// red, red, brown resistor for led
+
+
 
 #include "mraa.hpp"
 #include <cassert>
@@ -108,42 +112,42 @@ void limitSwitches(float switch1, float switch2, bool servoRun);
 // Limit Switches
 void limitSwitches(float switch1, float switch2, bool servoRun){
 
-  if (switch1 > 50) {
+  if (switch1 < 1000) {
     printf("Turning off motor\n");
-    setMotorPosition(15, 0.0);
+    setMotorPosition(0, 0.0);
 
     if (servoRun){
       printf("Pushing red block\n");
 
-      setServoPosition(0, 1.0); 
+      setServoPosition(8, 1.0); 
       printf("block pushed\n");
-      sleep(1);
-      setServoPosition(0, 0.0); 
+      sleep(1.0); //must be integer
+      setServoPosition(8, 0.0); 
       printf("returning home\n"); 
-      sleep(1); // return to home position
+      sleep(1.0); // return to home position
     }
 
   }
-  else if (switch2 > 50){
+  else if (switch2 < 1000){
     printf("Turning off motor\n");
-    setMotorPosition(15, 0.0);
+    setMotorPosition(0, 0.0);
     
     if (servoRun){
       printf("Pushing green block\n");
 
-      setServoPosition(0, 1.0);
+      setServoPosition(8, 1.0);
       printf("block pushed\n");
-      sleep(1);
-      setServoPosition(0, 0.0); 
+      sleep(1.0);
+      setServoPosition(8, 0.0); 
       printf("returning home\n");
-      sleep(1); //return to home position
+      sleep(1.0); //return to home position
     }
   }
 }
 
 // Check color sensors and move to hopper
 void checkColors(float colorVal){
-  if (colorVal > 360 && colorVal < 500){ //prev 900 to 1000
+  if (colorVal > 360 && colorVal < 700){ //prev 900 to 1000
       printf("Red Block Found\n");
       servoRun = true;
       dir.write(0);
@@ -153,7 +157,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else {
-        setMotorPosition(15, 0.15);
+        setMotorPosition(0, 0.25);
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
@@ -166,7 +170,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else { 
-      setMotorPosition(15, 0.15);
+      setMotorPosition(0, 0.25);
       limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
@@ -175,7 +179,7 @@ void checkColors(float colorVal){
       dir.write(1);
       // adding in check for already being at green station
       if (greenSwitch > 50){
-      setMotorPosition(15, 0.15);
+      setMotorPosition(0, 0.25);
       servoRun = false; 
       }
     }
@@ -184,7 +188,7 @@ void checkColors(float colorVal){
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
-    setMotorPosition(15, 0.0);
+    setMotorPosition(0, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -198,10 +202,10 @@ int main() {
   alpha = 0.5;
 
   // Color Sensor Readings to Pin 0
-  // Limit Switch to Pin 2, Pin 3
+  // Limit Switch to Pin 1, Pin 2
   mraa::Aio aio = mraa::Aio(0);
-  mraa::Aio aio2 = mraa::Aio(2);
-  mraa::Aio aio3 = mraa::Aio(3);
+  mraa::Aio aio2 = mraa::Aio(1);
+  mraa::Aio aio3 = mraa::Aio(2);
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
