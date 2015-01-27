@@ -16,7 +16,7 @@
 //Compile on PC:
 //g++ -ggdb `pkg-config --cflags opencv` -o `basename rgbObjectTrackingEdisonMultithread.cpp` rgbObjectTrackingEdisonMultithread `pkg-config --libs opencv`
 //Compile on Edison:
-//g++ rgbObjectTrackingEdisonMultithread.cpp -o rgbObjectTrackingEdisonMultithread `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
+//g++ rgbObjectTrackingEdisonMultithreadBufferFix.cpp -o rgbObjectTrackingEdisonMultithreadBufferFix `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
 
 
 #include <sstream>
