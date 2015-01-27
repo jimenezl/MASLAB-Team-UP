@@ -11,6 +11,9 @@
 #include <csignal>
 #include <iostream>
 
+//green is digigal pin 1
+// red is digial pin 0
+
 
 // Global Variables
 int running = 1;
@@ -208,9 +211,9 @@ int main() {
 
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 1, Pin 2
-  mraa::Aio aio = mraa::Aio(0);
-  mraa::Aio aio2 = mraa::Aio(1);
-  mraa::Aio aio3 = mraa::Aio(2);
+  mraa::Aio colorSensor = mraa::Gpio(0);
+  mraa::Aio limit1 = mraa::Gpio(1);
+  mraa::Aio limit2 = mraa::Gpio(0);
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
@@ -226,8 +229,8 @@ int main() {
     colorVal = aio.read();
     float cvalTwo = cvalOne; 
     //colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
-    greenSwitch = aio2.read(); //Green block canister
-    redSwitch = aio3.read();
+    greenSwitch = limit1.read(); //Green block canister
+    redSwitch = limit2.read();
 
     std::cout << "Colors: " << colorVal << std::endl;
     std::cout << "Switch 1: " << greenSwitch << std::endl;
