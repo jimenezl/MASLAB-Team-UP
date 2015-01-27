@@ -96,9 +96,9 @@ void setServoPosition(mraa::I2c *i2c, int index, double duty) {
 void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
     assert(-1.0 <= speed && speed <= 1.0);
     if (speed < 0) {
-        dir.write(1);
-    } else {
         dir.write(0);
+    } else {
+        dir.write(1);
     }
     pwm.write(fabs(speed));
 }
@@ -115,7 +115,7 @@ int main()
     mraa::Gpio dir = mraa::Gpio(8);
     //assert(dir != NULL);
     dir.dir(mraa::DIR_OUT);
-    dir.write(0);
+    dir.write(1);
     
     mraa::Pwm pwm2 = mraa::Pwm(6);
     pwm2.write(0.0);
@@ -124,7 +124,7 @@ int main()
     mraa::Gpio dir2 = mraa::Gpio(5);
     //assert(dir != NULL);
     dir2.dir(mraa::DIR_OUT);
-    dir2.write(0);
+    dir2.write(1);
     
 
   // Edison i2c bus is 6
