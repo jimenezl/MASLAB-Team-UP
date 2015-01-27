@@ -150,7 +150,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 // no block > 760
 // 460 red
 void checkColors(float colorVal){
-  if (colorVal > 360 && colorVal < 700){ //prev 900 to 1000
+  if (colorVal > 400 && colorVal < 700){ //prev 900 to 1000
       printf("Red Block Found\n");
       servoRun = true;
       dir.write(0);
@@ -164,7 +164,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal <= 350){ //prev. val<900 
+  else if (colorVal <= 400){ //prev. val<900 
       printf("Green Block Found\n");
       servoRun = true;
       dir.write(1);
@@ -232,6 +232,6 @@ int main() {
     std::cout << "Switch 2: " << redSwitch << std::endl;
 
     checkColors(colorVal); //checking color sensor
-    sleep(1.0);
+    sleep(2.0);
   } 
 }
