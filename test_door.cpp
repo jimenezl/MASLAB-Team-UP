@@ -7,6 +7,7 @@
 #include <cassert>
 #include <csignal>
 #include <iostream>
+#include "mraa.hpp"
 
 #define SHIELD_I2C_ADDR 0x40
 
