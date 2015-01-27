@@ -1,13 +1,16 @@
 // Compile with:
-// g++ test_servo_shield.cpp -o test_servo_shield -lmraa
+// g++ test_door.cpp -o test_door -lmraa
 // Controls a servo on port 0 of the servo shield.
+// 18.111.18.177 
 
 #include "mraa.hpp"
 #include <cassert>
 #include <csignal>
 #include <iostream>
+#include <cmath>
 
 #define SHIELD_I2C_ADDR 0x40
+
 
 int running = 1;
 #define MS 1000
@@ -68,6 +71,8 @@ void initPWM(mraa::I2c *i2c) {
 void writePWM(mraa::I2c* i2c, int index, double duty) {
   assert(0.0 <= duty && duty <= 1.0);
   assert(0 <= index && index < 16);
+  std::cout << "Duty " << duty << std::endl;
+  std::cout << "Index " << index << std::endl;
   double on = 4095.0 * duty;
   uint16_t onRounded = (uint16_t) on;
 
@@ -88,10 +93,39 @@ void setServoPosition(mraa::I2c *i2c, int index, double duty) {
   writePWM(i2c, index, .04 * duty + .04);
 }
 
+void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
+    assert(-1.0 <= speed && speed <= 1.0);
+    if (speed < 0) {
+        dir.write(0);
+    } else {
+        dir.write(1);
+    }
+    pwm.write(fabs(speed));
+}
+
 int main()
 {
   // Handle Ctrl-C quit
-  signal(SIGINT, sig_handler);
+    signal(SIGINT, sig_handler);
+
+    mraa::Pwm pwm = mraa::Pwm(9);
+    pwm.write(0.0);
+    pwm.enable(true);
+    //assert(pwm != NULL);
+    mraa::Gpio dir = mraa::Gpio(8);
+    //assert(dir != NULL);
+    dir.dir(mraa::DIR_OUT);
+    dir.write(1);
+    
+    mraa::Pwm pwm2 = mraa::Pwm(6);
+    pwm2.write(0.0);
+    pwm2.enable(true);
+    //assert(pwm2 != NULL);
+    mraa::Gpio dir2 = mraa::Gpio(5);
+    //assert(dir != NULL);
+    dir2.dir(mraa::DIR_OUT);
+    dir2.write(1);
+    
 
   // Edison i2c bus is 6
   mraa::I2c* i2c = new mraa::I2c(6);
@@ -99,12 +133,25 @@ int main()
 
   initPWM(i2c);
 
+  double speed = 0.25;
+  setServoPosition(i2c, 3, 0.0);
+  
   while (running) {
     // Alternate two locations with 2-sec delay
-    setServoPosition(i2c, 3, 1.0);  // perpendicular to brackets  -0.2 to 1.4 max with servo head parallel to servo
-    sleep(2.0); 
-
-    setServoPosition(i2c, 3, 0.0); // close
+    setMotorSpeed(pwm, dir, speed);
+    setMotorSpeed(pwm2, dir2, -1*speed); //move forward
     sleep(2.0);
+    setMotorSpeed(pwm, dir, 0);
+    setMotorSpeed(pwm2, dir2, 0);
+    setServoPosition(i2c, 3, 1.0); //open door
+    sleep(2.0);
+    setMotorSpeed(pwm, dir, speed);
+    setMotorSpeed(pwm2, dir2, -1*speed);
+    sleep(4.0);
+    setServoPosition(i2c, 3, 0.3); //close door
+    setMotorSpeed(pwm, dir, 0);
+    setMotorSpeed(pwm2, dir2, 0);
+    sleep(2.0);
+
   }
 }
