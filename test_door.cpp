@@ -133,7 +133,7 @@ int main()
 
   initPWM(i2c);
 
-  double speed = 0.15;
+  double speed = 0.35;
   
   while (running) {
     // Alternate two locations with 2-sec delay
