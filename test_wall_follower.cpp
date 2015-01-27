@@ -30,8 +30,8 @@ float DISTANCE_FROM_IR_SENSORS = 5.1;
 // float QUAD_TERM = ;
 // float LINEAR_TERM = ;
 // float CONST_TERM = ;
-BACK_INFRARED_PIN = ;
-FRONT_INFRARED_PIN = ;
+BACK_INFRARED_PIN = 1;
+FRONT_INFRARED_PIN = 0;
 
 int running = 1;
 
