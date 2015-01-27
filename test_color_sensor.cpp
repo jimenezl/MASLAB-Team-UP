@@ -80,7 +80,7 @@ void writePWM(int index, double duty) {
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
     printf("duty:%f\n", duty);
-    printf("Index:%d\n", index);
+    
     uint16_t onRounded = (uint16_t) on;
 
     uint8_t writeBuf[5];
@@ -122,7 +122,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
       setServoPosition(15, 1.0); 
       printf("block pushed\n");
       sleep(1.0); //must be integer
-      setServoPosition(15, 0.0); 
+      setServoPosition(15, -0.2); 
       printf("returning home\n"); 
       sleep(1.0); // return to home position
     }
@@ -138,7 +138,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
       setServoPosition(15, 1.0);
       printf("block pushed\n");
       sleep(1.0);
-      setServoPosition(15, 0.0); 
+      setServoPosition(15, -0.20); 
       printf("returning home\n");
       sleep(1.0); //return to home position
     }
@@ -161,6 +161,7 @@ void checkColors(float colorVal){
       }
       else {
         setMotorPosition(8, 0.15);
+        sleep(2.0);
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
@@ -174,6 +175,7 @@ void checkColors(float colorVal){
       }
       else { 
       setMotorPosition(8, 0.15);
+      sleep(2.0);
       limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
