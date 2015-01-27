@@ -133,7 +133,7 @@ int main()
 
   initPWM(i2c);
 
-  double speed = 0.;
+  double speed = 0.25;
   setServoPosition(i2c, 3, 0.0);
   
   while (running) {
