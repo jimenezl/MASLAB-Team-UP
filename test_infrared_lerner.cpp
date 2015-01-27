@@ -21,7 +21,7 @@ int main() {
   // Handle Ctrl-C quit
   signal(SIGINT, sig_handler);
 
-  mraa::Aio aio = mraa::Aio(3);
+  mraa::Aio aio = mraa::Aio(2);
 
   while (running) {
     int val = aio.read();
