@@ -132,21 +132,24 @@ int main() {
 
   //Turntable motor
   dir.dir(mraa::DIR_OUT);
-  dir.write(0);
+  dir.write(1);
 
   initPWM();
 
   while (running) {
     setServoPosition(0, 1.0);
+    sleep(2.0);
     setMotorPosition(11, 0.2);
     sleep(2.0);
     setMotorPosition(11, 0.0);
-    setServoPosition(0, 0.5); 
-    dir.write(1);
+    sleep(2.0);
+    setServoPosition(0, 0.3); 
+    dir.write(0);
     setMotorPosition(11, 0.2);
     sleep(2.0);
     setMotorPosition(11, 0.0);
-    setServoPosition(0, 0.0);
+    sleep(2.0);
+    
   }
 
 }
