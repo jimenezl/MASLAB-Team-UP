@@ -141,14 +141,14 @@ int main()
     setServoPosition(i2c, 3, 0.3); //close door
     sleep(1.0);
     setMotorSpeed(pwm, dir, speed);
-    setMotorSpeed(pwm2, dir2, speed); //move forward
+    setMotorSpeed(pwm2, dir2, -1*speed); //move forward
     sleep(2.0);
     setMotorSpeed(pwm, dir, 0);
     setMotorSpeed(pwm2, dir2, 0);
     setServoPosition(i2c, 14, 1.0); //open door
     sleep(2.0);
     setMotorSpeed(pwm, dir, speed);
-    setMotorSpeed(pwm2, dir2, speed);
+    setMotorSpeed(pwm2, dir2, -1*speed);
     sleep(2.0);
     setServoPosition(i2c, 3, 0.3); //close door
     setMotorSpeed(pwm, dir, 0);
