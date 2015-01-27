@@ -137,17 +137,23 @@ int main() {
   initPWM();
 
   while (running) {
-    setServoPosition(0, 1.0);
+    setServoPosition(0, 0.0);
+    printf("close gripper\n");
     sleep(2.0);
-    setMotorPosition(11, 0.2);
-    sleep(2.0);
+    setMotorPosition(11, 0.35);
+    printf("arm going up\n");
+    sleep(5.0);
     setMotorPosition(11, 0.0);
+    printf("turning off arm\n");
     sleep(2.0);
     setServoPosition(0, 0.3); 
+    printf("claw opening\n");
     dir.write(0);
     setMotorPosition(11, 0.2);
-    sleep(2.0);
+    printf("arm coming down\n");
+    sleep(3.0);
     setMotorPosition(11, 0.0);
+    printf("turning off arm to pick up blocks\n");
     sleep(2.0);
     
   }
