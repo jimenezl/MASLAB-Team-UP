@@ -117,7 +117,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     setMotorPosition(8, 0.0);
 
     if (servoRun){
-      printf("Pushing red block\n");
+      printf("Pushing green block\n");
 
       setServoPosition(15, 1.0); 
       printf("block pushed\n");
@@ -133,7 +133,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     setMotorPosition(8, 0.0);
     
     if (servoRun){
-      printf("Pushing green block\n");
+      printf("Pushing red block\n");
 
       setServoPosition(15, 1.0);
       printf("block pushed\n");
@@ -232,6 +232,6 @@ int main() {
     std::cout << "Switch 2: " << redSwitch << std::endl;
 
     checkColors(colorVal); //checking color sensor
-    sleep(2.0);
+    sleep(3.0);
   } 
 }
