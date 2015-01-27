@@ -141,9 +141,9 @@ int main() {
     setServoPosition(0, -0.20);
     printf("close gripper\n");
     sleep(2.0);
-    setMotorPosition(11, 0.32);
+    setMotorPosition(11, 0.5);
     printf("arm going up\n");
-    sleep(7.0);
+    sleep(4.0);
     setMotorPosition(11, 0.0);
     printf("turning off arm\n");
     sleep(2.0);
