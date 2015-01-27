@@ -115,7 +115,7 @@ int main()
     mraa::Gpio dir = mraa::Gpio(8);
     //assert(dir != NULL);
     dir.dir(mraa::DIR_OUT);
-    dir.write(1);
+    dir.write(0);
     
     mraa::Pwm pwm2 = mraa::Pwm(6);
     pwm2.write(0.0);
@@ -124,7 +124,7 @@ int main()
     mraa::Gpio dir2 = mraa::Gpio(5);
     //assert(dir != NULL);
     dir2.dir(mraa::DIR_OUT);
-    dir2.write(1);
+    dir2.write(0);
     
 
   // Edison i2c bus is 6
@@ -137,9 +137,6 @@ int main()
   
   while (running) {
     // Alternate two locations with 2-sec delay
-
-    setServoPosition(i2c, 3, 0.0); //close door
-    sleep(2.0);
     setMotorSpeed(pwm, dir, speed);
     setMotorSpeed(pwm2, dir2, -1*speed); //move forward
     sleep(2.0);
