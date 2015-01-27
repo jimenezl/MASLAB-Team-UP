@@ -1,5 +1,5 @@
 // Compile with:
-// *
+// g++ test_gripper_arm.cpp -o test_gripper_arm -lmraa
 // Repeatedly reads pin A0 and prints the result.
 // brown, black, orange resistor for photoresistor
 // red, red, brown resistor for led
@@ -32,7 +32,6 @@ Analogs
 int running = 1;
 
 mraa::I2c *i2c;
-
 mraa::Gpio dir = mraa::Gpio(4);
 
 
@@ -117,7 +116,7 @@ void setMotorPosition(int index, double duty) {
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
-    setMotorPosition(15, 0.0);
+    setMotorPosition(11, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
