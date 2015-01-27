@@ -133,21 +133,22 @@ int main()
 
   initPWM(i2c);
 
-  double speed = 0.25;
-  setServoPosition(i2c, 3, 0.0);
+  double speed = 0.35;
+  double speed2 = 0.30;
+  setServoPosition(i2c, 3, -0.2);
   
   while (running) {
     // Alternate two locations with 2-sec delay
     setMotorSpeed(pwm, dir, speed);
-    setMotorSpeed(pwm2, dir2, -1*speed); //move forward
-    sleep(2.0);
+    setMotorSpeed(pwm2, dir2, -1*speed2); //move forward
+    sleep(4.0);
     setMotorSpeed(pwm, dir, 0);
     setMotorSpeed(pwm2, dir2, 0);
     setServoPosition(i2c, 3, 1.0); //open door
     sleep(2.0);
     setMotorSpeed(pwm, dir, speed);
-    setMotorSpeed(pwm2, dir2, -1*speed);
-    sleep(4.0);
+    setMotorSpeed(pwm2, dir2, -1*speed2);
+    sleep(3.0);
     setServoPosition(i2c, 3, 0.3); //close door
     setMotorSpeed(pwm, dir, 0);
     setMotorSpeed(pwm2, dir2, 0);
