@@ -24,6 +24,15 @@
 #define GYRO_DATA_OKAY_MASK 0x0C000000
 #define GYRO_DATA_OKAY 0x04000000
 
+#define PI 3.14159265
+
+float DISTANCE_FROM_IR_SENSORS = 5.1;
+// float QUAD_TERM = ;
+// float LINEAR_TERM = ;
+// float CONST_TERM = ;
+BACK_INFRARED_PIN = ;
+FRONT_INFRARED_PIN = ;
+
 int running = 1;
 
 void sig_handler(int signo) {
@@ -47,8 +56,30 @@ void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
     pwm.write(fabs(speed));
 }
 
-float angleFromWall(float backInfraReading, float frontInfraReading){
-    bool inQuadran
+float angleFromWall(float backInfraDistance, float frontInfraDistance){
+    bool inQuadrantOne = true;
+    if (backInfraDistance > frontInfraDistance){
+        inQuadrantOne = true;
+    } else {
+        inQuadrantOne = false;
+    }
+
+    diffDistance = fabs(backInfraDistance - frontInfraDistance);
+
+    if(inQuadrantOne){
+        return asin(diffDistance/DISTANCE_FROM_IR_SENSORS);
+    } else{
+        return -1.0 * acos(diffDistance/DISTANCE_FROM_IR_SENSORS);
+    }
+}
+
+float infraReadingToDistance(float infraReading){
+    // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
+    if (infraReading!=0){
+        return 4500.0/infraReading;
+    } else {
+        return 10.0; //big number
+    }
 }
 
 int main() {
@@ -92,6 +123,9 @@ int main() {
     dir2.dir(mraa::DIR_OUT);
     dir2.write(0);
 
+    mraa::Aio aioBackInfrared = mraa::Aio(BACK_INFRARED_PIN);
+    mraa::Aio aioFrontInfrared = mraa::Aio(FRONT_INFRARED_PIN);
+
     float speed = .1;
     float desiredAngle = 0.0;
     float diffAngle = 0.0;
@@ -104,6 +138,8 @@ int main() {
     float P_CONSTANT = 25;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
+
+    float P_CONSTANT_WALL_FOLLOWER = .05 * 180.0 / PI;
 
     while (running) {
         chipSelect->write(0);
@@ -153,12 +189,22 @@ int main() {
         diffAngle = desiredAngle - total;
         integral += diffAngle * 0.001 * timeBetweenReadings;
         derivative = (rf / 80.0);
-        power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
 
-        if (power > .5) {
-            power = .5;
-        } else if (power < -.5) {
-            power = -.5;
+        float backInfraredReading = aioBackInfrared.read();
+        float frontInfraredReading = aioFrontInfrared.read();
+
+        float backDistance = infraReadingToDistance(backInfraredReading);
+        float frontDistance = infraReadingToDistance(frontInfraredReading);
+
+        float infraAngle = angleFromWall(backDistance, frontDistance);
+
+        // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        power = speed * (P_CONSTANT_WALL_FOLLOWER * infraAngle);
+
+        if (power > .3) {
+            power = .3;
+        } else if (power < -.3) {
+            power = -.3;
         }
         setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
