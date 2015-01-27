@@ -133,7 +133,7 @@ int main()
 
   initPWM(i2c);
 
-  double speed = 0.25;
+  double speed = 0.;
   setServoPosition(i2c, 3, 0.0);
   
   while (running) {
@@ -147,10 +147,11 @@ int main()
     sleep(2.0);
     setMotorSpeed(pwm, dir, speed);
     setMotorSpeed(pwm2, dir2, -1*speed);
-    sleep(2.0);
+    sleep(4.0);
     setServoPosition(i2c, 3, 0.3); //close door
     setMotorSpeed(pwm, dir, 0);
     setMotorSpeed(pwm2, dir2, 0);
+    sleep(2.0);
 
   }
 }
