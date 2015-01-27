@@ -114,15 +114,15 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 
   if (switch1 < 1000) {
     printf("Turning off motor\n");
-    setMotorPosition(0, 0.0);
+    setMotorPosition(8, 0.0);
 
     if (servoRun){
       printf("Pushing red block\n");
 
-      setServoPosition(8, 1.0); 
+      setServoPosition(15, 1.0); 
       printf("block pushed\n");
       sleep(1.0); //must be integer
-      setServoPosition(8, 0.0); 
+      setServoPosition(15, 0.0); 
       printf("returning home\n"); 
       sleep(1.0); // return to home position
     }
@@ -130,15 +130,15 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
   }
   else if (switch2 < 1000){
     printf("Turning off motor\n");
-    setMotorPosition(0, 0.0);
+    setMotorPosition(8, 0.0);
     
     if (servoRun){
       printf("Pushing green block\n");
 
-      setServoPosition(8, 1.0);
+      setServoPosition(15, 1.0);
       printf("block pushed\n");
       sleep(1.0);
-      setServoPosition(8, 0.0); 
+      setServoPosition(15, 0.0); 
       printf("returning home\n");
       sleep(1.0); //return to home position
     }
@@ -157,7 +157,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else {
-        setMotorPosition(0, 0.25);
+        setMotorPosition(8, 0.15);
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
@@ -170,7 +170,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else { 
-      setMotorPosition(0, 0.25);
+      setMotorPosition(8, 0.15);
       limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
@@ -179,7 +179,7 @@ void checkColors(float colorVal){
       dir.write(1);
       // adding in check for already being at green station
       if (greenSwitch > 50){
-      setMotorPosition(0, 0.25);
+      setMotorPosition(8, 0.15);
       servoRun = false; 
       }
     }
@@ -188,7 +188,7 @@ void checkColors(float colorVal){
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
-    setMotorPosition(0, 0.0);
+    setMotorPosition(8, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
