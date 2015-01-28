@@ -152,7 +152,7 @@ int main() {
     float derivative = 0;
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
-    float forwardBias = 0.1;
+    float forwardBias = 0.15;
     float P_CONSTANT = 25;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
@@ -176,18 +176,19 @@ int main() {
         // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         power = speed * (P_CONSTANT_WALL_FOLLOWER * infraAngle);
 
-        if (fabs(infraAngle) < 5.0){
-            power = 0;
-        }
+        // if (fabs(infraAngle) < 5.0){
+        //     power = 0;
+        // }
 
         if (power > .3) {
             power = .3;
         } else if (power < -.3) {
             power = -.3;
         }
-        setMotorSpeed(pwm, dir, power - forwardBias);
-        setMotorSpeed(pwm2, dir2, power + forwardBias);
+        setMotorSpeed(pwm, dir, -1 * power + forwardBias);
+        setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
         printf("Set power to: %f\n", power);
+        usleep(1000 * 10);
 
     }
 
