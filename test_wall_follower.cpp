@@ -169,7 +169,7 @@ int main() {
         // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         power = speed * (P_CONSTANT_WALL_FOLLOWER * infraAngle);
 
-        if (infraAngle < 7.0){
+        if (fabs(infraAngle) < 5.0){
             power = 0;
         }
 
