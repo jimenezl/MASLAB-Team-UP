@@ -26,7 +26,7 @@
 
 #define PI 3.14159265
 
-float DISTANCE_FROM_IR_SENSORS = 5.1;
+float DISTANCE_FROM_IR_SENSORS = 4.6;
 // float QUAD_TERM = ;
 // float LINEAR_TERM = ;
 // float CONST_TERM = ;
@@ -76,7 +76,7 @@ float angleFromWall(float backInfraDistance, float frontInfraDistance){
 float infraReadingToDistanceBack(float infraReading){
     // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
     if (infraReading!=0){
-        return 970.0/infraReading; //y = 970/x fits our data 
+        return (970.0/infraReading) - .5; //y = 970/x fits our data 
     } else {
         return 10.0; //big number
     }

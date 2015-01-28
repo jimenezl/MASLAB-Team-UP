@@ -148,6 +148,8 @@ int main() {
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
 
+    float desiredDistance = 1.5;
+
     float P_CONSTANT_WALL_FOLLOWER = .05 * 180.0 / PI;
 
     while (running) {
@@ -206,10 +208,12 @@ int main() {
         float backDistance = infraReadingToDistanceBack(backInfraredReading);
         float frontDistance = infraReadingToDistanceFront(frontInfraredReading);
         printf("Distances: Front: %f, Back: %f\n", backDistance, frontDistance);
-        float infraAngle = angleFromWall(backDistance, frontDistance);
-        printf("estimated angle: %f\n", infraAngle);
+        float averageDistance = (backDistance + frontDistance) / 2.0
+        // float infraAngle = angleFromWall(backDistance, frontDistance);
+        // printf("estimated angle: %f\n", infraAngle);
         // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
-        power = speed * (P_CONSTANT_WALL_FOLLOWER * infraAngle);
+        float diffDistance = averageDistance - desiredDistance;
+        power = speed * (P_CONSTANT_WALL_FOLLOWER * diffDistance);
 
         if (power > .3) {
             power = .3;
