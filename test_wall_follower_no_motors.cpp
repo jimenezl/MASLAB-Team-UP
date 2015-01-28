@@ -67,8 +67,10 @@ float angleFromWall(float backInfraDistance, float frontInfraDistance){
     float diffDistance = fabs(backInfraDistance - frontInfraDistance);
 
     if(inQuadrantOne){
+        printf("Quad 1: Estimated Angle in Radians:%f\n", diffDistance/DISTANCE_FROM_IR_SENSORS);
         return asin(diffDistance/DISTANCE_FROM_IR_SENSORS);
     } else{
+        printf("Quad 2: Estimated Angle in Radians:%f\n", diffDistance/DISTANCE_FROM_IR_SENSORS);
         return -1.0 * acos(diffDistance/DISTANCE_FROM_IR_SENSORS);
     }
 }
@@ -172,7 +174,7 @@ int main() {
         // }
         // setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         // setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
-        printf("Set power to: %f\n", power);
+        //printf("Set power to: %f\n", power);
         usleep(1000*1000);
 
     }
