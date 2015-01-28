@@ -58,7 +58,7 @@ void initPWM(mraa::I2c *i2c) {
   
   writeBuf[0] = 0; // Write to the MODE 1 register
   writeBuf[1] = 1 << 5 // Enable auto increment mode
-        | 0 << 4; // Enable the oscillator
+            | 0 << 4; // Enable the oscillator
         
   i2c->address(SHIELD_I2C_ADDR);
   i2c->write(writeBuf, 2);
@@ -80,6 +80,7 @@ void writePWM(mraa::I2c* i2c, int index, double duty) {
   writeBuf[3] = onRounded & 0xFF; // OFF LSB
   writeBuf[4] = (onRounded >> 8) & 0xFF; // OFF MSB
   i2c->address(SHIELD_I2C_ADDR);
+  i2c->write(writeBuf, 5); 
 }
 
 
@@ -101,10 +102,10 @@ int main()
   while (running) {
     // Alternate two locations with 2-sec delay
     setServoPosition(i2c, 0, 0.8);  // 1.5 fully open 
-    printf("(Position at 1.3)\n");
+
     sleep(2.0);
     setServoPosition(i2c, 0, 0.2);
-    printf("Position at 0.7\n"); // close
+
     sleep(2.0);
   }
 }
