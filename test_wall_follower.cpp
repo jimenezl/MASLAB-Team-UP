@@ -185,8 +185,8 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        setMotorSpeed(pwm, dir, -1 * power + forwardBias);
-        setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
+        setMotorSpeed(pwm, dir, power + forwardBias);
+        setMotorSpeed(pwm2, dir2, power - forwardBias);
         printf("Set power to: %f\n", power);
         usleep(1000 * 10);
 
