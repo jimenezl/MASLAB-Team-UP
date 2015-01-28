@@ -1,5 +1,5 @@
 // Build with:
-// g++ test_wall_follower.cpp -o test_wall_follower -lmraa
+// g++ test_wall_follower_distance.cpp -o test_wall_follower_distance -lmraa
 // SPI pins are:
 // - IO10: SS
 // - IO11: MOSI
@@ -66,7 +66,7 @@ float angleFromWall(float backInfraDistance, float frontInfraDistance){
         inQuadrantOne = false;
     }
 
-    diffDistance = fabs(backInfraDistance - frontInfraDistance);
+    float diffDistance = fabs(backInfraDistance - frontInfraDistance);
 
     if(inQuadrantOne){
         return asin(diffDistance/DISTANCE_FROM_IR_SENSORS);
@@ -183,8 +183,6 @@ int main() {
         printf("Set power to: %f\n", power);
 
     }
-
-    delete spi;
 
     return 0;
 }
