@@ -33,7 +33,7 @@ int running = 1;
 
 mraa::I2c *i2c;
 mraa::Gpio dir = mraa::Gpio(4);
-mraa::Gpio armLimit = mraa::Gpio(2);
+
 
 
 #define SHIELD_I2C_ADDR 0x40
@@ -126,6 +126,8 @@ void sig_handler(int signo)
 int main() {
   // Handle Ctrl-C quit
   signal(SIGINT, sig_handler);
+
+  mraa::Gpio armLimit = mraa::Gpio(2);
 
     // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
