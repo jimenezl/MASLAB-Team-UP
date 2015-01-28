@@ -21,17 +21,32 @@ void sig_handler(int signo) {
 
 class WheelController {
 public:
-    int PWM_ONE_PIN = 9;
-    int DIR_ONE_PIN = 8;
+
+    int PWM_ONE_PIN;
+    int DIR_ONE_PIN;
     
-    int PWM_TWO_PIN = 6;
-    int DIR_TWO_PIN = 5;
+    int PWM_TWO_PIN;
+    int DIR_TWO_PIN;
 
-    mraa::Pwm pwm = mraa::Pwm(PWM_ONE_PIN);
-    mraa::Gpio dir = mraa::Gpio(DIR_ONE_PIN);
+    mraa::Pwm pwm;
+    mraa::Gpio dir;
 
-    mraa::Pwm pwm2 = mraa::Pwm(PWM_TWO_PIN);
-    mraa::Gpio dir2 = mraa::Gpio(DIR_TWO_PIN);
+    mraa::Pwm pwm2;
+    mraa::Gpio dir2;
+
+    WheelController(){
+        PWM_ONE_PIN = 9;
+        DIR_ONE_PIN = 8;
+        
+        PWM_TWO_PIN = 6;
+        DIR_TWO_PIN = 5;
+
+        pwm = mraa::Pwm(PWM_ONE_PIN);
+        dir = mraa::Gpio(DIR_ONE_PIN);
+
+        pwm2 = mraa::Pwm(PWM_TWO_PIN);
+        dir2 = mraa::Gpio(DIR_TWO_PIN);
+    }
 
     void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
         assert(-1.0 <= speed && speed <= 1.0);
