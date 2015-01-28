@@ -100,7 +100,7 @@ int main()
 
   while (running) {
     // Alternate two locations with 2-sec delay
-    setServoPosition(i2c, 0, 1.5);  // 1.5 fully open 
+    setServoPosition(i2c, 0, 0);  // 1.5 fully open 
     printf("(Position at 1.3)\n");
     sleep(2.0);
     //setServoPosition(i2c, 0, 0.70);
