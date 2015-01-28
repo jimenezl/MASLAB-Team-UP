@@ -145,13 +145,13 @@ int main() {
     float derivative = 0;
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
-    float forwardBias = .1;
+    float forwardBias = 0;
     float P_CONSTANT = 25;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
 
-    float backDistance = 3;
-    float frontDistance = 3;
+    float backDistance = 3.0;
+    float frontDistance = 3.0;
 
     float P_CONSTANT_WALL_FOLLOWER = .05 * 180.0 / PI;
 
