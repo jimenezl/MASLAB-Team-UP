@@ -155,7 +155,7 @@ int main() {
     float backDistance = 3.0;
     float frontDistance = 3.0;
 
-    float P_CONSTANT_WALL_FOLLOWER = .05 * 180.0 / PI;
+    float P_CONSTANT_WALL_FOLLOWER = .05;
 
     while (running) {
 
