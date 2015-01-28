@@ -152,7 +152,7 @@ int main() {
     float derivative = 0;
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
-    float forwardBias = 0.1;
+    float forwardBias = 0.2;
     float P_CONSTANT = 25;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
@@ -185,8 +185,8 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        setMotorSpeed(pwm, dir, power + forwardBias);
-        setMotorSpeed(pwm2, dir2, power - forwardBias);
+        setMotorSpeed(pwm, dir, power - forwardBias);
+        setMotorSpeed(pwm2, dir2, power + forwardBias);
         printf("Set power to: %f\n", power);
 
     }
