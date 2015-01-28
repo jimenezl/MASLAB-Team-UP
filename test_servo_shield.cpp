@@ -104,7 +104,7 @@ int main()
     setServoPosition(i2c, 0, -0.20);  // perpendicular to brackets  -0.2 to 1.4 max with servo head parallel to servo
     sleep(2.0); 
 
-    setServoPosition(i2c, 0, 1.0); // close
-    sleep(2.0);
+    //setServoPosition(i2c, 0, 1.0); // close
+    //sleep(2.0);
   }
 }
