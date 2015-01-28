@@ -101,12 +101,9 @@ int main()
 
   while (running) {
     // Alternate two locations with 2-sec delay
-    setServoPosition(i2c, 0, 1.5);  // perpendicular to brackets  -0.2 to 1.4 max with servo head parallel to servo
+    setServoPosition(i2c, 0, 1.5);  // 1.5 fully open 
     sleep(2.0);
-
-   // setServoPosition(i2c, 0, 0.2); // close
-    //sleep(2.0);
-    
-    
+    setServoPosition(i2c, 0, 0.8); // close
+    sleep(2.0);
   }
 }
