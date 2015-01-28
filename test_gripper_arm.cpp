@@ -138,16 +138,16 @@ int main() {
 
   while (running) {
     dir.write(1);
-    setServoPosition(0, 0.0);
+    setServoPosition(0, -0.10);
     printf("close gripper\n");
     sleep(2.0);
-    setMotorPosition(11, 0.40);
+    setMotorPosition(11, 0.44);
     printf("arm going up\n");
-    sleep(4.0);
+    sleep(5.0);
     setMotorPosition(11, 0.0);
     printf("turning off arm\n");
     sleep(2.0);
-    setServoPosition(0, 0.3); 
+    setServoPosition(0, 0.2); 
     printf("claw opening\n");
     sleep(2.0);
     dir.write(0);
