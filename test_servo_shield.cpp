@@ -104,7 +104,7 @@ int main()
     setServoPosition(i2c, 4, 1.6);  // 1.5 fully open 
 
     sleep(2.0);
-    setServoPosition(i2c, 4, 1.3);
+    setServoPosition(i2c, 4, 1.1);
 
     sleep(2.0);
   }
