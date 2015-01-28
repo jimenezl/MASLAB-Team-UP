@@ -141,21 +141,24 @@ int main() {
     armLimit.read();
     std::cout << "Arm Switch: " << armLimit << std::endl;
 
+
     dir.write(1);
     setServoPosition(0, -0.10);
     printf("close gripper\n");
     sleep(1.0);
     setMotorPosition(11, 0.30);
     printf("arm going up\n");
-    if (armLimit > 100){
+    if (armLimit < 1){
         setMotorPosition(11, 0.0);
         sleep(1.0);
         setServoPosition(i2c, 11, 0.20);
         sleep(2.0);
-        // arm going down
+        running = 0;
+      /*  // arm going down
         dir.write(0);
         setMotorPosition(11, 0.2);
         sleep(2.0);
+    */
     }
   }
 
