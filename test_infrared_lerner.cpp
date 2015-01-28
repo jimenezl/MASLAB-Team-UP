@@ -4,7 +4,7 @@
 
 #include <csignal>
 #include <iostream>
-
+#include <stdint.h>
 #include "mraa.hpp"
 
 int running = 1;
@@ -22,14 +22,14 @@ int main() {
   signal(SIGINT, sig_handler);
 
   mraa::Gpio GpioPinTwo = mraa::Gpio(2);
-  mraa::Aio aioPintThree = mraa::Aio(3);
+  mraa::Aio aioPinThree = mraa::Aio(3);
 
   while (running) {
     int val1 = GpioPinTwo.read();
-    int val2 = aioPintThree.read();
+    int val2 = aioPinThree.read();
     printf("Pin two: %d, pin three: %d\n", val1, val2);
     // std::cout << "Read: " << val << std::endl;
-    sleep(1);
+    usleep(1000*30);
 
 
     
