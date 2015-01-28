@@ -49,10 +49,10 @@ void sig_handler(int signo) {
 }
 
 void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
-    if (speed > 1) {
-        speed = 1;
-    } else if (speed < -1) {
-        speed = -1;
+    if (speed > 1.0) {
+        speed = 1.0;
+    } else if (speed < -1.0) {
+        speed = -1.0;
     }
     assert(-1.0 <= speed && speed <= 1.0);
     if (speed < 0) {
@@ -160,7 +160,7 @@ int main() {
     float backDistance = 3.0;
     float frontDistance = 3.0;
 
-    float P_CONSTANT_WALL_FOLLOWER = .05;
+    float P_CONSTANT_WALL_FOLLOWER = .075;
 
     while (running) {
 
