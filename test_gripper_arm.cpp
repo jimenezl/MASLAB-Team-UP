@@ -161,7 +161,7 @@ int main() {
       // arm going down
         dir.write(0);
         setMotorPosition(11, 0.2);
-        sleep(2.0);
+        sleep(1.0);
         setServoPosition(0, 1.0);
         sleep(2.0);
         armMoving = true;
