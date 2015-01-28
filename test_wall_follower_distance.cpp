@@ -166,7 +166,7 @@ int main() {
         backDistance =  (backDistance * alpha) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha));
         frontDistance = (frontDistance * alpha) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha) * .94);
         printf("Distances: Front: %f, Back: %f\n", backDistance, frontDistance);
-        float averageDistance = (backDistance + frontDistance) / 2.0
+        float averageDistance = (backDistance + frontDistance) / 2.0;
         // float infraAngle = angleFromWall(backDistance, frontDistance);
         // printf("estimated angle: %f\n", infraAngle);
         // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
