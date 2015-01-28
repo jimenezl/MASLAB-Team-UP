@@ -44,20 +44,20 @@ public:
     }
 
     void init() {
-        pwm = mraa::Pwm(9);
+        pwm = mraa::Pwm(PWM_ONE_PIN);
         pwm.write(0.0);
         pwm.enable(true);
         //assert(pwm != NULL);
-        dir = mraa::Gpio(8);
+        dir = mraa::Gpio(DIR_ONE_PIN);
         //assert(dir != NULL);
         dir.dir(mraa::DIR_OUT);
         dir.write(0);
 
-        pwm2 = mraa::Pwm(6);
+        pwm2 = mraa::Pwm(PWM_TWO_PIN);
         pwm2.write(0.0);
         pwm2.enable(true);
         //assert(pwm2 != NULL);
-        dir2 = mraa::Gpio(5);
+        dir2 = mraa::Gpio(DIR_TWO_PIN);
         //assert(dir != NULL);
         dir2.dir(mraa::DIR_OUT);
         dir2.write(0);
@@ -78,7 +78,7 @@ int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
 
-    WheelController wheelController(void);
+    WheelController wheelController;
     wheelController.init();
 
     double speed = -1.0;
