@@ -43,7 +43,7 @@ public:
         pwm.write(fabs(speed));
     }
 
-    void init(void) {
+    void init() {
         pwm = mraa::Pwm(9);
         pwm.write(0.0);
         pwm.enable(true);
@@ -78,7 +78,7 @@ int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
 
-    WheelController wheelController();
+    WheelController wheelController;
     wheelController.init();
 
     double speed = -1.0;
