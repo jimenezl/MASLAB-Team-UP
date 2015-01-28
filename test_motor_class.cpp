@@ -27,11 +27,11 @@ public:
     int PWM_TWO_PIN = 6;
     int DIR_TWO_PIN = 5;
 
-    mraa::Pwm pwm;
-    mraa::Gpio dir;
+    mraa::Pwm pwm = mraa::Pwm(PWM_ONE_PIN);
+    mraa::Gpio dir = mraa::Gpio(DIR_ONE_PIN);
 
-    mraa::Pwm pwm2;
-    mraa::Gpio dir2;
+    mraa::Pwm pwm2 = mraa::Pwm(PWM_TWO_PIN);
+    mraa::Gpio dir2 = mraa::Gpio(DIR_TWO_PIN);
 
     void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
         assert(-1.0 <= speed && speed <= 1.0);
@@ -44,20 +44,20 @@ public:
     }
 
     void init() {
-        pwm = mraa::Pwm(PWM_ONE_PIN);
+        // pwm = mraa::Pwm(PWM_ONE_PIN);
         pwm.write(0.0);
         pwm.enable(true);
         //assert(pwm != NULL);
-        dir = mraa::Gpio(DIR_ONE_PIN);
+        // dir = mraa::Gpio(DIR_ONE_PIN);
         //assert(dir != NULL);
         dir.dir(mraa::DIR_OUT);
         dir.write(0);
 
-        pwm2 = mraa::Pwm(PWM_TWO_PIN);
+        // pwm2 = mraa::Pwm(PWM_TWO_PIN);
         pwm2.write(0.0);
         pwm2.enable(true);
         //assert(pwm2 != NULL);
-        dir2 = mraa::Gpio(DIR_TWO_PIN);
+        // dir2 = mraa::Gpio(DIR_TWO_PIN);
         //assert(dir != NULL);
         dir2.dir(mraa::DIR_OUT);
         dir2.write(0);
