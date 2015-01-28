@@ -78,7 +78,7 @@ int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
 
-    WheelController wheelController;
+    WheelController wheelController(void);
     wheelController.init();
 
     double speed = -1.0;
