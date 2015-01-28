@@ -160,7 +160,7 @@ int main() {
     float backDistance = 3.0;
     float frontDistance = 3.0;
 
-    float P_CONSTANT_WALL_FOLLOWER = .075;
+    float P_CONSTANT_WALL_FOLLOWER = .1;
 
     while (running) {
 
