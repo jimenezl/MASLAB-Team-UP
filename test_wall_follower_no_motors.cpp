@@ -166,7 +166,7 @@ int main() {
         printf("Infra readings: back: %f, front: %f\n", backInfraredReading, frontInfraredReading);
 
         backDistance =  (backDistance * alpha) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha));
-        frontDistance = (frontDistance * alpha) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha));
+        frontDistance = (frontDistance * alpha) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha) * .94);
         printf("Distances: Back: %f, Front: %f\n", backDistance, frontDistance);
         float infraAngle = angleFromWall(backDistance, frontDistance);
         printf("estimated angle: %f\n", infraAngle);
