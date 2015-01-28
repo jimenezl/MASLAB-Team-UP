@@ -80,7 +80,6 @@ void writePWM(mraa::I2c* i2c, int index, double duty) {
   writeBuf[3] = onRounded & 0xFF; // OFF LSB
   writeBuf[4] = (onRounded >> 8) & 0xFF; // OFF MSB
   i2c->address(SHIELD_I2C_ADDR);
-  i2c->write(writeBuf, 5);
 }
 
 
@@ -101,11 +100,11 @@ int main()
 
   while (running) {
     // Alternate two locations with 2-sec delay
-    setServoPosition(i2c, 0, 1.3);  // 1.5 fully open 
+    setServoPosition(i2c, 0, 1.5);  // 1.5 fully open 
     printf("(Position at 1.3)\n");
     sleep(2.0);
-    setServoPosition(i2c, 0, 0.70);
-    printf("Position at 0.7\n"); // close
-    sleep(2.0);
+    //setServoPosition(i2c, 0, 0.70);
+    //printf("Position at 0.7\n"); // close
+    //sleep(2.0);
   }
 }
