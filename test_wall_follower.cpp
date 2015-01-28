@@ -152,7 +152,7 @@ int main() {
     float derivative = 0;
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
-    float forwardBias = 0.15;
+    float forwardBias = 0.1;
     float P_CONSTANT = 25;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
@@ -160,7 +160,7 @@ int main() {
     float backDistance = 3.0;
     float frontDistance = 3.0;
 
-    float P_CONSTANT_WALL_FOLLOWER = .08;
+    float P_CONSTANT_WALL_FOLLOWER = .05;
 
     while (running) {
 
