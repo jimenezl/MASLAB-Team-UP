@@ -26,7 +26,7 @@
 
 #define PI 3.14159265
 
-float DISTANCE_FROM_IR_SENSORS = 4.6;
+float DISTANCE_FROM_IR_SENSORS = 4.7;
 // float QUAD_TERM = ;
 // float LINEAR_TERM = ;
 // float CONST_TERM = ;
