@@ -33,6 +33,7 @@ int running = 1;
 
 mraa::I2c *i2c;
 mraa::Gpio dir = mraa::Gpio(4);
+mraa::Gpio armLimit = mraa::Gpio(2);
 
 
 #define SHIELD_I2C_ADDR 0x40
@@ -137,26 +138,25 @@ int main() {
   initPWM();
 
   while (running) {
+    armLimit.read();
+    std::cout << "Arm Switch: " << armLimit << std::endl;
+
     dir.write(1);
     setServoPosition(0, -0.10);
     printf("close gripper\n");
-    sleep(2.0);
-    setMotorPosition(11, 0.44);
+    sleep(1.0);
+    setMotorPosition(11, 0.30);
     printf("arm going up\n");
-    sleep(5.0);
-    setMotorPosition(11, 0.0);
-    printf("turning off arm\n");
-    sleep(2.0);
-    setServoPosition(0, 0.2); 
-    printf("claw opening\n");
-    sleep(2.0);
-    dir.write(0);
-    setMotorPosition(11, 0.2);
-    printf("arm coming down\n");
-    sleep(4.0);
-    setMotorPosition(11, 0.0);
-    printf("turning off arm to pick up blocks\n");
-    sleep(2.0);
+    if (armLimit > 100){
+        setMotorPosition(11, 0.0);
+        sleep(1.0);
+        setServoPosition(i2c, 11, 0.20);
+        sleep(2.0);
+        // arm going down
+        dir.write(0);
+        setMotorPosition(11, 0.2);
+        sleep(2.0);
+    }
   }
 
 }

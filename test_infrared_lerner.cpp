@@ -21,11 +21,11 @@ int main() {
   // Handle Ctrl-C quit
   signal(SIGINT, sig_handler);
 
-  mraa::Aio aioPinTwo = mraa::Aio(2);
+  mraa::Gpio GpioPinTwo = mraa::Gpio(2);
   mraa::Aio aioPintThree = mraa::Aio(3);
 
   while (running) {
-    int val1 = aioPinTwo.read();
+    int val1 = GpioPinTwo.read();
     int val2 = aioPintThree.read();
     printf("Pin two: %d, pin three: %d\n", val1, val2);
     // std::cout << "Read: " << val << std::endl;

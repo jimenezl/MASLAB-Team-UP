@@ -211,9 +211,9 @@ int main() {
 
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 1, Pin 2
-  mraa::Aio colorSensor = mraa::Gpio(0);
-  mraa::Aio limit1 = mraa::Gpio(1);
-  mraa::Aio limit2 = mraa::Gpio(0);
+  mraa::Aio colorSensor = mraa::aio(0);
+  mraa::Gpio limit1 = mraa::Gpio(1);
+  mraa::Gpio limit2 = mraa::Gpio(0);
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
