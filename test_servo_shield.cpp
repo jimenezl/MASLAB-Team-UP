@@ -103,7 +103,7 @@ int main()
     // Alternate two locations with 2-sec delay
     //setServoPosition(i2c, 0, 1.5);  // 1.5 fully open 
     //sleep(2.0);
-    setServoPosition(i2c, 0, 0.70); // close
+    setServoPosition(i2c, 0, 0.40); // close
     sleep(2.0);
   }
 }
