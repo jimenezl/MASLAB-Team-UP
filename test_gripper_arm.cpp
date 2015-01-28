@@ -138,17 +138,17 @@ int main() {
   initPWM();
 
   while (running) {
-    armLimit.read();
-    std::cout << "Arm Switch: " << armLimit << std::endl;
+    int armVal = armLimit.read();
+    printf("Arm Limit: %d\n", armLimit);
 
 
     dir.write(1);
-    setServoPosition(0, -0.10);
+    setServoPosition(i2d, 0, -0.10);
     printf("close gripper\n");
     sleep(1.0);
     setMotorPosition(11, 0.30);
     printf("arm going up\n");
-    if (armLimit < 1){
+    if (armVal < 1){
         setMotorPosition(11, 0.0);
         sleep(1.0);
         setServoPosition(i2c, 11, 0.20);
