@@ -142,7 +142,7 @@ int main() {
     if (armMoving){
     printf("Arm Limit: %d\n", armVal);
     dir.write(1);
-    setServoPosition(0, -0.10);
+    setServoPosition(0, -0.20);
     printf("close gripper\n");
     sleep(1.0);
 }
@@ -155,7 +155,7 @@ int main() {
         printf("Arm Limit: %d\n", armVal);
         setMotorPosition(11, 0.0);
         sleep(1.0);
-        setServoPosition(0, 0.30);
+        setServoPosition(0, 0.70);
         sleep(2.0);
         
       // arm going down
