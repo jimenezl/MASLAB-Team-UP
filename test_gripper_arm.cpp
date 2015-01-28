@@ -140,10 +140,9 @@ int main() {
   while (running) {
     int armVal = armLimit.read();
     printf("Arm Limit: %d\n", armVal);
-
-
     dir.write(1);
     setServoPosition(0, -0.10);
+    sleep(2.0);
     printf("close gripper\n");
     sleep(1.0);
     setMotorPosition(11, 0.30);
@@ -152,14 +151,15 @@ int main() {
         printf("Arm Limit: %d\n", armVal);
         setMotorPosition(11, 0.0);
         sleep(1.0);
-        setServoPosition(11, 0.20);
+        setServoPosition(0, 0.20);
         sleep(2.0);
-        running = 0;
-      /*  // arm going down
+        
+      // arm going down
         dir.write(0);
         setMotorPosition(11, 0.2);
+        sleep(4.0);
+        setServoPosition(0, 1.0);
         sleep(2.0);
-    */
     }
   }
 
