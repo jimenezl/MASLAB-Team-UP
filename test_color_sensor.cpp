@@ -28,7 +28,8 @@ bool servoRun = true;
 
 mraa::I2c *i2c;
 
-mraa::Gpio dir = mraa::Gpio(3);
+mraa::Gpio dir = mraa::Gpio(3); //Direction of Turntable
+mraa::Gpio dir = mraa::Gpio(4); //Direction of Arm
 
 #define SHIELD_I2C_ADDR 0x40
 #define MS 1000
@@ -206,14 +207,15 @@ int main() {
   // Handle Ctrl-C quit
   signal(SIGINT, sig_handler);
 
-  //alpha for low pass filter
-  alpha = 0.5;
-
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 1, Pin 2
   mraa::Aio colorSensor = mraa::aio(0);
   mraa::Gpio limit1 = mraa::Gpio(1);
   mraa::Gpio limit2 = mraa::Gpio(0);
+
+  mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
+  bool armMoving = true;
+  bool cubeFound = true;
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
@@ -226,17 +228,44 @@ int main() {
   initPWM();
 
   while (running) {
+    int armVal = armLimit.read(); 
     colorVal = aio.read();
-    float cvalTwo = cvalOne; 
-    //colorVal = cvalTwo*alpha + cvalOne*(1.0 - alpha);
     greenSwitch = limit1.read(); //Green block canister
     redSwitch = limit2.read();
 
-    std::cout << "Colors: " << colorVal << std::endl;
-    std::cout << "Switch 1: " << greenSwitch << std::endl;
-    std::cout << "Switch 2: " << redSwitch << std::endl;
+    if (cubeFound){ // Arm moving up until switch hit
+      printf("Arm Limit: %d\n", armVal);
+      dir.write(1);
+      setServoPosition(0, 0.90);
+      printf("close gripper\n");
+      sleep(1.0);
+    }
+    if (armMoving){
+      setMotorPosition(11, 0.30);
+      printf("Arm Moving Up\n");
+      }
 
-    checkColors(colorVal); //checking color sensor
-    sleep(3.0);
+     
+    if (armVal < 1){
+      armMoving = false;
+      cubeFound = false;
+
+      std::cout << "Colors: " << colorVal << std::endl;
+      std::cout << "Switch 1: " << greenSwitch << std::endl;
+      std::cout << "Switch 2: " << redSwitch << std::endl;
+      
+      printf("Arm Limit: %d\n", armVal);
+      setMotorPosition(11, 0.0);
+      sleep(2.0);
+      setServoPosition(0, 1.10);
+      sleep(2.0);
+      servoRun = true;
+
+      while(servoRun){
+        checkColors(colorVal); //checking color sensor
+        sleep(3.0);
+      }
+    }
+
   } 
 }
