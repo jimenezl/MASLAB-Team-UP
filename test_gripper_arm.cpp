@@ -127,11 +127,12 @@ int main() {
 
   mraa::Gpio armLimit = mraa::Gpio(2);
   bool armMoving = true;
+  bool cubeFound; 
     // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
   assert(i2c != NULL);
 
-  //Turntable motor
+  //armmotor
   dir.dir(mraa::DIR_OUT);
   dir.write(1);
 
@@ -139,33 +140,28 @@ int main() {
 
   while (running) {
     int armVal = armLimit.read();
+
+    if (blockFound){}
+        setServoPosition(0, 0.0);
+        printf("close gripper\n");
+        sleep(1.0);
+    }
     if (armMoving){
-    printf("Arm Limit: %d\n", armVal);
-    dir.write(1);
-    setServoPosition(0, 0.0);
-    printf("close gripper\n");
-    sleep(1.0);
-}
-    setMotorPosition(11, 0.30);
-    printf("Arm Moving Up\n");
-    armMoving = false; 
+        printf("Arm Limit: %d\n", armVal);
+        dir.write(1);
+        setMotorPosition(11, 0.30);
+        printf("Arm Moving Up\n");
+    }
+
     
-    printf("arm going up\n");
+    
     if (armVal < 1){
+        blockFound = false;
+        armMoving = false; 
         printf("Arm Limit: %d\n", armVal);
         setMotorPosition(11, 0.0);
         sleep(1.0);
         setServoPosition(0, 0.70);
         sleep(2.0);
-        
-      // arm going down
-        dir.write(0);
-        setMotorPosition(11, 0.2);
-        sleep(1.0);
-        setServoPosition(0, 8.0);
-        sleep(2.0);
-        armMoving = true;
     }
-  }
-
 }
