@@ -155,13 +155,13 @@ int main() {
         printf("Arm Limit: %d\n", armVal);
         setMotorPosition(11, 0.0);
         sleep(1.0);
-        setServoPosition(0, 0.20);
+        setServoPosition(0, 0.30);
         sleep(2.0);
         
       // arm going down
         dir.write(0);
         setMotorPosition(11, 0.2);
-        sleep(4.0);
+        sleep(2.0);
         setServoPosition(0, 1.0);
         sleep(2.0);
         armMoving = true;
