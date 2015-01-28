@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_motor.cpp -o test_motor -lmraa
+// g++ test_motor_class.cpp -o test_motor_class -lmraa
 // Controls a motor through a range of speeds using the Cytron motor controller
 // Pwm on pin 9, and dir on pin 8.
 
@@ -43,7 +43,7 @@ public:
         pwm.write(fabs(speed));
     }
 
-    void init() {
+    void init(void) {
         pwm = mraa::Pwm(9);
         pwm.write(0.0);
         pwm.enable(true);
