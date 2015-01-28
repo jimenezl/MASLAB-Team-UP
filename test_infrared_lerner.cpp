@@ -29,7 +29,7 @@ int main() {
     int val2 = aioPinThree.read();
     printf("Pin two: %d, pin three: %d\n", val1, val2);
     // std::cout << "Read: " << val << std::endl;
-    usleep(1000*300);
+    usleep(1000*30);
 
 
     
