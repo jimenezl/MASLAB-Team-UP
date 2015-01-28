@@ -81,7 +81,7 @@ float angleFromWall(float backInfraDistance, float frontInfraDistance){
 float infraReadingToDistanceBack(float infraReading){
     // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
     if (infraReading!=0){
-        return (970.0/infraReading) - .5; //y = 970/x fits our data 
+        return (970.0/infraReading) - .3; //y = 970/x - .3 fits our data 
     } else {
         return 10.0; //big number
     }
@@ -90,7 +90,7 @@ float infraReadingToDistanceBack(float infraReading){
 float infraReadingToDistanceFront(float infraReading){
     // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
     if (infraReading!=50.0){
-        return 600.0/(infraReading - 50.0); //y = 600/(x-50)
+        return (900.0/infraReading) - .5;; //y = 900/x  - .5
     } else {
         return 10.0; //big number
     }
