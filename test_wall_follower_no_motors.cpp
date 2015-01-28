@@ -33,6 +33,9 @@ float DISTANCE_FROM_IR_SENSORS = 4.7;
 int BACK_INFRARED_PIN = 3;
 int FRONT_INFRARED_PIN = 2;
 
+float alpha = .3;
+
+
 int running = 1;
 
 void sig_handler(int signo) {
@@ -68,17 +71,17 @@ float angleFromWall(float backInfraDistance, float frontInfraDistance){
 
     if(inQuadrantOne){
         printf("Quad 1: Estimated Angle in Radians:%f\n", diffDistance/DISTANCE_FROM_IR_SENSORS);
-        return asin(diffDistance/DISTANCE_FROM_IR_SENSORS);
+        return asin(diffDistance/DISTANCE_FROM_IR_SENSORS) * 180.0 / PI;
     } else{
         printf("Quad 2: Estimated Angle in Radians:%f\n", diffDistance/DISTANCE_FROM_IR_SENSORS);
-        return -1.0 * acos(diffDistance/DISTANCE_FROM_IR_SENSORS);
+        return -1.0 * asin(diffDistance/DISTANCE_FROM_IR_SENSORS) * 180.0 / PI;
     }
 }
 
 float infraReadingToDistanceBack(float infraReading){
     // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
     if (infraReading!=0){
-        return (970.0/infraReading) - .5; //y = 970/x fits our data 
+        return (970.0/infraReading) - .5; //y = 970/x - .3 fits our data 
     } else {
         return 10.0; //big number
     }
@@ -86,8 +89,8 @@ float infraReadingToDistanceBack(float infraReading){
 
 float infraReadingToDistanceFront(float infraReading){
     // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
-    if (infraReading!=50.0){
-        return 600.0/(infraReading - 50.0); //y = 600/(x-50)
+    if (infraReading!=0){
+        return (970.0/infraReading) - .5;; //y = 970/x  - .5
     } else {
         return 10.0; //big number
     }
@@ -150,6 +153,9 @@ int main() {
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
 
+    float backDistance = 0;
+    float frontDistance = 0;
+
     float P_CONSTANT_WALL_FOLLOWER = .05 * 180.0 / PI;
 
     while (running) {
@@ -159,8 +165,8 @@ int main() {
         float frontInfraredReading = aioFrontInfrared.read();
         printf("Infra readings: back: %f, front: %f\n", backInfraredReading, frontInfraredReading);
 
-        float backDistance = infraReadingToDistanceBack(backInfraredReading);
-        float frontDistance = infraReadingToDistanceFront(frontInfraredReading);
+        backDistance =  (backDistance * alpha) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha));
+        frontDistance = (frontDistance * alpha) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha) * .94);
         printf("Distances: Back: %f, Front: %f\n", backDistance, frontDistance);
         float infraAngle = angleFromWall(backDistance, frontDistance);
         printf("estimated angle: %f\n", infraAngle);
