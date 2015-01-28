@@ -88,8 +88,6 @@ void writePWM(int index, double duty) {
     assert(0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
-    printf("duty:%f\n", duty);
-    printf("Index:%d\n", index);
     uint16_t onRounded = (uint16_t) on;
 
     uint8_t writeBuf[5];
@@ -151,6 +149,7 @@ int main() {
     setMotorPosition(11, 0.30);
     printf("arm going up\n");
     if (armVal < 1){
+        printf("Arm Limit: %d\n", armVal);
         setMotorPosition(11, 0.0);
         sleep(1.0);
         setServoPosition(11, 0.20);
