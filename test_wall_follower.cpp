@@ -174,7 +174,10 @@ int main() {
         float infraAngle = angleFromWall(backDistance, frontDistance);
         printf("estimated angle: %f\n", infraAngle);
         // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
-        power = speed * (P_CONSTANT_WALL_FOLLOWER * infraAngle);
+        
+        if (!isnan(infraAngle)){
+            power = speed * (P_CONSTANT_WALL_FOLLOWER * infraAngle);
+        }
 
         // if (fabs(infraAngle) < 5.0){
         //     power = 0;
@@ -185,8 +188,8 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        setMotorSpeed(pwm, dir, -1 * power + forwardBias);
-        setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
+        setMotorSpeed(pwm, dir, power + forwardBias);
+        setMotorSpeed(pwm2, dir2, power - forwardBias);
         printf("Set power to: %f\n", power);
         usleep(1000 * 10);
 
