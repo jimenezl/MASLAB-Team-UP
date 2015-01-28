@@ -73,10 +73,19 @@ float angleFromWall(float backInfraDistance, float frontInfraDistance){
     }
 }
 
-float infraReadingToDistance(float infraReading){
+float infraReadingToDistanceBack(int infraReading){
     // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
     if (infraReading!=0){
-        return 4500.0/infraReading;
+        return 970.0/float(infraReading); //y = 970/x fits our data 
+    } else {
+        return 10.0; //big number
+    }
+}
+
+float infraReadingToDistanceFront(int infraReading){
+    // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
+    if (infraReading!=0){
+        return 600.0/(float(infraReading) - 50.0); //y = 600/(x-50)
     } else {
         return 10.0; //big number
     }
@@ -144,13 +153,13 @@ int main() {
     while (running) {
         
 
-        float backInfraredReading = aioBackInfrared.read();
-        float frontInfraredReading = aioFrontInfrared.read();
+        int backInfraredReading = aioBackInfrared.read();
+        int frontInfraredReading = aioFrontInfrared.read();
         printf("Infra readings: back: %f, front: %f\n", backInfraredReading, frontInfraredReading);
 
-        float backDistance = infraReadingToDistance(backInfraredReading);
-        float frontDistance = infraReadingToDistance(frontInfraredReading);
-        printf("Distances: Front: %f, Back: %f\n", backDistance, frontDistance);
+        float backDistance = infraReadingToDistanceBack(backInfraredReading);
+        float frontDistance = infraReadingToDistanceFront(frontInfraredReading);
+        printf("Distances: Back: %f, Front: %f\n", backDistance, frontDistance);
         float infraAngle = angleFromWall(backDistance, frontDistance);
         printf("estimated angle: %f\n", infraAngle);
         // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
