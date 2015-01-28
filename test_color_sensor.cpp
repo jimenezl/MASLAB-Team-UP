@@ -28,8 +28,8 @@ bool servoRun = true;
 
 mraa::I2c *i2c;
 
-mraa::Gpio dir = mraa::Gpio(3); //Direction of Turntable
-mraa::Gpio dir = mraa::Gpio(4); //Direction of Arm
+mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
+mraa::Gpio dirArm = mraa::Gpio(4); //Direction of Arm
 
 #define SHIELD_I2C_ADDR 0x40
 #define MS 1000
@@ -157,7 +157,7 @@ void checkColors(float colorVal){
   if (colorVal > 400 && colorVal < 700){ //prev 900 to 1000
       printf("Red Block Found\n");
       servoRun = true;
-      dir.write(0);
+      dirTurn.write(0);
 
       // adding in check for already being at red station
       if (redSwitch < 1000){
@@ -172,7 +172,7 @@ void checkColors(float colorVal){
   else if (colorVal <= 400){ //prev. val<900 
       printf("Green Block Found\n");
       servoRun = true;
-      dir.write(1);
+      dirTurn.write(1);
        // adding in check for already being at green station
       if (greenSwitch < 1000){
         limitSwitches(greenSwitch, redSwitch, servoRun);
@@ -185,7 +185,7 @@ void checkColors(float colorVal){
     }
   else if (colorVal >= 700){
       printf("No Block Found\n"); //prev > 1000
-      dir.write(1);
+      dirTurn.write(1);
       // adding in check for already being at green station
       if (greenSwitch < 1000){
       setMotorPosition(8, 0.15);
@@ -209,7 +209,7 @@ int main() {
 
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 1, Pin 2
-  mraa::Aio colorSensor = mraa::aio(0);
+  mraa::Aio colorSensor = mraa::Aio(0);
   mraa::Gpio limit1 = mraa::Gpio(1);
   mraa::Gpio limit2 = mraa::Gpio(0);
 
@@ -222,20 +222,20 @@ int main() {
   assert(i2c != NULL);
 
   //Turntable motor
-  dir.dir(mraa::DIR_OUT);
-  dir.write(0);
+  dirTurn.dir(mraa::DIR_OUT);
+  dirTurn.write(0);
 
   initPWM();
 
   while (running) {
     int armVal = armLimit.read(); 
-    colorVal = aio.read();
+    colorVal = colorSensor.read();
     greenSwitch = limit1.read(); //Green block canister
     redSwitch = limit2.read();
 
     if (cubeFound){ // Arm moving up until switch hit
       printf("Arm Limit: %d\n", armVal);
-      dir.write(1);
+      dirArm.write(1);
       setServoPosition(0, 0.90);
       printf("close gripper\n");
       sleep(1.0);
@@ -256,6 +256,7 @@ int main() {
       
       printf("Arm Limit: %d\n", armVal);
       setMotorPosition(11, 0.0);
+      dirArm.write(0);
       sleep(2.0);
       setServoPosition(0, 1.10);
       sleep(2.0);
