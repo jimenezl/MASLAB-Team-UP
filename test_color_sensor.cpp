@@ -236,7 +236,7 @@ int main() {
     if (cubeFound){ // Arm moving up until switch hit
       printf("Arm Limit: %d\n", armVal);
       dirArm.write(1);
-      setServoPosition(0, 0.90);
+      setServoPosition(0, 0.40);
       printf("close gripper\n");
       sleep(1.0);
     }
@@ -250,6 +250,9 @@ int main() {
       armMoving = false;
       cubeFound = false;
 
+      printf("Arm being held up\n");
+      setServoPosition(1, 0.5);
+
       std::cout << "Colors: " << colorVal << std::endl;
       std::cout << "Switch 1: " << greenSwitch << std::endl;
       std::cout << "Switch 2: " << redSwitch << std::endl;
@@ -258,7 +261,7 @@ int main() {
       setMotorPosition(11, 0.0);
       dirArm.write(0);
       sleep(2.0);
-      setServoPosition(0, 1.10);
+      setServoPosition(0, 0.70);
       sleep(2.0);
       servoRun = true;
 
