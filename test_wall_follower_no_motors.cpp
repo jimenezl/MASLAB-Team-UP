@@ -74,7 +74,7 @@ float angleFromWall(float backInfraDistance, float frontInfraDistance){
         return asin(diffDistance/DISTANCE_FROM_IR_SENSORS) * 180.0 / PI;
     } else{
         printf("Quad 2: Estimated Angle in Radians:%f\n", diffDistance/DISTANCE_FROM_IR_SENSORS);
-        return -1.0 * acos(diffDistance/DISTANCE_FROM_IR_SENSORS) * 180.0 / PI;
+        return -1.0 * asin(diffDistance/DISTANCE_FROM_IR_SENSORS) * 180.0 / PI;
     }
 }
 
