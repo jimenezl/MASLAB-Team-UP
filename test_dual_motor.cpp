@@ -12,6 +12,7 @@
 
 
 int running = 1;
+mraa::I2c* i2c;
 #define MS 1000
 
 uint8_t registers[] = {
@@ -112,7 +113,7 @@ int main()
   signal(SIGINT, sig_handler);
 
   // Edison i2c bus is 6
-  mraa::I2c* i2c = new mraa::I2c(6);
+  i2c = new mraa::I2c(6);
   assert(i2c != NULL);
 
   initPWM(i2c);
