@@ -35,14 +35,7 @@ uint8_t registers[] = {
 };
   
 
-void sig_handler(int signo)
-{
-  if (signo == SIGINT) {
-    setServoPosition(i2c, 4, 1.5); 
-    printf("closing spi nicely\n");
-    running = 0;
-  }
-}
+
 
 void initPWM(mraa::I2c *i2c) {
   uint8_t writeBuf[2] = {0};
