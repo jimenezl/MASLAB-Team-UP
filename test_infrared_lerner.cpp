@@ -21,7 +21,7 @@ int main() {
   // Handle Ctrl-C quit
   signal(SIGINT, sig_handler);
 
-  mraa::Gpio GpioPinTwo = mraa::Gpio(0);
+  mraa::Gpio GpioPinTwo = mraa::Gpio(1);
   mraa::Aio aioPinThree = mraa::Aio(3);
 
   while (running) {

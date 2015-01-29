@@ -28,6 +28,7 @@ float greenSwitch = 0;
 float redSwitch = 0; 
 bool servoRun = true;
 bool notSorting = true; 
+bool switchHit = true;
 
 mraa::I2c *i2c;
 
@@ -272,8 +273,8 @@ int main() {
 
       // Sort blocks by color
       std::cout << "Colors: " << colorVal << std::endl;
-      std::cout << "Switch 1: " << greenSwitch << std::endl;
-      std::cout << "Switch 2: " << redSwitch << std::endl;  
+      std::cout << "Green 1: " << greenSwitch << std::endl;
+      std::cout << "Red Switch: " << redSwitch << std::endl;  
       checkColors(colorVal); //checking color sensor
       sleep(3.0);
       
