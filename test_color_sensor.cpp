@@ -232,29 +232,31 @@ int main() {
     greenSwitch = limit1.read(); //Green block canister
     redSwitch = limit2.read();
 
-    if (cubeFound){ // Arm moving up until switch hit
-      printf("Arm Limit: %d\n", armVal);
+    if (cubeFound){ // Pick up Blocks
       dirArm.write(1);
       setServoPosition(0, 0.40);
       printf("close gripper\n");
       sleep(1.0);
+      cubeFound = false;
     }
 
-    if (armMoving){
+    if (armMoving){ // Arm moving up until switch hit
       setMotorPosition(11, 0.30);
       printf("Arm Moving Up\n");
+      printf("Arm Limit: %d\n", armVal);
     }
 
      
     if (armVal < 1){
-      armMoving = false;
-      cubeFound = false;
-
       printf("Arm Limit: %d\n", armVal);
+      armMoving = false;
+
+      // Turn motor off
       setMotorPosition(11, 0.0);
       dirArm.write(0);
       usleep(1000*500);
 
+      // Hold arm up
       printf("Arm being held up\n");
       setServoPosition(4, 1.1);
       sleep(2.0);
@@ -263,6 +265,7 @@ int main() {
       servoRun = true;
 
       while(servoRun){
+        // Sort blocks by color
         std::cout << "Colors: " << colorVal << std::endl;
         std::cout << "Switch 1: " << greenSwitch << std::endl;
         std::cout << "Switch 2: " << redSwitch << std::endl;  
