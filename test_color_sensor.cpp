@@ -250,7 +250,7 @@ int main() {
     }
 
     if (armMoving){ // Arm moving up until switch hit
-      setMotorPosition(11, 0.40);
+      setMotorPosition(11, 0.30);
     }
     if (armVal < 1){
       printf("Arm Limit: %d\n", armVal);

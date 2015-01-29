@@ -12,6 +12,7 @@
 
 
 int running = 1;
+mraa::I2c* i2c;
 #define MS 1000
 
 uint8_t registers[] = {
@@ -34,13 +35,7 @@ uint8_t registers[] = {
 };
   
 
-void sig_handler(int signo)
-{
-  if (signo == SIGINT) {
-    printf("closing spi nicely\n");
-    running = 0;
-  }
-}
+
 
 void initPWM(mraa::I2c *i2c) {
   uint8_t writeBuf[2] = {0};
@@ -96,13 +91,22 @@ void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
     writePWM(i2c, index, duty);
 }
 
+void sig_handler(int signo)
+{
+  if (signo == SIGINT) {
+    setServoPosition(i2c, 4, 1.5); 
+    printf("closing spi nicely\n");
+    running = 0;
+  }
+}
+
 int main()
 {
   // Handle Ctrl-C quit
   signal(SIGINT, sig_handler);
 
   // Edison i2c bus is 6
-  mraa::I2c* i2c = new mraa::I2c(6);
+  i2c = new mraa::I2c(6);
   assert(i2c != NULL);
 
   initPWM(i2c);
@@ -111,7 +115,7 @@ int main()
   // Turntable motor
   mraa::Gpio dir = mraa::Gpio(4);
   dir.dir(mraa::DIR_OUT);
-  dir.write(0);
+  dir.write(1);
 
 
   while (running) {
@@ -119,17 +123,10 @@ int main()
     printf("armVal%d\n", armVal);
     setMotorPosition(i2c, 11, 0.20);
     if (armVal < 1){
-      dir.write(1);
+      setMotorPosition(i2c, 11, 0.00);
+      dir.write(0);
+      setServoPosition(i2c, 4, 1.1); 
       sleep(2.0);
     }
-    // Alternate two locations with 2-sec delay
-
-    //setServoPosition(i2c, 0, -0.2); 
-    //dir.write(0);// -0.2 to 1.4 max with servo head parallel to servo
-    //sleep(2.0);
-    //setServoPosition(i2c, 0, 1.4);
-    //dir.write(1);
-    //sleep(2.0);
-
   }
 }
