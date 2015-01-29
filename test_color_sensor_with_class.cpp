@@ -38,9 +38,9 @@ int main() {
   while (running) {
     lilMama.readValues();
 
-    if (cubeFound){ // Arm moving up until switch hit
+    if (lilMama.cubeFound){ // Arm moving up until switch hit
       printf("Arm Limit: %d\n", lilMama.armVal);
-      dirArm.write(1);
+      lilMama.dirArm.write(1);
       lilMama.setServoPosition(0, 0.40);
       printf("close gripper\n");
       sleep(1.0);
@@ -63,14 +63,14 @@ int main() {
       
       printf("Arm Limit: %d\n", lilMama.armVal);
       lilMama.setMotorPosition(11, 0.0);
-      dirArm.write(0);
+      lilMama.dirArm.write(0);
       sleep(2.0);
       lilMama.setServoPosition(0, 0.70);
       sleep(2.0);
       lilMama.servoRun = true;
 
-      while(servoRun){
-        lilMama.checkColors(colorVal); //checking color sensor
+      while(lilMama.servoRun){
+        lilMama.checkColors(lilMama.colorVal); //checking color sensor
         sleep(3.0);
       }
     }
