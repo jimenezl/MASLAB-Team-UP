@@ -34,7 +34,7 @@ int BACK_INFRARED_PIN = 3;
 int FRONT_INFRARED_PIN = 2;
 int HEAD_INFRARED_PIN = 1;
 
-float alpha = .3;
+float alpha_infrareds = .3;
 
 int running = 1;
 
@@ -106,24 +106,6 @@ float infraReadingToDistanceHead(float infraReading){
 int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
-    // mraa::Gpio *chipSelect = new mraa::Gpio(10);
-    // chipSelect->dir(mraa::DIR_OUT);
-    // chipSelect->write(1);
-    // mraa::Spi *spi = new mraa::Spi(0);
-    // spi->bitPerWord(32);
-    // char rxBuf[2];
-    // char writeBuf[4];
-    // unsigned int sensorRead = 0x20000000;
-    // writeBuf[0] = sensorRead & 0xff;
-    // writeBuf[1] = (sensorRead >> 8) & 0xff;
-    // writeBuf[2] = (sensorRead >> 16) & 0xff;
-    // writeBuf[3] = (sensorRead >> 24) & 0xff;
-    // float total = 0;
-    // struct timeval tv;
-    // int init = 0;
-    // float rf;
-
-    signal(SIGINT, sig_handler);
 
     //Motor Stuff
     mraa::Pwm pwm = mraa::Pwm(9);
@@ -149,17 +131,8 @@ int main() {
     mraa::Aio aioHeadInfrared = mraa::Aio(HEAD_INFRARED_PIN);
 
     float speed = .1;
-    float desiredAngle = 0.0;
-    float diffAngle = 0.0;
-    float integral = 0;
     float power = 0;
-    float derivative = 0;
-    float timeBetweenReadings = 0;
-    float gyroBias = 1.0;
     float forwardBias = .15;
-    float P_CONSTANT = 25;
-    float I_CONSTANT = 0;
-    float D_CONSTANT = -1;
 
     float backDistance = 0;
     float frontDistance = 0;
@@ -176,14 +149,12 @@ int main() {
         float headInfraredReading = aioHeadInfrared.read();
         printf("Infra readings: back: %f, front: %f, head: %f\n", backInfraredReading, frontInfraredReading, headInfraredReading);
 
-        backDistance =  (backDistance * alpha) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha));
-        frontDistance = (frontDistance * alpha) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha) * .94);
-        headDistance = (headDistance * alpha) + (infraReadingToDistanceHead(headInfraredReading) * (1.0 - alpha));
+        backDistance =  (backDistance * alpha_infrareds) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha_infrareds));
+        frontDistance = (frontDistance * alpha_infrareds) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha_infrareds) * .94);
+        headDistance = (headDistance * alpha_infrareds) + (infraReadingToDistanceHead(headInfraredReading) * (1.0 - alpha_infrareds));
         printf("Distances: Back: %f, Front: %f, Head: %f\n", backDistance, frontDistance, headDistance);
         float averageDistance = (backDistance + frontDistance) / 2.0;
-        // float infraAngle = angleFromWall(backDistance, frontDistance);
-        // printf("estimated angle: %f\n", infraAngle);
-        // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
+        
         float diffDistance = desiredDistance - averageDistance;
         power = speed * (P_CONSTANT_WALL_FOLLOWER * diffDistance);
 
