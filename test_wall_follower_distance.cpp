@@ -192,8 +192,8 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        if (headDistance < 6.0){
-            setMotorSpeed(pwm, dir, power + forwardBias);
+        if (headDistance > 6.0){
+            setMotorSpeed(pwm, dir, power + forwardBias); //normal behavior
             setMotorSpeed(pwm2, dir2, power - forwardBias);
             
         } else {
