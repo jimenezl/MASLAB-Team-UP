@@ -187,7 +187,7 @@ int main() {
             
         } else {
             printf("Power reduced!\n");
-            power = .2;
+            power = .25;
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
             usleep(1000 * 20);    
