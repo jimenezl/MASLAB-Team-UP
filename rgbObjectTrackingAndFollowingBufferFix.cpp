@@ -358,7 +358,7 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 		}
 
 		// distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
-		distanceToBlock = 185 - objectMaxY;
+		distanceToBlock = 180 - objectMaxY;
 		if (thresholdBlockSize<(numOfBlocks*maxFloodPixelCount)){
 			printf("Pick up block(s)!\n");
 		}
