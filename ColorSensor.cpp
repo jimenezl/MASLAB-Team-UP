@@ -1,7 +1,9 @@
 class ColorSensor {
 public:
+
 		float cvalOne = 0;
 		float colorVal = 0;
+		int armVal = 0;
 
 		float greenSwitch = 0;
 		float redSwitch = 0; 
@@ -13,11 +15,13 @@ public:
 		mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
 		bool armMoving = true;
 		bool cubeFound = true;
+
 		// Edison i2c bus is 6
+		mraa::I2c *i2c;
 		i2c = new mraa::I2c(6);
 		assert(i2c != NULL);
 
-		mraa::I2c *i2c;
+		
 		mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
 		mraa::Gpio dirArm = mraa::Gpio(4); //Direction of Arm
 
@@ -188,6 +192,13 @@ public:
 		//Turntable motor
 		  dirTurn.dir(mraa::DIR_OUT);
 		  dirTurn.write(0);
+	}
+
+	void readValues(){
+		armVal = armLimit.read(); 
+    	colorVal = colorSensor.read();
+    	greenSwitch = limit1.read(); 
+    	redSwitch = limit2.read();
 	}
 };
 
