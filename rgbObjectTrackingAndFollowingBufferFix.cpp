@@ -606,7 +606,7 @@ int main() {
     dir2.dir(mraa::DIR_OUT);
     dir2.write(0);
 
-    float speed = .05;
+    float speed = .1;
     // float desiredAngle = 0.0; //making this global so camera thread can use and change it
     float diffAngle = 0.0;
     float integral = 0;
@@ -615,7 +615,7 @@ int main() {
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
     float forwardBias = 0.0;
-    float P_CONSTANT = 75;
+    float P_CONSTANT = 55;
     float I_CONSTANT = .1;
     float D_CONSTANT = -1;
 
