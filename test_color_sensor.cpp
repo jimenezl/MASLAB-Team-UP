@@ -28,7 +28,7 @@ float greenSwitch = 0;
 float redSwitch = 0; 
 bool servoRun = true;
 bool notSorting = true; 
-bool switchHit = true;
+
 
 mraa::I2c *i2c;
 
@@ -119,6 +119,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
   if (switch1 < 1) {
     printf("Turning off motor\n");
     setMotorPosition(8, 0.0);
+
 
     if (servoRun){
       printf("Pushing green block\n");
