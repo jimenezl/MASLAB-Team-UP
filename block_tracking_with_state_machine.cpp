@@ -2,7 +2,7 @@
 //Compile on PC:
 //g++ -ggdb `pkg-config --cflags opencv` -o `basename rgbObjectTrackingEdisonMultithread.cpp` rgbObjectTrackingEdisonMultithread `pkg-config --libs opencv`
 //Compile on Edison:
-//g++ rgbObjectTrackingAndFollowingBufferFix.cpp -o rgbObjectTrackingAndFollowingBufferFix `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
+//g++ block_tracking_with_state_machine.cpp -o block_tracking_with_state_machine `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
 
 
 #include <sstream>
@@ -70,6 +70,8 @@ float desiredAngle = 0.0;
 float DEGREES_PER_PIXEL = 0.14;
 
 float total = 0; //current angle belief
+
+int initGyro = 0;
 
 //wall follower constants
 float DISTANCE_FROM_IR_SENSORS = 4.6;
@@ -625,6 +627,7 @@ void cameraThreadLoop() {
         if (ROBOT_STATE == 0){
 			if (blockFound){
 				ROBOT_STATE = 1;
+				initGyro = 0; //set this to 0 to reset the gyro
 			} else {
 				usleep(400 * MS);
 			}        	
@@ -653,7 +656,7 @@ int main() {
     writeBuf[3] = (sensorRead >> 24) & 0xff;
     // float total = 0; made this global for camera thread
     struct timeval tv;
-    int initGyro = 0;
+    
     float rf;
 
     //Motor Stuff
