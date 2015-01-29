@@ -615,7 +615,7 @@ int main() {
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
     float forwardBias = 0.0;
-    float P_CONSTANT = 45;
+    float P_CONSTANT = 75;
     float I_CONSTANT = .1;
     float D_CONSTANT = -1;
 
