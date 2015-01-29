@@ -15,6 +15,7 @@ public:
 		mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
 		bool armMoving = true;
 		bool cubeFound = true;
+		bool notSorting = true;
 
 		// Edison i2c bus is 6
 		mraa::I2c *i2c;

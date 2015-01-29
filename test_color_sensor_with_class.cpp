@@ -49,6 +49,7 @@ int main() {
       }
 
     if (lilMama.armVal < 1){
+      if (lilMama.notSorting){
       lilMama.armMoving = false;
 
       // Turn motor off
@@ -63,19 +64,16 @@ int main() {
       sleep(2.0);
       lilMama.setServoPosition(0, 0.70);
       sleep(2.0);
-      lilMama.servoRun = true;
-
-
-
-      while(lilMama.servoRun){
-        // Sort blocks by color
-        std::cout << "Colors: " << lilMama.colorVal << std::endl;
-        std::cout << "Switch 1: " << lilMama.greenSwitch << std::endl;
-        std::cout << "Switch 2: " << lilMama.redSwitch << std::endl;
-        lilMama.checkColors(lilMama.colorVal); //checking color sensor
-        sleep(3.0);
+      }
+      // Sort blocks by color
+      lilMama.notSorting = false;
+      std::cout << "Colors: " << lilMama.colorVal << std::endl;
+      std::cout << "Switch 1: " << lilMama.greenSwitch << std::endl;
+      std::cout << "Switch 2: " << lilMama.redSwitch << std::endl;
+      lilMama.checkColors(lilMama.colorVal); //checking color sensor
+      sleep(3.0);
       }
     }
 
   } 
-}
+

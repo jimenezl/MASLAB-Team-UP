@@ -215,6 +215,7 @@ int main() {
   mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
   bool armMoving = true;
   bool cubeFound = true;
+  bool notSorting = true; 
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
@@ -254,7 +255,8 @@ int main() {
     if (armVal < 1){
       printf("Arm Limit: %d\n", armVal);
       armMoving = false;
-
+      if (notSorting){
+      
       // Turn motor off
       setMotorPosition(11, 0.0);
       dirArm.write(0);
@@ -266,9 +268,10 @@ int main() {
       sleep(2.0);
       setServoPosition(0, 0.90);
       sleep(2.0);
-      servoRun = true;
-
+      
+    }
       // Sort blocks by color
+      notSorting = false;
       std::cout << "Colors: " << colorVal << std::endl;
       std::cout << "Switch 1: " << greenSwitch << std::endl;
       std::cout << "Switch 2: " << redSwitch << std::endl;  
