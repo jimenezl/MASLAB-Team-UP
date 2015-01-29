@@ -91,7 +91,7 @@ float infraReadingToDistanceBack(float infraReading){
 float infraReadingToDistanceFront(float infraReading){
     // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
     if (infraReading!=0){
-        return (970.0/infraReading) - .5;; //y = 970/x  - .5
+        return (970.0/infraReading) - .5; //y = 970/x  - .5
     } else {
         return 10.0; //big number
     }
@@ -99,8 +99,8 @@ float infraReadingToDistanceFront(float infraReading){
 
 float infraReadingToDistanceHead(float infraReading){
     // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
-    if (infraReading!=0){
-        return (970.0/infraReading) - .5;; //y = 970/x  - .5
+    if (infraReading!=50){
+        return (900.0/(infraReading - 50.0)); //y = 900/(x-50)
     } else {
         return 10.0; //big number
     }
