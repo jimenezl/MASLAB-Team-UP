@@ -106,16 +106,22 @@ int main()
   assert(i2c != NULL);
 
   initPWM(i2c);
-
+  mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
 
   // Turntable motor
-  mraa::Gpio dir = mraa::Gpio(3);
+  mraa::Gpio dir = mraa::Gpio(4);
   dir.dir(mraa::DIR_OUT);
   dir.write(0);
-  setMotorPosition(i2c, 0, 0.20);
+
 
   while (running) {
-    setMotorPosition(i2c, 0, 0.20);
+    int armVal = armLimit.read(); 
+    printf("armVal%d\n", armVal);
+    setMotorPosition(i2c, 11, 0.20);
+    if (armVal < 1){
+      dir.write(1);
+      sleep(2.0);
+    }
     // Alternate two locations with 2-sec delay
 
     //setServoPosition(i2c, 0, -0.2); 
