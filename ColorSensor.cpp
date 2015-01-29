@@ -29,7 +29,7 @@ public:
 		    58,  // output 13
 		    62,  // output 14
 		    66   // output 15
-		}
+		};
 
 	void initPWM() {
 	    uint8_t writeBuf[2] = {0};
