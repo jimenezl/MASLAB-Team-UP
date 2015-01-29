@@ -197,20 +197,20 @@ int main() {
             power = .25;
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
-        } else if ((backDistance > 10) && (frontDistance < 10 && frontDistance > 0 )){
+        } else if ((backDistance > 15) && (frontDistance < 15 && frontDistance > 0 )){
             power = .15; //only front distance gives good readings, turn left
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
-        } else if ((frontDistance > 10) && (backDistance < 10 && backDistance > 0 )){
+        } else if ((frontDistance > 15) && (backDistance < 15 && backDistance > 0 )){
             power = -.15; //only back distance gives good readings, turn right
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
-        } else if ((frontDistance > 10 || frontDistance < 0) && (backDistance > 10 || backDistance < 0)) {
+        } else if ((frontDistance > 15 || frontDistance < 0) && (backDistance > 15 || backDistance < 0)) {
             power = .15; //sensors read garbage
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, -1 * power);
         }
-        else if ((frontDistance < 10 && frontDistance > 0) && (backDistance < 10 && backDistance > 0)) {
+        else if ((frontDistance < 15 && frontDistance > 0) && (backDistance < 15 && backDistance > 0)) {
             setMotorSpeed(pwm, dir, power + forwardBias); //normal behavior
             setMotorSpeed(pwm2, dir2, power - forwardBias);   
         } else {
