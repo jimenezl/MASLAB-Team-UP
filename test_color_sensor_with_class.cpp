@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_color_sensor.cpp -o test_color_sensor -lmraa
+// g++ test_color_sensor_with_class.cpp -o test_color_sensor_with_class -lmraa
 // Repeatedly reads pin A0 and prints the result.
 // brown, black, orange resistor for photoresistor
 // red, red, brown resistor for led
@@ -54,7 +54,7 @@ int main() {
       lilMama.setMotorPosition(11, 0.30);
       printf("Arm Moving Up\n");
       }
-      
+
     if (armVal < 1){
       armMoving = false;
       cubeFound = false;
