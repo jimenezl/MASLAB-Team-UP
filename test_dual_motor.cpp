@@ -119,17 +119,10 @@ int main()
     printf("armVal%d\n", armVal);
     setMotorPosition(i2c, 11, 0.20);
     if (armVal < 1){
+      setMotorPosition(i2c, 11, 0.00);
       dir.write(0);
+      setServoPosition(i2c, 4, 1.1); 
       sleep(2.0);
     }
-    // Alternate two locations with 2-sec delay
-
-    //setServoPosition(i2c, 0, -0.2); 
-    //dir.write(0);// -0.2 to 1.4 max with servo head parallel to servo
-    //sleep(2.0);
-    //setServoPosition(i2c, 0, 1.4);
-    //dir.write(1);
-    //sleep(2.0);
-
   }
 }
