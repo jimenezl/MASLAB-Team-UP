@@ -111,7 +111,7 @@ int main()
   // Turntable motor
   mraa::Gpio dir = mraa::Gpio(4);
   dir.dir(mraa::DIR_OUT);
-  dir.write(0);
+  dir.write(1);
 
 
   while (running) {
@@ -119,7 +119,7 @@ int main()
     printf("armVal%d\n", armVal);
     setMotorPosition(i2c, 11, 0.20);
     if (armVal < 1){
-      dir.write(1);
+      dir.write(0);
       sleep(2.0);
     }
     // Alternate two locations with 2-sec delay
