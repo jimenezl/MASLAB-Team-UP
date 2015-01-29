@@ -173,7 +173,7 @@ int main() {
         // float infraAngle = angleFromWall(backDistance, frontDistance);
         // printf("estimated angle: %f\n", infraAngle);
         // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
-        float diffDistance = averageDistance - desiredDistance;
+        float diffDistance = desiredDistance - averageDistance;
         power = speed * (P_CONSTANT_WALL_FOLLOWER * diffDistance);
 
         if (power > .3) {
