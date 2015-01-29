@@ -50,14 +50,14 @@ int main() {
       printf("close gripper\n");
       sleep(1.0);
     }
-    if (armMoving){
+    if (lilMama.armMoving){
       lilMama.setMotorPosition(11, 0.30);
       printf("Arm Moving Up\n");
       }
 
     if (armVal < 1){
-      armMoving = false;
-      cubeFound = false;
+      lilMama.armMoving = false;
+      lilMama.cubeFound = false;
 
       printf("Arm being held up\n");
       lilMama.setServoPosition(4, 1.1);
@@ -68,13 +68,13 @@ int main() {
       
       printf("Arm Limit: %d\n", armVal);
       lilMama.setMotorPosition(11, 0.0);
-      dirArm.write(0);
+      lilMama.dirArm.write(0);
       sleep(2.0);
       lilMama.setServoPosition(0, 0.70);
       sleep(2.0);
-      servoRun = true;
+      lilMama.servoRun = true;
 
-      while(servoRun){
+      while(lilMama.servoRun){
         lilMama.checkColors(colorVal); //checking color sensor
         sleep(3.0);
       }
