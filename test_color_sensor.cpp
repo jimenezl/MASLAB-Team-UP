@@ -242,6 +242,7 @@ int main() {
 
     if (cubeFound){ // Pick up Blocks
       dirArm.write(1);
+      setServoPosition(0, 0.90);
       setServoPosition(0, 0.30);
       printf("close gripper\n");
       sleep(1.0);
@@ -249,6 +250,7 @@ int main() {
     }
 
     if (armMoving){ // Arm moving up until switch hit
+
       setMotorPosition(11, 0.40);
       printf("Arm Moving Up\n");
       printf("Arm Limit: %d\n", armVal);
@@ -269,7 +271,7 @@ int main() {
       printf("Arm being held up\n");
       setServoPosition(4, 1.1);
       sleep(2.0);
-      setServoPosition(0, 0.90); //open up partially 
+      setServoPosition(0, 0.45); //open up partially 
       sleep(2.0);
       
     }
