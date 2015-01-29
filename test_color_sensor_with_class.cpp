@@ -36,7 +36,7 @@ int main() {
     lilMama.readValues();
 
     if (lilMama.cubeFound){ // Pick up Blocks
-      lilMama.dirArm.write(1);
+      lilMama.dirArm.write(0);
       lilMama.setServoPosition(0, 0.40);
       printf("close gripper\n");
       sleep(1.0);
@@ -54,7 +54,7 @@ int main() {
       // Turn motor off
       printf("Arm Limit: %d\n", lilMama.armVal);
       lilMama.setMotorPosition(11, 0.0);
-      lilMama.dirArm.write(0);
+      lilMama.dirArm.write(1);
       usleep(1000*500);
 
       // Hold arm up

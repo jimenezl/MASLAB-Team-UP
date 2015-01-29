@@ -233,7 +233,7 @@ int main() {
     redSwitch = limit2.read();
 
     if (cubeFound){ // Pick up Blocks
-      dirArm.write(1);
+      dirArm.write(0);
       setServoPosition(0, 0.40);
       printf("close gripper\n");
       sleep(1.0);
@@ -253,7 +253,7 @@ int main() {
 
       // Turn motor off
       setMotorPosition(11, 0.0);
-      dirArm.write(0);
+      dirArm.write(1);
       usleep(1000*500);
 
       // Hold arm up
