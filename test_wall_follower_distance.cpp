@@ -156,7 +156,7 @@ int main() {
     float derivative = 0;
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
-    float forwardBias = .15;
+    float forwardBias = .18;
     float P_CONSTANT = 25;
     float I_CONSTANT = 0;
     float D_CONSTANT = -1;
@@ -197,20 +197,21 @@ int main() {
             power = .25;
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
-        } else if ((backDistance > 15) && (frontDistance < 15 && frontDistance > 0 )){
+            usleep(1000 * 20); 
+        } else if ((backDistance > 20) && (frontDistance < 20 && frontDistance > 0 )){
             power = .15; //only front distance gives good readings, turn left
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
-        } else if ((frontDistance > 15) && (backDistance < 15 && backDistance > 0 )){
+        } else if ((frontDistance > 20) && (backDistance < 20 && backDistance > 0 )){
             power = -.15; //only back distance gives good readings, turn right
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
-        } else if ((frontDistance > 15 || frontDistance < 0) && (backDistance > 15 || backDistance < 0)) {
+        } else if ((frontDistance > 20 || frontDistance < 0) && (backDistance > 20 || backDistance < 0)) {
             power = .15; //sensors read garbage
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, -1 * power);
         }
-        else if ((frontDistance < 15 && frontDistance > 0) && (backDistance < 15 && backDistance > 0)) {
+        else if ((frontDistance < 20 && frontDistance > 0) && (backDistance < 20 && backDistance > 0)) {
             setMotorSpeed(pwm, dir, power + forwardBias); //normal behavior
             setMotorSpeed(pwm2, dir2, power - forwardBias);   
         } else {
@@ -219,7 +220,7 @@ int main() {
             running = 0;
         }
 
-        usleep(1000 * 20); 
+        
         
         printf("Set power to: %f\n", power);
 
