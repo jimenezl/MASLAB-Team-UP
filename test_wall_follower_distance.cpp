@@ -24,12 +24,7 @@
 #define GYRO_DATA_OKAY_MASK 0x0C000000
 #define GYRO_DATA_OKAY 0x04000000
 
-#define PI 3.14159265
-
-float DISTANCE_FROM_IR_SENSORS = 4.6; //
-// float QUAD_TERM = ;
-// float LINEAR_TERM = ;
-// float CONST_TERM = ;
+float DISTANCE_FROM_IR_SENSORS = 4.6;
 int BACK_INFRARED_PIN = 3;
 int FRONT_INFRARED_PIN = 2;
 int HEAD_INFRARED_PIN = 1;
@@ -41,11 +36,11 @@ int running = 1;
 void sig_handler(int signo) {
     if (signo == SIGINT) {
         printf("closing spi nicely\n");
+        running = 0;
         mraa::Pwm pwm = mraa::Pwm(9);
         mraa::Pwm pwm2 = mraa::Pwm(6);
         pwm.write(0);
         pwm2.write(0);
-        running = 0;
     }
 }
 
@@ -130,9 +125,9 @@ int main() {
     mraa::Aio aioFrontInfrared = mraa::Aio(FRONT_INFRARED_PIN);
     mraa::Aio aioHeadInfrared = mraa::Aio(HEAD_INFRARED_PIN);
 
-    float speed = .1;
-    float power = 0;
-    float forwardBias = .15;
+    float speedWallFollower = .1;
+    float powerWallFollower = 0;
+    float forwardBiasWallFollower = .15;
 
     float backDistance = 0;
     float frontDistance = 0;
@@ -156,50 +151,49 @@ int main() {
         float averageDistance = (backDistance + frontDistance) / 2.0;
         
         float diffDistance = desiredDistance - averageDistance;
-        power = speed * (P_CONSTANT_WALL_FOLLOWER * diffDistance);
+        powerWallFollower = speedWallFollower * (P_CONSTANT_WALL_FOLLOWER * diffDistance);
 
-        if (power > .3) {
-            power = .3;
-        } else if (power < -.3) {
-            power = -.3;
+        if (powerWallFollower > .3) {
+            powerWallFollower = .3;
+        } else if (powerWallFollower < -.3) {
+            powerWallFollower = -.3;
         }
         if (headDistance < 6.0 && headDistance > 0){
-            printf("Power reduced!\n"); //head hit a wall
-            power = .2;
-            setMotorSpeed(pwm, dir, power);
-            setMotorSpeed(pwm2, dir2, power);
+            printf("PowerWallFollower reduced!\n"); //head hit a wall
+            powerWallFollower = .2;
+            setMotorSpeed(pwm, dir, powerWallFollower);
+            setMotorSpeed(pwm2, dir2, powerWallFollower);
             usleep(1000 * 20); 
         } else if ((backDistance > 20) && (frontDistance < 20 && frontDistance > 0 )){
-            power = .15; //only front distance gives good readings, turn left
-            setMotorSpeed(pwm, dir, power + forwardBias);
-            setMotorSpeed(pwm2, dir2, power - forwardBias);
+            powerWallFollower = .15; //only front distance gives good readings, turn left
+            setMotorSpeed(pwm, dir, powerWallFollower + forwardBiasWallFollower);
+            setMotorSpeed(pwm2, dir2, powerWallFollower - forwardBiasWallFollower);
         } else if ((frontDistance > 20) && (backDistance < 20 && backDistance > 0 )){
-            setMotorSpeed(pwm, dir, forwardBias);
-            setMotorSpeed(pwm2, dir2, -1.0 * forwardBias);
+            setMotorSpeed(pwm, dir, forwardBiasWallFollower);
+            setMotorSpeed(pwm2, dir2, -1.0 * forwardBiasWallFollower);
             usleep(300 * 1000);
-            power = -.15; //only back distance gives good readings, turn right
-            setMotorSpeed(pwm, dir, power + forwardBias);
-            setMotorSpeed(pwm2, dir2, power - forwardBias);
+            powerWallFollower = -.15; //only back distance gives good readings, turn right
+            setMotorSpeed(pwm, dir, powerWallFollower + forwardBiasWallFollower);
+            setMotorSpeed(pwm2, dir2, powerWallFollower - forwardBiasWallFollower);
             usleep(300 * 1000);
         } else if ((frontDistance > 20 || frontDistance < 0) && (backDistance > 20 || backDistance < 0)) {
-            power = .15; //sensors read garbage
-            setMotorSpeed(pwm, dir, power);
-            setMotorSpeed(pwm2, dir2, -1 * power);
+            powerWallFollower = .15; //sensors read garbage
+            setMotorSpeed(pwm, dir, powerWallFollower);
+            setMotorSpeed(pwm2, dir2, -1 * powerWallFollower);
         }
         else if ((frontDistance < 20 && frontDistance > 0) && (backDistance < 20 && backDistance > 0)) {
-            setMotorSpeed(pwm, dir, power + forwardBias); //normal behavior
-            setMotorSpeed(pwm2, dir2, power - forwardBias);   
+            setMotorSpeed(pwm, dir, powerWallFollower + forwardBiasWallFollower); //normal behavior
+            setMotorSpeed(pwm2, dir2, powerWallFollower - forwardBiasWallFollower);   
         } else {
             setMotorSpeed(pwm, dir, 0);
             setMotorSpeed(pwm2, dir2, 0);
             running = 0;
         }
-
-        
-        
-        printf("Set power to: %f\n", power);
+        printf("Set power to: %f\n", powerWallFollower);
 
     }
 
+    setMotorSpeed(pwm, dir, 0);
+    setMotorSpeed(pwm2, dir2, 0);
     return 0;
 }
