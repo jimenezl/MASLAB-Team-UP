@@ -17,8 +17,7 @@
 int running = 1;
 
 
-#define SHIELD_I2C_ADDR 0x40
-#define MS 1000
+
 
 void sig_handler(int signo)
 {
@@ -38,10 +37,10 @@ int main() {
   lilMama.initPWM();
 
   while (running) {
-    int armVal = armLimit.read(); 
-    colorVal = colorSensor.read();
-    greenSwitch = limit1.read(); //Green block canister
-    redSwitch = limit2.read();
+    int armVal = lilMama.armLimit.read(); 
+    colorVal = lilMama.colorSensor.read();
+    greenSwitch = lilMama.limit1.read(); //Green block canister
+    redSwitch = lilMama.limit2.read();
 
     if (cubeFound){ // Arm moving up until switch hit
       printf("Arm Limit: %d\n", armVal);
@@ -50,14 +49,14 @@ int main() {
       printf("close gripper\n");
       sleep(1.0);
     }
-    if (armMoving){
+    if (lilMama.armMoving){
       lilMama.setMotorPosition(11, 0.30);
       printf("Arm Moving Up\n");
       }
 
     if (armVal < 1){
-      armMoving = false;
-      cubeFound = false;
+      lilMama.armMoving = false;
+      lilMama.cubeFound = false;
 
       printf("Arm being held up\n");
       lilMama.setServoPosition(4, 1.1);
