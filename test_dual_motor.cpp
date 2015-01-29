@@ -122,8 +122,9 @@ int main()
 
 
   while (running) {
-    if (runArm){
     int armVal = armLimit.read(); 
+    if (runArm){
+    
     printf("armVal%d\n", armVal);
     setMotorPosition(i2c, 11, 0.20);
     }
