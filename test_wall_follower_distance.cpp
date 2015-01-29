@@ -94,6 +94,15 @@ float infraReadingToDistanceFront(float infraReading){
     }
 }
 
+float infraReadingToDistanceHead(float infraReading){
+    // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
+    if (infraReading!=0){
+        return (970.0/infraReading) - .5;; //y = 970/x  - .5
+    } else {
+        return 10.0; //big number
+    }
+}
+
 int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
@@ -154,6 +163,7 @@ int main() {
 
     float backDistance = 0;
     float frontDistance = 0;
+    float headDistance = 10.0;
 
     float desiredDistance = 5;
 
@@ -168,7 +178,8 @@ int main() {
 
         backDistance =  (backDistance * alpha) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha));
         frontDistance = (frontDistance * alpha) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha) * .94);
-        printf("Distances: Front: %f, Back: %f\n", backDistance, frontDistance);
+        headDistance = (headDistance * alpha) + (infraReadingToDistanceHead(headInfraredReading) * (1.0 - alpha));
+        printf("Distances: Back: %f, Front: %f, Head: %f\n", backDistance, frontDistance, headDistance);
         float averageDistance = (backDistance + frontDistance) / 2.0;
         // float infraAngle = angleFromWall(backDistance, frontDistance);
         // printf("estimated angle: %f\n", infraAngle);

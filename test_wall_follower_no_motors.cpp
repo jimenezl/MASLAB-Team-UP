@@ -97,6 +97,15 @@ float infraReadingToDistanceFront(float infraReading){
     }
 }
 
+float infraReadingToDistanceHead(float infraReading){
+    // return (QUAD_TERM * infraReading * infraReading) + (LINEAR_TERM * infraReading) + CONST_TERM;
+    if (infraReading!=0){
+        return (970.0/infraReading) - .5;; //y = 970/x  - .5
+    } else {
+        return 10.0; //big number
+    }
+}
+
 int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
@@ -157,6 +166,7 @@ int main() {
 
     float backDistance = 0;
     float frontDistance = 0;
+    float headDistance = 10.0;
 
     float P_CONSTANT_WALL_FOLLOWER = .05 * 180.0 / PI;
 
@@ -170,7 +180,8 @@ int main() {
 
         backDistance =  (backDistance * alpha) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha));
         frontDistance = (frontDistance * alpha) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha) * .94);
-        printf("Distances: Back: %f, Front: %f\n", backDistance, frontDistance);
+        headDistance = (headDistance * alpha) + (infraReadingToDistanceHead(headInfraredReading) * (1.0 - alpha));
+        printf("Distances: Back: %f, Front: %f, Head: %f\n", backDistance, frontDistance, headDistance);
         float infraAngle = angleFromWall(backDistance, frontDistance);
         printf("estimated angle: %f\n", infraAngle);
         // power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
