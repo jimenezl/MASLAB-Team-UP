@@ -251,7 +251,7 @@ int main() {
       cubeFound = false;
 
       printf("Arm being held up\n");
-      setServoPosition(1, 0.5);
+      setServoPosition(4, 1.1);
 
       std::cout << "Colors: " << colorVal << std::endl;
       std::cout << "Switch 1: " << greenSwitch << std::endl;
