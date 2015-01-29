@@ -199,7 +199,7 @@ void sig_handler(int signo)
   if (signo == SIGINT) {
     //turn Motors off or open them
     setMotorPosition(11, 0.0);
-    setServoPosition(4, 1.5);
+    setServoPosition(4, 1.6);
     setServoPosition(0, 0.90);
     setMotorPosition(8, 0.0);
     printf("closing spi nicely\n");
@@ -250,28 +250,27 @@ int main() {
     }
 
     if (armMoving){ // Arm moving up until switch hit
-      setMotorPosition(11, 0.30);
+      setMotorPosition(11, 0.20);
     }
+
     if (armVal < 1){
+      setMotorPosition(11, 0.0);
+      setServoPosition(4,1.1);
       printf("Arm Limit: %d\n", armVal);
       armMoving = false;
-      if (notSorting){
-      
-      // Turn motor off
-      setMotorPosition(11, 0.0);
       dirArm.write(0);
-      usleep(1000*500);
+      
+    }
+
+    if (armMoving == false){
 
       // Hold arm up
       printf("Arm being held up\n");
       setServoPosition(4, 1.1);
+      setServoPosition(0, 0.40); //open up partially 
       sleep(2.0);
-      setServoPosition(0, 0.45); //open up partially 
-      sleep(2.0);
-      
-      }
+
       // Sort blocks by color
-      notSorting = false;
       std::cout << "Colors: " << colorVal << std::endl;
       std::cout << "Switch 1: " << greenSwitch << std::endl;
       std::cout << "Switch 2: " << redSwitch << std::endl;  
