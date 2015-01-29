@@ -196,7 +196,7 @@ void checkColors(float colorVal){
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
-    setMotorPosition(8, 0.0);
+    setMotorPosition(11, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -223,6 +223,10 @@ int main() {
   //Turntable motor
   dirTurn.dir(mraa::DIR_OUT);
   dirTurn.write(0);
+
+  // Arm motor
+  dirArm.dir(mraa::DIR_OUT);
+  dirArm.write(1);
 
   initPWM();
 
