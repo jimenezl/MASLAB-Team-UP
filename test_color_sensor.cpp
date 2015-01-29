@@ -196,7 +196,7 @@ void checkColors(float colorVal){
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
-    setMotorPosition(8, 0.0);
+    setMotorPosition(11, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -215,6 +215,7 @@ int main() {
   mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
   bool armMoving = true;
   bool cubeFound = true;
+  bool notSorting = true; 
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
@@ -224,6 +225,13 @@ int main() {
   dirTurn.dir(mraa::DIR_OUT);
   dirTurn.write(0);
 
+  // Arm motor
+  dirArm.dir(mraa::DIR_OUT);
+  dirArm.write(1);
+
+  //Initial servo open
+  setServoPosition(0, 1.0);
+
   initPWM();
 
   while (running) {
@@ -232,42 +240,47 @@ int main() {
     greenSwitch = limit1.read(); //Green block canister
     redSwitch = limit2.read();
 
-    if (cubeFound){ // Arm moving up until switch hit
-      printf("Arm Limit: %d\n", armVal);
+    if (cubeFound){ // Pick up Blocks
       dirArm.write(1);
-      setServoPosition(0, 0.40);
+      setServoPosition(0, 0.30);
       printf("close gripper\n");
       sleep(1.0);
+      cubeFound = false;
     }
-    if (armMoving){
-      setMotorPosition(11, 0.30);
+
+    if (armMoving){ // Arm moving up until switch hit
+      setMotorPosition(11, 0.40);
       printf("Arm Moving Up\n");
-      }
+      printf("Arm Limit: %d\n", armVal);
+    }
 
      
     if (armVal < 1){
-      armMoving = false;
-      cubeFound = false;
-
-      printf("Arm being held up\n");
-      setServoPosition(4, 1.1);
-
-      std::cout << "Colors: " << colorVal << std::endl;
-      std::cout << "Switch 1: " << greenSwitch << std::endl;
-      std::cout << "Switch 2: " << redSwitch << std::endl;
-      
       printf("Arm Limit: %d\n", armVal);
+      armMoving = false;
+      if (notSorting){
+      
+      // Turn motor off
       setMotorPosition(11, 0.0);
       dirArm.write(0);
-      sleep(2.0);
-      setServoPosition(0, 0.70);
-      sleep(2.0);
-      servoRun = true;
+      usleep(1000*500);
 
-      while(servoRun){
-        checkColors(colorVal); //checking color sensor
-        sleep(3.0);
-      }
+      // Hold arm up
+      printf("Arm being held up\n");
+      setServoPosition(4, 1.1);
+      sleep(2.0);
+      setServoPosition(0, 0.90);
+      sleep(2.0);
+      
+    }
+      // Sort blocks by color
+      notSorting = false;
+      std::cout << "Colors: " << colorVal << std::endl;
+      std::cout << "Switch 1: " << greenSwitch << std::endl;
+      std::cout << "Switch 2: " << redSwitch << std::endl;  
+      checkColors(colorVal); //checking color sensor
+      sleep(3.0);
+      
     }
 
   } 
