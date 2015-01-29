@@ -239,32 +239,33 @@ int main() {
       printf("close gripper\n");
       sleep(1.0);
     }
+
     if (armMoving){
       setMotorPosition(11, 0.30);
       printf("Arm Moving Up\n");
-      }
+    }
 
      
     if (armVal < 1){
       armMoving = false;
       cubeFound = false;
 
-      printf("Arm being held up\n");
-      setServoPosition(4, 1.1);
-
-      std::cout << "Colors: " << colorVal << std::endl;
-      std::cout << "Switch 1: " << greenSwitch << std::endl;
-      std::cout << "Switch 2: " << redSwitch << std::endl;
-      
       printf("Arm Limit: %d\n", armVal);
       setMotorPosition(11, 0.0);
       dirArm.write(0);
+      usleep(1000*500);
+
+      printf("Arm being held up\n");
+      setServoPosition(4, 1.1);
       sleep(2.0);
       setServoPosition(0, 0.70);
       sleep(2.0);
       servoRun = true;
 
       while(servoRun){
+        std::cout << "Colors: " << colorVal << std::endl;
+        std::cout << "Switch 1: " << greenSwitch << std::endl;
+        std::cout << "Switch 2: " << redSwitch << std::endl;  
         checkColors(colorVal); //checking color sensor
         sleep(3.0);
       }

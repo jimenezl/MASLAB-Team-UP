@@ -54,20 +54,19 @@ int main() {
       printf("Arm Limit: %d\n", lilMama.armVal);
       lilMama.setMotorPosition(11, 0.0);
       lilMama.dirArm.write(0);
+      usleep(1000*500);
+
+      printf("Arm being held up\n");
+      lilMama.setServoPosition(4, 1.1);
       sleep(2.0);
       lilMama.setServoPosition(0, 0.70);
       sleep(2.0);
       lilMama.servoRun = true;
 
-      printf("Arm being held up\n");
-      lilMama.setServoPosition(4, 1.1);
 
-
-      
-      
 
       while(lilMama.servoRun){
-        // Color Value and Limit Switches
+        // Color Sensor Value and Limit Switches
         std::cout << "Colors: " << lilMama.colorVal << std::endl;
         std::cout << "Switch 1: " << lilMama.greenSwitch << std::endl;
         std::cout << "Switch 2: " << lilMama.redSwitch << std::endl;
