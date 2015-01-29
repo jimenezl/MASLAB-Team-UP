@@ -189,11 +189,14 @@ void checkColors(float colorVal){
       dirTurn.write(1);
       // adding in check for already being at green station
       if (greenSwitch < 1){
+        limitSwitches(greenSwitch, redSwitch, servoRun);
+      }
+      else { 
         printf("Turntable moving\n");
         setMotorPosition(8, 0.15);
-        servoRun = false; 
-      }
+        limitSwitches(greenSwitch, redSwitch, servoRun);
     }
+  } 
 }
 
 void sig_handler(int signo)
