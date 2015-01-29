@@ -229,6 +229,9 @@ int main() {
   dirArm.dir(mraa::DIR_OUT);
   dirArm.write(1);
 
+  //Initial servo open
+  setServoPosition(0, 1.0);
+
   initPWM();
 
   while (running) {
