@@ -1,5 +1,5 @@
 class ColorSensor {
-	public:
+public:
 		float cvalOne = 0;
 		float colorVal = 0;
 
@@ -168,7 +168,7 @@ class ColorSensor {
 	    }
 	}
 
-	void init(){
+	void init() {
 		// Color Sensor Readings to Pin 0
 		// Limit Switch to Pin 1, Pin 2
 		  mraa::Aio colorSensor = mraa::Aio(0);
@@ -186,6 +186,5 @@ class ColorSensor {
 		  dirTurn.dir(mraa::DIR_OUT);
 		  dirTurn.write(0);
 	}
-
-} ;
+};
 
