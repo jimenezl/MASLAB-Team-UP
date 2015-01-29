@@ -230,7 +230,7 @@ int main() {
   dirArm.write(1);
 
   //Initial servo open
-  setServoPosition(0, 1.0);
+  setServoPosition(0, 0.0);
 
   initPWM();
 
