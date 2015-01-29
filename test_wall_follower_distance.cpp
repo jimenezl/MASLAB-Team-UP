@@ -194,7 +194,7 @@ int main() {
         }
         if (headDistance < 6.0){
             printf("Power reduced!\n"); //head hit a wall
-            power = .25;
+            power = .2;
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
             usleep(1000 * 20); 
