@@ -216,8 +216,8 @@ int main() {
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 1, Pin 2
   mraa::Aio colorSensor = mraa::Aio(0);
-  mraa::Gpio limit1 = mraa::Gpio(1);
-  mraa::Gpio limit2 = mraa::Gpio(0);
+  mraa::Gpio limit1 = mraa::Gpio(1); //green side
+  mraa::Gpio limit2 = mraa::Gpio(0); //red side
 
   mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
   bool armMoving = true;
@@ -274,7 +274,7 @@ int main() {
 
       // Sort blocks by color
       std::cout << "Colors: " << colorVal << std::endl;
-      std::cout << "Green 1: " << greenSwitch << std::endl;
+      std::cout << "Green Switch: " << greenSwitch << std::endl;
       std::cout << "Red Switch: " << redSwitch << std::endl;  
       checkColors(colorVal); //checking color sensor
       sleep(3.0);
