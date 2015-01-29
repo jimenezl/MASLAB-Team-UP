@@ -97,6 +97,15 @@ void setMotorPosition(mraa::I2c *i2c, int index, double duty) {
     writePWM(i2c, index, duty);
 }
 
+void sig_handler(int signo)
+{
+  if (signo == SIGINT) {
+    setServoPosition(i2c, 4, 1.5); 
+    printf("closing spi nicely\n");
+    running = 0;
+  }
+}
+
 int main()
 {
   // Handle Ctrl-C quit
