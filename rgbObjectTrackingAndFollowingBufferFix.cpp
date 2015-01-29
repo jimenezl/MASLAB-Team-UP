@@ -326,6 +326,9 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 				objectMinX = minX;
 				objectMinY = minY;
 			}
+			if (maxY>objectMaxY){
+				objectMaxY = maxY;
+			}
 			
 		}
 	}
