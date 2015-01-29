@@ -18,8 +18,7 @@ public:
 
 		// Edison i2c bus is 6
 		mraa::I2c *i2c;
-		i2c = new mraa::I2c(6);
-		assert(i2c != NULL);
+		
 
 		
 		mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
@@ -29,7 +28,7 @@ public:
 		#define MS 1000
 
 		// Motor Setup
-		uint8_t registers[] = {
+		uint8_t registers[16] = {
 		    6,   // output 0
 		    10,  // output 1
 		    14,  // output 2
@@ -188,7 +187,8 @@ public:
 	void init() {
 		// Color Sensor Readings to Pin 0
 		// Limit Switch to Pin 1, Pin 2
-		
+		i2c = new mraa::I2c(6);
+		assert(i2c != NULL);
 		//Turntable motor
 		  dirTurn.dir(mraa::DIR_OUT);
 		  dirTurn.write(0);
