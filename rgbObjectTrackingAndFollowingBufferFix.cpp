@@ -623,7 +623,7 @@ int main() {
     float previousDistance = 0;
 
     float P_CONSTANT_DISTANCE = .002;
-    float D_CONSTANT_DISTANCE = .005;
+    float D_CONSTANT_DISTANCE = .0005;
 
     while (running) {
         
