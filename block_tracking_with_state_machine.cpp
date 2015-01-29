@@ -96,6 +96,13 @@ void sig_handler(int signo) {
     }
 }
 
+long timevalDiff(struct timeval *starttime, struct timeval *finishtime) { //returns time difference
+  long msec;
+  msec=(finishtime->tv_sec-starttime->tv_sec);
+  //msec+=(finishtime->tv_usec-starttime->tv_usec)/1000000;
+  return msec;
+}
+
 //
 // Wall Follower Stuff
 //
@@ -639,6 +646,12 @@ int main() {
     // Handle Ctrl-C quit
     signal(SIGINT, sig_handler);
 
+    struct timeval startTime;
+    gettimeofday(&startTime, NULL);
+
+    struct timeval currentTime;
+    gettimeofday(&currentTime, NULL);
+
     std::thread cameraThread(cameraThreadLoop);
 
     //gyro stuff
@@ -718,6 +731,13 @@ int main() {
 
     while (running) {
     	printf("Robot state: %d\n", ROBOT_STATE);
+
+    	gettimeofday(&currentTime, NULL);
+
+    	if (timevalDiff(&startTime, &currentTime) > 180){
+    		break;
+    	}
+
 
     	if (ROBOT_STATE == 0) {
 
