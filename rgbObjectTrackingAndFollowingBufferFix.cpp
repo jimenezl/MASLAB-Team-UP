@@ -16,7 +16,7 @@
 //Compile on PC:
 //g++ -ggdb `pkg-config --cflags opencv` -o `basename rgbObjectTrackingEdisonMultithread.cpp` rgbObjectTrackingEdisonMultithread `pkg-config --libs opencv`
 //Compile on Edison:
-//g++ rgbObjectTrackingEdisonMultithread.cpp -o rgbObjectTrackingEdisonMultithread `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
+//g++ rgbObjectTrackingAndFollowingBufferFix.cpp -o rgbObjectTrackingAndFollowingBufferFix `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
 
 
 #include <sstream>
@@ -677,7 +677,8 @@ int main() {
         power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         
         if (diffAngle<5){
-	        forwardBias = .1 * distanceToBlock;
+	        // forwardBias = .1 * distanceToBlock;
+	        forwardBias = 0.0;
 	    } else {
 	    	forwardBias = 0.0;
 	    }
@@ -687,8 +688,8 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        setMotorSpeed(pwm, dir, -1 * (power + forwardBias));
-        setMotorSpeed(pwm2, dir2, -1 * (power - forwardBias));
+        setMotorSpeed(pwm, dir, (power + forwardBias));
+        setMotorSpeed(pwm2, dir2, (power - forwardBias));
         printf("Set power to: %f\n", power);
         printf("Desired Angle: %f\n", desiredAngle);
 
