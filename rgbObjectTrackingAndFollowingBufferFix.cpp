@@ -680,13 +680,13 @@ int main() {
         derivative = (rf / 80.0);
         power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         
-        if (diffAngle<5){
-	        forwardBias = (P_CONSTANT_DISTANCE * distanceToBlock) + (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance));
-	        printf("D term: %f\n", (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance)));
-	        // forwardBias = 0.0;
-	    } else {
-	    	forwardBias = 0.0;
-	    }
+     //    if (diffAngle<5){
+	    //     forwardBias = (P_CONSTANT_DISTANCE * distanceToBlock) + (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance));
+	    //     printf("D term: %f\n", (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance)));
+	    //     // forwardBias = 0.0;
+	    // } else {
+	    // 	forwardBias = 0.0;
+	    // }
 
         if (power > .3) {
             power = .3;
