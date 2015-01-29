@@ -11,6 +11,9 @@
 #include <csignal>
 #include <iostream>
 
+#define SHIELD_I2C_ADDR 0x40
+#define MS 1000
+
 //green is digigal pin 1
 // red is digial pin 0
 
@@ -31,8 +34,7 @@ mraa::I2c *i2c;
 mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
 mraa::Gpio dirArm = mraa::Gpio(4); //Direction of Arm
 
-#define SHIELD_I2C_ADDR 0x40
-#define MS 1000
+
 
 // Motor Setup
 uint8_t registers[] = {

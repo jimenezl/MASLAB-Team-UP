@@ -1,18 +1,34 @@
 class ColorSensor {
 public:
+
 		float cvalOne = 0;
 		float colorVal = 0;
+		int armVal = 0;
 
 		float greenSwitch = 0;
 		float redSwitch = 0; 
 		bool servoRun = true;
 
+		mraa::Aio colorSensor = mraa::Aio(0);
+		mraa::Gpio limit1 = mraa::Gpio(1);
+		mraa::Gpio limit2 = mraa::Gpio(0);
+		mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
+		bool armMoving = true;
+		bool cubeFound = true;
+
+		// Edison i2c bus is 6
 		mraa::I2c *i2c;
+		
+
+		
 		mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
 		mraa::Gpio dirArm = mraa::Gpio(4); //Direction of Arm
 
+		#define SHIELD_I2C_ADDR 0x40
+		#define MS 1000
+
 		// Motor Setup
-		uint8_t registers[] = {
+		uint8_t registers[16] = {
 		    6,   // output 0
 		    10,  // output 1
 		    14,  // output 2
@@ -171,20 +187,18 @@ public:
 	void init() {
 		// Color Sensor Readings to Pin 0
 		// Limit Switch to Pin 1, Pin 2
-		  mraa::Aio colorSensor = mraa::Aio(0);
-		  mraa::Gpio limit1 = mraa::Gpio(1);
-		  mraa::Gpio limit2 = mraa::Gpio(0);
-
-		  mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
-		  bool armMoving = true;
-		  bool cubeFound = true;
-		  // Edison i2c bus is 6
-		  i2c = new mraa::I2c(6);
-		  assert(i2c != NULL);
-
-		  //Turntable motor
+		i2c = new mraa::I2c(6);
+		assert(i2c != NULL);
+		//Turntable motor
 		  dirTurn.dir(mraa::DIR_OUT);
 		  dirTurn.write(0);
+	}
+
+	void readValues(){
+		armVal = armLimit.read(); 
+    	colorVal = colorSensor.read();
+    	greenSwitch = limit1.read(); 
+    	redSwitch = limit2.read();
 	}
 };
 

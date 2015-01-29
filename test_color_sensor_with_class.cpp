@@ -17,13 +17,11 @@
 int running = 1;
 
 
-#define SHIELD_I2C_ADDR 0x40
-#define MS 1000
+
 
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
-    lilMama.setMotorPosition(8, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -38,44 +36,41 @@ int main() {
   lilMama.initPWM();
 
   while (running) {
-    int armVal = armLimit.read(); 
-    colorVal = colorSensor.read();
-    greenSwitch = limit1.read(); //Green block canister
-    redSwitch = limit2.read();
+    lilMama.readValues();
 
-    if (cubeFound){ // Arm moving up until switch hit
-      printf("Arm Limit: %d\n", armVal);
-      dirArm.write(1);
+    if (lilMama.cubeFound){ // Arm moving up until switch hit
+      printf("Arm Limit: %d\n", lilMama.armVal);
+      lilMama.dirArm.write(1);
       lilMama.setServoPosition(0, 0.40);
       printf("close gripper\n");
       sleep(1.0);
     }
-    if (armMoving){
+    if (lilMama.armMoving){
       lilMama.setMotorPosition(11, 0.30);
       printf("Arm Moving Up\n");
       }
 
-    if (armVal < 1){
-      armMoving = false;
-      cubeFound = false;
+    if (lilMama.armVal < 1){
+      lilMama.armMoving = false;
+      lilMama.cubeFound = false;
 
       printf("Arm being held up\n");
       lilMama.setServoPosition(4, 1.1);
 
-      std::cout << "Colors: " << colorVal << std::endl;
-      std::cout << "Switch 1: " << greenSwitch << std::endl;
-      std::cout << "Switch 2: " << redSwitch << std::endl;
+      std::cout << "Colors: " << lilMama.colorVal << std::endl;
+      std::cout << "Switch 1: " << lilMama.greenSwitch << std::endl;
+      std::cout << "Switch 2: " << lilMama.redSwitch << std::endl;
       
-      printf("Arm Limit: %d\n", armVal);
+      printf("Arm Limit: %d\n", lilMama.armVal);
       lilMama.setMotorPosition(11, 0.0);
-      dirArm.write(0);
+      lilMama.dirArm.write(0);
       sleep(2.0);
       lilMama.setServoPosition(0, 0.70);
       sleep(2.0);
       lilMama.servoRun = true;
 
-      while(servoRun){
-        lilMama.checkColors(colorVal); //checking color sensor
+      while(lilMama.servoRun){
+        lilMama.checkColors(lilMama.colorVal); //checking color sensor
         sleep(3.0);
       }
     }
