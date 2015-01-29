@@ -166,7 +166,7 @@ int main() {
         float backInfraredReading = aioBackInfrared.read();
         float frontInfraredReading = aioFrontInfrared.read();
         float headInfraredReading = aioHeadInfrared.read();
-        printf("Infra readings: back: %f, front: %f\n", backInfraredReading, frontInfraredReading);
+        printf("Infra readings: back: %f, front: %f, head: %f\n", backInfraredReading, frontInfraredReading, headInfraredReading);
 
         backDistance =  (backDistance * alpha) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha));
         frontDistance = (frontDistance * alpha) + (infraReadingToDistanceFront(frontInfraredReading) * (1.0 - alpha) * .94);
