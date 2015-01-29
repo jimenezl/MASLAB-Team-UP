@@ -95,6 +95,7 @@ void sig_handler(int signo)
 {
   if (signo == SIGINT) {
     setServoPosition(i2c, 4, 1.5); 
+    setMotorPosition(i2c, 11, 0.00);
     printf("closing spi nicely\n");
     running = 0;
   }
