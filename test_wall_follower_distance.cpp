@@ -203,6 +203,9 @@ int main() {
             setMotorSpeed(pwm, dir, power + forwardBias);
             setMotorSpeed(pwm2, dir2, power - forwardBias);
         } else if ((frontDistance > 20) && (backDistance < 20 && backDistance > 0 )){
+            setMotorSpeed(pwm, dir, forwardBias);
+            setMotorSpeed(pwm2, dir2, -1.0 * forwardBias);
+            usleep(300 * 1000);
             power = -.15; //only back distance gives good readings, turn right
             setMotorSpeed(pwm, dir, power + forwardBias);
             setMotorSpeed(pwm2, dir2, power - forwardBias);
