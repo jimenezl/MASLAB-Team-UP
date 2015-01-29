@@ -27,6 +27,7 @@ float colorVal = 0;
 float greenSwitch = 0;
 float redSwitch = 0; 
 bool servoRun = true;
+bool notSorting = true; 
 
 mraa::I2c *i2c;
 
@@ -196,7 +197,11 @@ void checkColors(float colorVal){
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
+    //turn Motors off or open them
     setMotorPosition(11, 0.0);
+    setServoPosition(4, 1.5);
+    setServoPosition(0, 0.90);
+    setMotorPosition(8, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -215,7 +220,7 @@ int main() {
   mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
   bool armMoving = true;
   bool cubeFound = true;
-  bool notSorting = true; 
+  
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
@@ -229,9 +234,6 @@ int main() {
   dirArm.dir(mraa::DIR_OUT);
   dirArm.write(1);
 
-  //Initial servo open
-  setServoPosition(0, 1.0);
-
   initPWM();
 
   while (running) {
@@ -242,19 +244,14 @@ int main() {
 
     if (cubeFound){ // Pick up Blocks
       dirArm.write(1);
-      setServoPosition(0, 0.30);
-      printf("close gripper\n");
+      setServoPosition(0, 0.30); // close claw
       sleep(1.0);
       cubeFound = false;
     }
 
     if (armMoving){ // Arm moving up until switch hit
       setMotorPosition(11, 0.40);
-      printf("Arm Moving Up\n");
-      printf("Arm Limit: %d\n", armVal);
     }
-
-     
     if (armVal < 1){
       printf("Arm Limit: %d\n", armVal);
       armMoving = false;
@@ -269,10 +266,10 @@ int main() {
       printf("Arm being held up\n");
       setServoPosition(4, 1.1);
       sleep(2.0);
-      setServoPosition(0, 0.90);
+      setServoPosition(0, 0.45); //open up partially 
       sleep(2.0);
       
-    }
+      }
       // Sort blocks by color
       notSorting = false;
       std::cout << "Colors: " << colorVal << std::endl;
