@@ -32,6 +32,7 @@ float DISTANCE_FROM_IR_SENSORS = 4.6; //
 // float CONST_TERM = ;
 int BACK_INFRARED_PIN = 3;
 int FRONT_INFRARED_PIN = 2;
+int HEAD_INFRARED_PIN = 1;
 
 float alpha = .3;
 
@@ -143,6 +144,7 @@ int main() {
 
     mraa::Aio aioBackInfrared = mraa::Aio(BACK_INFRARED_PIN);
     mraa::Aio aioFrontInfrared = mraa::Aio(FRONT_INFRARED_PIN);
+    mraa::Aio aioHeadInfrared = mraa::Aio(HEAD_INFRARED_PIN);
 
     float speed = .1;
     float desiredAngle = 0.0;
@@ -166,6 +168,7 @@ int main() {
 
         float backInfraredReading = aioBackInfrared.read();
         float frontInfraredReading = aioFrontInfrared.read();
+        float headInfraredReading = aioHeadInfrared.read();
         // printf("Infra readings: back: %f, front: %f\n", backInfraredReading, frontInfraredReading);
 
         backDistance =  (backDistance * alpha) + (infraReadingToDistanceBack(backInfraredReading) * (1.0 - alpha));
@@ -188,8 +191,18 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        setMotorSpeed(pwm, dir, power + forwardBias);
-        setMotorSpeed(pwm2, dir2, power - forwardBias);
+
+        if (headInfraredReading > 500.0){
+            setMotorSpeed(pwm, dir, power + forwardBias);
+            setMotorSpeed(pwm2, dir2, power - forwardBias);
+            
+        } else {
+            power = .1;
+            setMotorSpeed(pwm, dir, power);
+            setMotorSpeed(pwm2, dir2, power);
+            usleep(1000 * 20);    
+        }
+
         printf("Set power to: %f\n", power);
         usleep(1000 * 10);
 
