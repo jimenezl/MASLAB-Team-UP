@@ -83,7 +83,6 @@ void writePWM(int index, double duty) {
     assert(0 <= duty && duty <= 1.0);
     assert(0 <= index && index < 16);
     double on = 4095.0 * duty;
-    printf("duty:%f\n", duty);
     
     uint16_t onRounded = (uint16_t) on;
 
@@ -154,7 +153,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 // no block > 760
 // 460 red
 void checkColors(float colorVal){
-  if (colorVal > 300 && colorVal < 600){ //prev 900 to 1000
+  if (colorVal > 350 && colorVal < 600){ //prev 900 to 1000
       printf("Red Block Found\n");
       servoRun = true;
       dirTurn.write(0);
@@ -165,11 +164,11 @@ void checkColors(float colorVal){
       }
       else {
         setMotorPosition(8, 0.15);
-        sleep(2.0);
+        printf("Turntable moving\n");
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal <= 300){ //prev. val<900 
+  else if (colorVal <= 350){ //prev. val<900 
       printf("Green Block Found\n");
       servoRun = true;
       dirTurn.write(1);
@@ -178,9 +177,9 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else { 
-      setMotorPosition(8, 0.15);
-      sleep(2.0);
-      limitSwitches(greenSwitch, redSwitch, servoRun);
+        printf("Turntable moving\n");
+        setMotorPosition(8, 0.15);
+        limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
   else if (colorVal >= 600){
@@ -188,8 +187,9 @@ void checkColors(float colorVal){
       dirTurn.write(1);
       // adding in check for already being at green station
       if (greenSwitch < 1){
-      setMotorPosition(8, 0.15);
-      servoRun = false; 
+        printf("Turntable moving\n");
+        setMotorPosition(8, 0.15);
+        servoRun = false; 
       }
     }
 }
