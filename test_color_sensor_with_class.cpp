@@ -23,7 +23,7 @@ int running = 1;
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
-    setMotorPosition(8, 0.0);
+    lilMama.setMotorPosition(8, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -50,14 +50,14 @@ int main() {
       printf("close gripper\n");
       sleep(1.0);
     }
-    if (lilMama.armMoving){
+    if (armMoving){
       lilMama.setMotorPosition(11, 0.30);
       printf("Arm Moving Up\n");
       }
 
     if (armVal < 1){
-      lilMama.armMoving = false;
-      lilMama.cubeFound = false;
+      armMoving = false;
+      cubeFound = false;
 
       printf("Arm being held up\n");
       lilMama.setServoPosition(4, 1.1);
@@ -68,13 +68,13 @@ int main() {
       
       printf("Arm Limit: %d\n", armVal);
       lilMama.setMotorPosition(11, 0.0);
-      lilMama.dirArm.write(0);
+      dirArm.write(0);
       sleep(2.0);
       lilMama.setServoPosition(0, 0.70);
       sleep(2.0);
       lilMama.servoRun = true;
 
-      while(lilMama.servoRun){
+      while(servoRun){
         lilMama.checkColors(colorVal); //checking color sensor
         sleep(3.0);
       }
