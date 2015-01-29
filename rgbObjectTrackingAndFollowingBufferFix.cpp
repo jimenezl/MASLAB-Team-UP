@@ -356,7 +356,8 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 			// drawObject(objectXCoord,objectYCoord,*cameraFeed);
 		}
 
-		distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
+		// distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
+		distanceToBlock = 210 - objectMaxY;
 		if (thresholdBlockSize<(numOfBlocks*maxFloodPixelCount)){
 			printf("Pick up block(s)!\n");
 		}
@@ -677,7 +678,7 @@ int main() {
         power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         
         if (diffAngle<5){
-	        forwardBias = .1 * distanceToBlock;
+	        forwardBias = .005 * distanceToBlock;
 	        // forwardBias = 0.0;
 	    } else {
 	    	forwardBias = 0.0;

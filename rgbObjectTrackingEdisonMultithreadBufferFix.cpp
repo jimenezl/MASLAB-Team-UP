@@ -299,7 +299,7 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 	printf("border coordinates: (%d,%d) , (%d,%d)\n", objectMinX, objectMinY, objectMaxX, objectMaxY);
 	printf("object angle: %f\n", float(objectXCoord-160) * 0.2125);
 	objectAngle = float(objectXCoord-160) * 0.2125;
-	int distanceToBlock = 220 - objectMaxY;
+	int distanceToBlock = 210 - objectMaxY;
 	printf("Distance to block: %d\n", distanceToBlock);
 
 	// drawObject(objectMinX, objectMinY,*cameraFeed);
