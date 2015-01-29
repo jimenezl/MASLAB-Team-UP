@@ -230,7 +230,7 @@ int main() {
   dirArm.write(1);
 
   //Initial servo open
-  setServoPosition(0, 0.0);
+  setServoPosition(0, 1.0);
 
   initPWM();
 
@@ -269,7 +269,7 @@ int main() {
       printf("Arm being held up\n");
       setServoPosition(4, 1.1);
       sleep(2.0);
-      setServoPosition(0, 0.90);
+      setServoPosition(0, 0.90); //open up partially 
       sleep(2.0);
       
     }
