@@ -192,17 +192,35 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        if (headDistance > 6.0){
-            setMotorSpeed(pwm, dir, power + forwardBias); //normal behavior
-            setMotorSpeed(pwm2, dir2, power - forwardBias);
-            
-        } else {
-            printf("Power reduced!\n");
+        if (headDistance < 6.0){
+            printf("Power reduced!\n"); //head hit a wall
             power = .25;
             setMotorSpeed(pwm, dir, power);
             setMotorSpeed(pwm2, dir2, power);
-            usleep(1000 * 20);    
+        } else if ((backDistance > 10) && (frontDistance < 10 && frontDistance > 0 )){
+            power = .15; //only front distance gives good readings, turn left
+            setMotorSpeed(pwm, dir, power);
+            setMotorSpeed(pwm2, dir2, power);
+        } else if ((frontDistance > 10) && (backDistance < 10 && backDistance > 0 )){
+            power = -.15; //only back distance gives good readings, turn right
+            setMotorSpeed(pwm, dir, power);
+            setMotorSpeed(pwm2, dir2, power);
+        } else if ((frontDistance > 10 || frontDistance < 0) && (backDistance > 10 || backDistance < 0)) {
+            power = .15; //sensors read garbage
+            setMotorSpeed(pwm, dir, power);
+            setMotorSpeed(pwm2, dir2, -1 * power);
         }
+        else if ((frontDistance < 10 && frontDistance > 0) && (backDistance < 10 && backDistance > 0)) {
+            setMotorSpeed(pwm, dir, power + forwardBias); //normal behavior
+            setMotorSpeed(pwm2, dir2, power - forwardBias);   
+        } else {
+            setMotorSpeed(pwm, dir, 0);
+            setMotorSpeed(pwm2, dir2, 0);
+            running = 0;
+        }
+
+        usleep(1000 * 20); 
+        
         printf("Set power to: %f\n", power);
 
     }
