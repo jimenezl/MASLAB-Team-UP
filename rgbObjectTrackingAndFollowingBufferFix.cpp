@@ -682,7 +682,7 @@ int main() {
         
         if (diffAngle<5){
 	        forwardBias = (P_CONSTANT_DISTANCE * distanceToBlock) + (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance));
-	        printf("D term: %f\n", (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance));
+	        printf("D term: %f\n", (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance)));
 	        // forwardBias = 0.0;
 	    } else {
 	    	forwardBias = 0.0;
