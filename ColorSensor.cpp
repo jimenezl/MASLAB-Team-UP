@@ -1,5 +1,5 @@
 class ColorSensor {
-public:
+	public:
 		float cvalOne = 0;
 		float colorVal = 0;
 
@@ -83,108 +83,109 @@ public:
     writePWM(index, duty);
 	}
 
-	// Forward declarations of checkColors limitSwitches
-void checkColors(float colorVal);
-void limitSwitches(float switch1, float switch2, bool servoRun);
+	/*// Forward declarations of checkColors limitSwitches
+	void checkColors(float colorVal);
+	void limitSwitches(float switch1, float switch2, bool servoRun);
+*/
+	// Limit Switches
+	void limitSwitches(float switch1, float switch2, bool servoRun){
 
-// Limit Switches
-void limitSwitches(float switch1, float switch2, bool servoRun){
+	  if (switch1 < 1000) {
+	    printf("Turning off motor\n");
+	    setMotorPosition(8, 0.0);
 
-  if (switch1 < 1000) {
-    printf("Turning off motor\n");
-    setMotorPosition(8, 0.0);
+	    if (servoRun){
+	      printf("Pushing green block\n");
 
-    if (servoRun){
-      printf("Pushing green block\n");
+	      setServoPosition(15, 1.0); 
+	      printf("block pushed\n");
+	      sleep(1.0); //must be integer
+	      setServoPosition(15, -0.2); 
+	      printf("returning home\n"); 
+	      sleep(1.0); // return to home position
+	    }
 
-      setServoPosition(15, 1.0); 
-      printf("block pushed\n");
-      sleep(1.0); //must be integer
-      setServoPosition(15, -0.2); 
-      printf("returning home\n"); 
-      sleep(1.0); // return to home position
-    }
+	  }
+	  else if (switch2 < 1000){
+	    printf("Turning off motor\n");
+	    setMotorPosition(8, 0.0);
+	    
+	    if (servoRun){
+	      printf("Pushing red block\n");
 
-  }
-  else if (switch2 < 1000){
-    printf("Turning off motor\n");
-    setMotorPosition(8, 0.0);
-    
-    if (servoRun){
-      printf("Pushing red block\n");
+	      setServoPosition(15, 1.0);
+	      printf("block pushed\n");
+	      sleep(1.0);
+	      setServoPosition(15, -0.20); 
+	      printf("returning home\n");
+	      sleep(1.0); //return to home position
+	    }
+	  }
+	}
 
-      setServoPosition(15, 1.0);
-      printf("block pushed\n");
-      sleep(1.0);
-      setServoPosition(15, -0.20); 
-      printf("returning home\n");
-      sleep(1.0); //return to home position
-    }
-  }
-}
+	// Check color sensors and move to hopper
+	// green <340
+	// no block > 760
+	// 460 red
+	void checkColors(float colorVal){
+	  if (colorVal > 400 && colorVal < 700){ //prev 900 to 1000
+	      printf("Red Block Found\n");
+	      servoRun = true;
+	      dirTurn.write(0);
 
-// Check color sensors and move to hopper
-// green <340
-// no block > 760
-// 460 red
-void checkColors(float colorVal){
-  if (colorVal > 400 && colorVal < 700){ //prev 900 to 1000
-      printf("Red Block Found\n");
-      servoRun = true;
-      dirTurn.write(0);
+	      // adding in check for already being at red station
+	      if (redSwitch < 1000){
+	        limitSwitches(greenSwitch, redSwitch, servoRun);
+	      }
+	      else {
+	        setMotorPosition(8, 0.15);
+	        sleep(2.0);
+	        limitSwitches(greenSwitch, redSwitch, servoRun);
+	      }
+	    }
+	  else if (colorVal <= 400){ //prev. val<900 
+	      printf("Green Block Found\n");
+	      servoRun = true;
+	      dirTurn.write(1);
+	       // adding in check for already being at green station
+	      if (greenSwitch < 1000){
+	        limitSwitches(greenSwitch, redSwitch, servoRun);
+	      }
+	      else { 
+	      setMotorPosition(8, 0.15);
+	      sleep(2.0);
+	      limitSwitches(greenSwitch, redSwitch, servoRun);
+	      }
+	    }
+	  else if (colorVal >= 700){
+	      printf("No Block Found\n"); //prev > 1000
+	      dirTurn.write(1);
+	      // adding in check for already being at green station
+	      if (greenSwitch < 1000){
+	      setMotorPosition(8, 0.15);
+	      servoRun = false; 
+	      }
+	    }
+	}
 
-      // adding in check for already being at red station
-      if (redSwitch < 1000){
-        limitSwitches(greenSwitch, redSwitch, servoRun);
-      }
-      else {
-        setMotorPosition(8, 0.15);
-        sleep(2.0);
-        limitSwitches(greenSwitch, redSwitch, servoRun);
-      }
-    }
-  else if (colorVal <= 400){ //prev. val<900 
-      printf("Green Block Found\n");
-      servoRun = true;
-      dirTurn.write(1);
-       // adding in check for already being at green station
-      if (greenSwitch < 1000){
-        limitSwitches(greenSwitch, redSwitch, servoRun);
-      }
-      else { 
-      setMotorPosition(8, 0.15);
-      sleep(2.0);
-      limitSwitches(greenSwitch, redSwitch, servoRun);
-      }
-    }
-  else if (colorVal >= 700){
-      printf("No Block Found\n"); //prev > 1000
-      dirTurn.write(1);
-      // adding in check for already being at green station
-      if (greenSwitch < 1000){
-      setMotorPosition(8, 0.15);
-      servoRun = false; 
-      }
-    }
-}
+	void init(){
+		// Color Sensor Readings to Pin 0
+		// Limit Switch to Pin 1, Pin 2
+		  mraa::Aio colorSensor = mraa::Aio(0);
+		  mraa::Gpio limit1 = mraa::Gpio(1);
+		  mraa::Gpio limit2 = mraa::Gpio(0);
 
-void init(){
-	// Color Sensor Readings to Pin 0
-	// Limit Switch to Pin 1, Pin 2
-	  mraa::Aio colorSensor = mraa::Aio(0);
-	  mraa::Gpio limit1 = mraa::Gpio(1);
-	  mraa::Gpio limit2 = mraa::Gpio(0);
+		  mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
+		  bool armMoving = true;
+		  bool cubeFound = true;
+		  // Edison i2c bus is 6
+		  i2c = new mraa::I2c(6);
+		  assert(i2c != NULL);
 
-	  mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
-	  bool armMoving = true;
-	  bool cubeFound = true;
-	  // Edison i2c bus is 6
-	  i2c = new mraa::I2c(6);
-	  assert(i2c != NULL);
+		  //Turntable motor
+		  dirTurn.dir(mraa::DIR_OUT);
+		  dirTurn.write(0);
+	}
 
-	  //Turntable motor
-	  dirTurn.dir(mraa::DIR_OUT);
-	  dirTurn.write(0);
-}
+} ;
 
-}
