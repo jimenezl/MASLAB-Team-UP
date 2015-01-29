@@ -118,12 +118,18 @@ int main()
   dir.dir(mraa::DIR_OUT);
   dir.write(1);
 
+  bool runArm = true;
+
 
   while (running) {
+    if (runArm){
     int armVal = armLimit.read(); 
     printf("armVal%d\n", armVal);
     setMotorPosition(i2c, 11, 0.20);
+    }
+
     if (armVal < 1){
+      runArm = false;
       setMotorPosition(i2c, 11, 0.00);
       dir.write(0);
       setServoPosition(i2c, 4, 1.1); 
