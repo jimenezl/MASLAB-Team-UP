@@ -153,7 +153,7 @@ int main() {
     float backDistance = 0;
     float frontDistance = 0;
 
-    float desiredDistance = 3;
+    float desiredDistance = 5;
 
     float P_CONSTANT_WALL_FOLLOWER = .12;
 
