@@ -116,7 +116,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun);
 // Limit Switches
 void limitSwitches(float switch1, float switch2, bool servoRun){
 
-  if (switch1 < 1000) {
+  if (switch1 < 1) {
     printf("Turning off motor\n");
     setMotorPosition(8, 0.0);
 
@@ -132,7 +132,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     }
 
   }
-  else if (switch2 < 1000){
+  else if (switch2 < 1){
     printf("Turning off motor\n");
     setMotorPosition(8, 0.0);
     
@@ -250,7 +250,7 @@ int main() {
     }
 
     if (armMoving){ // Arm moving up until switch hit
-      setMotorPosition(11, 0.20);
+      setMotorPosition(11, 0.30);
     }
 
     if (armVal < 1){
@@ -267,7 +267,7 @@ int main() {
       // Hold arm up
       printf("Arm being held up\n");
       setServoPosition(4, 1.1);
-      setServoPosition(0, 0.40); //open up partially 
+      setServoPosition(0, 0.45); //open up partially 
       sleep(2.0);
 
       // Sort blocks by color
