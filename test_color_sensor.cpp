@@ -197,7 +197,11 @@ void checkColors(float colorVal){
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
+    //turn Motors off or open them
     setMotorPosition(11, 0.0);
+    setServoPosition(4, 1.5);
+    setServoPosition(0, 0.90);
+    setMotorPosition(8, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -230,9 +234,6 @@ int main() {
   dirArm.dir(mraa::DIR_OUT);
   dirArm.write(1);
 
-  //Initial servo open
-  setServoPosition(0, 1.0);
-
   initPWM();
 
   while (running) {
@@ -243,14 +244,12 @@ int main() {
 
     if (cubeFound){ // Pick up Blocks
       dirArm.write(1);
-      setServoPosition(0, 0.90); //open up claw
       setServoPosition(0, 0.30); // close claw
       sleep(1.0);
       cubeFound = false;
     }
 
     if (armMoving){ // Arm moving up until switch hit
-
       setMotorPosition(11, 0.40);
     }
     if (armVal < 1){
