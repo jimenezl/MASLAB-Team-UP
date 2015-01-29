@@ -10,8 +10,8 @@ public:
 		bool servoRun = true;
 
 		mraa::Aio colorSensor = mraa::Aio(0);
-		mraa::Gpio limit1 = mraa::Gpio(1);
-		mraa::Gpio limit2 = mraa::Gpio(0);
+		mraa::Gpio limit1 = mraa::Gpio(1); // Green Switch
+		mraa::Gpio limit2 = mraa::Gpio(0); // Red Switch
 		mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
 		bool armMoving = true;
 		bool cubeFound = true;

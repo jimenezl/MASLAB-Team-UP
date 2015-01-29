@@ -1,6 +1,6 @@
 // Compile with:
 // g++ test_color_sensor_with_class.cpp -o test_color_sensor_with_class -lmraa
-// Repeatedly reads pin A0 and prints the result.
+// Picks up blocks and sorts them in sets of three
 // brown, black, orange resistor for photoresistor
 // red, red, brown resistor for led
 
@@ -15,9 +15,6 @@
 
 // Global Variables
 int running = 1;
-
-
-
 
 void sig_handler(int signo)
 {
@@ -54,13 +51,6 @@ int main() {
       lilMama.armMoving = false;
       lilMama.cubeFound = false;
 
-      printf("Arm being held up\n");
-      lilMama.setServoPosition(4, 1.1);
-
-      std::cout << "Colors: " << lilMama.colorVal << std::endl;
-      std::cout << "Switch 1: " << lilMama.greenSwitch << std::endl;
-      std::cout << "Switch 2: " << lilMama.redSwitch << std::endl;
-      
       printf("Arm Limit: %d\n", lilMama.armVal);
       lilMama.setMotorPosition(11, 0.0);
       lilMama.dirArm.write(0);
@@ -69,7 +59,18 @@ int main() {
       sleep(2.0);
       lilMama.servoRun = true;
 
+      printf("Arm being held up\n");
+      lilMama.setServoPosition(4, 1.1);
+
+
+      
+      
+
       while(lilMama.servoRun){
+        // Color Value and Limit Switches
+        std::cout << "Colors: " << lilMama.colorVal << std::endl;
+        std::cout << "Switch 1: " << lilMama.greenSwitch << std::endl;
+        std::cout << "Switch 2: " << lilMama.redSwitch << std::endl;
         lilMama.checkColors(lilMama.colorVal); //checking color sensor
         sleep(3.0);
       }

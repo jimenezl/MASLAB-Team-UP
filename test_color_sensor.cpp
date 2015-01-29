@@ -1,6 +1,6 @@
 // Compile with:
 // g++ test_color_sensor.cpp -o test_color_sensor -lmraa
-// Repeatedly reads pin A0 and prints the result.
+// Picks up blocks and sorts them in sets of three
 // brown, black, orange resistor for photoresistor
 // red, red, brown resistor for led
 
@@ -21,7 +21,6 @@
 // Global Variables
 int running = 1;
 
-float alpha = 0;
 float cvalOne = 0;
 float colorVal = 0;
 
@@ -33,8 +32,6 @@ mraa::I2c *i2c;
 
 mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
 mraa::Gpio dirArm = mraa::Gpio(4); //Direction of Arm
-
-
 
 // Motor Setup
 uint8_t registers[] = {
