@@ -192,7 +192,7 @@ int main() {
         } else if (power < -.3) {
             power = -.3;
         }
-        if (headInfraredReading > 500.0){
+        if (headDistance < 6.0){
             setMotorSpeed(pwm, dir, power + forwardBias);
             setMotorSpeed(pwm2, dir2, power - forwardBias);
             
