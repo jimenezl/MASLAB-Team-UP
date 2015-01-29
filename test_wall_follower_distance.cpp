@@ -200,12 +200,12 @@ int main() {
             usleep(1000 * 20); 
         } else if ((backDistance > 20) && (frontDistance < 20 && frontDistance > 0 )){
             power = .15; //only front distance gives good readings, turn left
-            setMotorSpeed(pwm, dir, power + forwardBias * .75);
-            setMotorSpeed(pwm2, dir2, power - forwardBias * .75);
+            setMotorSpeed(pwm, dir, power + forwardBias);
+            setMotorSpeed(pwm2, dir2, power - forwardBias);
         } else if ((frontDistance > 20) && (backDistance < 20 && backDistance > 0 )){
             power = -.15; //only back distance gives good readings, turn right
-            setMotorSpeed(pwm, dir, power + forwardBias * .75);
-            setMotorSpeed(pwm2, dir2, power - forwardBias * .75);
+            setMotorSpeed(pwm, dir, power + forwardBias);
+            setMotorSpeed(pwm2, dir2, power - forwardBias);
         } else if ((frontDistance > 20 || frontDistance < 0) && (backDistance > 20 || backDistance < 0)) {
             power = .15; //sensors read garbage
             setMotorSpeed(pwm, dir, power);
