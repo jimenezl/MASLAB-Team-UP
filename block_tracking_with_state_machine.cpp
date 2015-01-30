@@ -436,6 +436,9 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 	else {
 		blockFound = false;
 		loopsInPickupRange = 0;
+		if (ROBOT_STATE = 1){
+			ROBOT_STATE = 0;
+		}
 	}
 }
 
