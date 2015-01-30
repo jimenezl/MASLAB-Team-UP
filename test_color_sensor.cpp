@@ -28,6 +28,8 @@ bool servoRun = true;
 
 
 
+
+
 mraa::I2c *i2c;
 
 mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
@@ -148,11 +150,11 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 }
 
 // Check color sensors and move to hopper
-// green 490 < 550
-// 370 < no block > 440
-// 650 < red
+// green 450 to 565
+// 370 < no block > 420
+//  565 > red
 void checkColors(float colorVal){
-  if (colorVal > 550){ 
+  if (565 > colorVal { 
       printf("Red Block Found\n");
       servoRun = true;
       dirTurn.write(0);
@@ -168,7 +170,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (490 < colorVal && colorVal <= 550){ //prev. val<900 
+  else if ( colorVal < 500){  
       printf("Green Block Found\n");
       servoRun = true;
       dirTurn.write(1);
@@ -183,7 +185,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal < 440){
+  else if (430 < colorVal){
       printf("No Block Found\n"); //prev > 1000
       dirTurn.write(1);
       // adding in check for already being at green station
@@ -218,6 +220,8 @@ int main() {
   mraa::Gpio limit1 = mraa::Gpio(1); 
   mraa::Gpio limit2 = mraa::Gpio(0);  
 
+  float count = 0;
+
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
   assert(i2c != NULL);
@@ -229,19 +233,25 @@ int main() {
   initPWM();
 
   while (running) {
-
-    colorVal = colorSensor.read();
-    greenSwitch = limit1.read(); 
-    redSwitch = limit2.read();
-
     // Sort blocks by color
-    std::cout << "Colors: " << colorVal << std::endl;
-    std::cout << "Green Switch: " << greenSwitch << std::endl;
-    std::cout << "Red Switch: " << redSwitch << std::endl;  
-    checkColors(colorVal); //checking color sensor
-    sleep(3.0);
-      
-    }
-  } 
+    while(count < 4){
+      colorVal = colorSensor.read();
+      greenSwitch = limit1.read(); 
+      redSwitch = limit2.read();
+      std::cout << "Colors: " << colorVal << std::endl;
+      std::cout << "Green Switch: " << greenSwitch << std::endl;
+      std::cout << "Red Switch: " << redSwitch << std::endl;  
+      checkColors(colorVal); //checking color sensor
+      count+=1;
+      sleep(3.0);
+      }
+  count = 0;
+  while (greenSwitch > 0){
+    dirTurn.write(1);
+    setMotorPosition(8, .12);
+    sleep(1.0);
+  }
+  running = 0;
+} 
 
 
