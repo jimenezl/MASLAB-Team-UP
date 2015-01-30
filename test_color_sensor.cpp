@@ -281,7 +281,7 @@ int main() {
       printf("Arm being held up\n");
       setServoPosition(7, 1.1);
       usleep(1000*300);
-      setServoPosition(0, 0.5); //open up partially 
+      setServoPosition(0, 0.7); //open up partially 
       sleep(2.0);
 
       // Sort blocks by color
