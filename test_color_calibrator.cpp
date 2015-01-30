@@ -26,7 +26,7 @@ int main() {
     int val = aio.read();
     std::cout << "Read: " << val << std::endl;
 
-    if (490 < val <= 550){
+    if (490 < val && val <= 550){
       printf("Green Block Found\n");
     }
     else if (val > 650){
