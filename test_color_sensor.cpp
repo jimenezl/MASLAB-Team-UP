@@ -4,9 +4,9 @@
 // brown, black, orange resistor for photoresistor
 // red, red, brown resistor for led
 
-// No Block: 1023
-// Red:   power
-// Green: < 1000 less than
+// No Block: < 445
+// Red: 450 < Red < 520
+// Green: < 650 less than
 
 #include "mraa.hpp"
 #include <cassert>
@@ -146,11 +146,11 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 }
 
 // Check color sensors and move to hopper
-// green < 310
-// 370 < no block > 470
-// 600 < red
+// green 490 < 550
+// 370 < no block > 440
+// 650 < red
 void checkColors(float colorVal){
-  if (280 < colorVal <= 620){ 
+  if (colorVal > 650){ 
       printf("Red Block Found\n");
       servoRun = true;
       dirTurn.write(1);
@@ -163,36 +163,36 @@ void checkColors(float colorVal){
         printf("Turntable moving\n");
         setMotorPosition(8, 0.12);
         sleep(2.0); // Give time for turntable to get to new pos.
-        limitSwitches(redSwitch, greenSwitch, servoRun);
+        limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal <= 280){ //prev. val<900 
+  else if (490 < colorVal <= 550){ //prev. val<900 
       printf("Green Block Found\n");
       servoRun = true;
       dirTurn.write(0);
        // adding in check for already being at green station
       if (greenSwitch < 1){
-        limitSwitches(redSwitch, greenSwitch, servoRun);
+        limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else { 
         printf("Turntable moving\n");
         setMotorPosition(8, 0.12);
         sleep(2.0); // Give time for turntable to get to new pos.
-        limitSwitches(redSwitch, greenSwitch, servoRun);
+        limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal > 750){
+  else if (370 < colorVal < 440){
       printf("No Block Found\n"); //prev > 1000
-      dirTurn.write(1);
+      dirTurn.write(0);
       // adding in check for already being at green station
-      if (redSwitch < 1){
-        limitSwitches(redSwitch, greenSwitch, servoRun);
+      if (greenSwitch < 1){
+        limitSwitches(greenSwitch, redSwitch, servoRun);
       }
       else { 
         printf("Turntable moving\n");
         setMotorPosition(8, 0.12);
         sleep(2.0); // Give time for turntable to get to new pos.
-        limitSwitches(redSwitch, greenSwitch, servoRun);
+        limitSwitches(greenSwitch, redSwitch, servoRun);
     }
   } 
 }
@@ -253,8 +253,8 @@ int main() {
   while (running) {
     int armVal = armLimit.read(); 
     colorVal = colorSensor.read();
-    redSwitch = limit1.read(); 
-    greenSwitch = limit2.read();
+    greenSwitch = limit1.read(); 
+    redSwitch = limit2.read();
 
     if (cubeFound){ // Pick up Blocks
       dirArm.write(1);
@@ -286,8 +286,8 @@ int main() {
 
       // Sort blocks by color
       std::cout << "Colors: " << colorVal << std::endl;
-      std::cout << "Green Switch: " << greenSwitch << std::endl;
-      std::cout << "Red Switch: " << redSwitch << std::endl;  
+      std::cout << "Red Switch: " << greenSwitch << std::endl;
+      std::cout << "Green Switch: " << redSwitch << std::endl;  
       checkColors(colorVal); //checking color sensor
       sleep(3.0);
       
