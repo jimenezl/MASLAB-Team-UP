@@ -358,7 +358,7 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 		}
 
 		// distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
-		distanceToBlock = 180 - objectMaxY;
+		distanceToBlock = 190 - objectMaxY;
 		if (thresholdBlockSize<(numOfBlocks*maxFloodPixelCount)){
 			printf("Pick up block(s)!\n");
 		}
@@ -626,6 +626,8 @@ int main() {
     float P_CONSTANT_DISTANCE = .00175;
     float D_CONSTANT_DISTANCE = .0002;
 
+    int loopsInPickupRange = 0;
+
     while (running) {
         
         
@@ -681,7 +683,7 @@ int main() {
         derivative = (rf / 80.0);
         power = speed * ((P_CONSTANT * diffAngle / 360.0) + (I_CONSTANT * integral) + (D_CONSTANT * derivative / 180.0)); //make sure to convert angles > 360 to proper angles
         
-        if (diffAngle<5){
+        if (fabs(diffAngle)<5){
 	        forwardBias = (P_CONSTANT_DISTANCE * distanceToBlock) + (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance));
 	        printf("D term: %f\n", (D_CONSTANT_DISTANCE * (distanceToBlock - previousDistance)));
 	        // forwardBias = 0.0;
@@ -696,6 +698,13 @@ int main() {
         }
 
         previousDistance = distanceToBlock;
+
+        if (distanceToBlock<15){
+        	loopsInPickupRange++;
+        }
+        if (loopsInPickupRange > 250){
+        	//change robot state
+        }
         
         setMotorSpeed(pwm, dir, -1 * power + forwardBias);
         setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
