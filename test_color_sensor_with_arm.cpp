@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_color_sensor.cpp -o test_color_sensor -lmraa
+// g++ test_color_sensor_with_arm.cpp -o test_color_sensor_with_arm -lmraa
 // Picks up blocks and sorts them in sets of three
 // brown, black, orange resistor for photoresistor
 // red, red, brown resistor for led
@@ -25,13 +25,13 @@ float colorVal = 0;
 float greenSwitch = 0;
 float redSwitch = 0; 
 bool servoRun = true;
-
+bool notSorting = true; 
 
 
 mraa::I2c *i2c;
 
 mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
-
+mraa::Gpio dirArm = mraa::Gpio(4); //Direction of Arm
 
 // Motor Setup
 uint8_t registers[] = {
@@ -217,8 +217,13 @@ int main() {
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 1, Pin 2
   mraa::Aio colorSensor = mraa::Aio(0);
-  mraa::Gpio limit1 = mraa::Gpio(1); // Green side
-  mraa::Gpio limit2 = mraa::Gpio(0); // Red side
+  mraa::Gpio limit1 = mraa::Gpio(1); //red side
+  mraa::Gpio limit2 = mraa::Gpio(0); //green side
+
+  mraa::Gpio armLimit = mraa::Gpio(2); // Arm Limit Switch
+  bool armMoving = true;
+  bool cubeFound = true;
+  
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
@@ -228,22 +233,69 @@ int main() {
   dirTurn.dir(mraa::DIR_OUT);
   dirTurn.write(0);
 
+  // Arm motor
+  dirArm.dir(mraa::DIR_OUT);
+  dirArm.write(0);
+  usleep(1000*400);
+
   initPWM();
+  setServoPosition(7, 1.6);
+  usleep(1000*400);
+  setMotorPosition(11, 0.2);
+  usleep(1000*100);
+  setMotorPosition(11, 0.0);
+  printf("sleeping\n");
+  sleep(15);
+  setServoPosition(0, 0.9);
+  sleep(2.0);
+  printf("starting\n");
 
   while (running) {
-
+    int armVal = armLimit.read(); 
     colorVal = colorSensor.read();
     greenSwitch = limit1.read(); 
     redSwitch = limit2.read();
 
-    // Sort blocks by color
-    std::cout << "Colors: " << colorVal << std::endl;
-    std::cout << "Green Switch: " << greenSwitch << std::endl;
-    std::cout << "Red Switch: " << redSwitch << std::endl;  
-    checkColors(colorVal); //checking color sensor
-    sleep(3.0);
+    if (cubeFound){ // Pick up Blocks
+      dirArm.write(1);
+      setServoPosition(0, 0.25); // close claw
+      sleep(1.0);
+      cubeFound = false;
+    }
+
+    if (armMoving){ // Arm moving up until switch hit
+      setMotorPosition(11, 0.30);
+    }
+
+    if (armVal < 1){
+      setMotorPosition(11, 0.0);
+      setServoPosition(7,1.1);
+      printf("Arm Limit: %d\n", armVal);
+      armMoving = false;
+      dirArm.write(0); 
+      usleep(1000*300);
+    }
+    if (armMoving == false){
+
+      // Hold arm up
+      printf("Arm being held up\n");
+      setServoPosition(7, 1.1);
+      usleep(1000*300);
+      setServoPosition(0, 0.7); //open up partially 
+      sleep(2.0);
+
+      // Sort blocks by color
+      std::cout << "Colors: " << colorVal << std::endl;
+      std::cout << "Red Switch: " << greenSwitch << std::endl;
+      std::cout << "Green Switch: " << redSwitch << std::endl;  
+      checkColors(colorVal); //checking color sensor
+      sleep(3.0);
       
     }
+
   } 
+    setMotorPosition(11, 0.0);
+    setServoPosition(0, 0.90);
+    setMotorPosition(8, 0.0);
 }
 
