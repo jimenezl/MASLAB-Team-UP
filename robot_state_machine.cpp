@@ -1092,6 +1092,7 @@ int main() {
 	        	ROBOT_STATE = 2;
 	        	// break;
 	        }
+	        printf("loopsInPickupRange: %d\n", loopsInPickupRange);
 	        
 	        setMotorSpeed(pwm, dir, -1 * power + forwardBias);
 	        setMotorSpeed(pwm2, dir2, -1 * power - forwardBias);
