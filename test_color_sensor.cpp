@@ -121,10 +121,8 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     printf("Turning off motor\n");
     setMotorPosition(8, 0.0);
 
-
     if (servoRun){
       printf("Pushing red block\n");
-
       setServoPosition(15, 1.0); 
       printf("block pushed\n");
       sleep(1.0); //must be integer
@@ -140,7 +138,6 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
     
     if (servoRun){
       printf("Pushing green block\n");
-
       setServoPosition(15, 1.0);
       printf("block pushed\n");
       sleep(1.0);
@@ -166,9 +163,9 @@ void checkColors(float colorVal){
         limitSwitches(redSwitch, greenSwitch, servoRun);
       }
       else {
-        setMotorPosition(8, 0.15);
-        sleep(2.0); // Give time for turntable to get to new pos.
         printf("Turntable moving\n");
+        setMotorPosition(8, 0.12);
+        sleep(2.0); // Give time for turntable to get to new pos.
         limitSwitches(redSwitch, greenSwitch, servoRun);
       }
     }
@@ -182,7 +179,7 @@ void checkColors(float colorVal){
       }
       else { 
         printf("Turntable moving\n");
-        setMotorPosition(8, 0.15);
+        setMotorPosition(8, 0.12);
         sleep(2.0); // Give time for turntable to get to new pos.
         limitSwitches(redSwitch, greenSwitch, servoRun);
       }
@@ -196,7 +193,8 @@ void checkColors(float colorVal){
       }
       else { 
         printf("Turntable moving\n");
-        setMotorPosition(8, 0.15);
+        setMotorPosition(8, 0.12);
+        sleep(2.0); // Give time for turntable to get to new pos.
         limitSwitches(redSwitch, greenSwitch, servoRun);
     }
   } 
@@ -241,14 +239,16 @@ int main() {
   // Arm motor
   dirArm.dir(mraa::DIR_OUT);
   dirArm.write(0);
+  usleep(1000*400);
 
   initPWM();
   setServoPosition(7, 1.6);
+  usleep(1000*400);
   setMotorPosition(11, 0.2);
   usleep(1000*100);
-  setMotorPosition(11, 0);
+  setMotorPosition(11, 0.0);
   printf("sleeping\n");
-  sleep(20);
+  sleep(15);
   setServoPosition(0, 0.9);
   sleep(2.0);
   printf("starting\n");
@@ -256,7 +256,7 @@ int main() {
   while (running) {
     int armVal = armLimit.read(); 
     colorVal = colorSensor.read();
-    redSwitch = limit1.read(); //Green block canister
+    redSwitch = limit1.read(); 
     greenSwitch = limit2.read();
 
     if (cubeFound){ // Pick up Blocks
@@ -276,12 +276,14 @@ int main() {
       printf("Arm Limit: %d\n", armVal);
       armMoving = false;
       dirArm.write(0); 
+      usleep(1000*300);
     }
     if (armMoving == false){
 
       // Hold arm up
       printf("Arm being held up\n");
       setServoPosition(7, 1.1);
+      usleep(1000*300);
       setServoPosition(0, 0.5); //open up partially 
       sleep(2.0);
 
