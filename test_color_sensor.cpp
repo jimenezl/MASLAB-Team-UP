@@ -273,10 +273,8 @@ int main() {
       setServoPosition(7,1.1);
       printf("Arm Limit: %d\n", armVal);
       armMoving = false;
-      dirArm.write(0);
-      
+      dirArm.write(0); 
     }
-
     if (armMoving == false){
 
       // Hold arm up
