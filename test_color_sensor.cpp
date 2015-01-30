@@ -117,9 +117,10 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
   if (switch1 < 1) {
     printf("Turning off motor\n");
     setMotorPosition(8, 0.0);
+    sleep(2.0); // give time for motor to turn off
 
     if (servoRun){
-      printf("Pushing red block\n");
+      printf("Pushing green block\n");
       setServoPosition(15, 1.0); 
       printf("block pushed\n");
       sleep(1.0); //must be integer
@@ -132,9 +133,10 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
   else if (switch2 < 1){
     printf("Turning off motor\n");
     setMotorPosition(8, 0.0);
+    sleep(2.0);
     
     if (servoRun){
-      printf("Pushing green block\n");
+      printf("Pushing red block\n");
       setServoPosition(15, 1.0);
       printf("block pushed\n");
       sleep(1.0);
@@ -153,7 +155,7 @@ void checkColors(float colorVal){
   if (colorVal > 550){ 
       printf("Red Block Found\n");
       servoRun = true;
-      dirTurn.write(1);
+      dirTurn.write(0);
 
       // adding in check for already being at red station
       if (redSwitch < 1){
@@ -169,7 +171,7 @@ void checkColors(float colorVal){
   else if (490 < colorVal && colorVal <= 550){ //prev. val<900 
       printf("Green Block Found\n");
       servoRun = true;
-      dirTurn.write(0);
+      dirTurn.write(1);
        // adding in check for already being at green station
       if (greenSwitch < 1){
         limitSwitches(greenSwitch, redSwitch, servoRun);
@@ -183,7 +185,7 @@ void checkColors(float colorVal){
     }
   else if (colorVal < 440){
       printf("No Block Found\n"); //prev > 1000
-      dirTurn.write(0);
+      dirTurn.write(1);
       // adding in check for already being at green station
       if (greenSwitch < 1){
         limitSwitches(greenSwitch, redSwitch, servoRun);
