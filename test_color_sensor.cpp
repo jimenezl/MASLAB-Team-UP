@@ -248,7 +248,7 @@ int main() {
   usleep(1000*100);
   setMotorPosition(11, 0);
   printf("sleeping\n");
-  sleep(15);
+  sleep(20);
   printf("starting\n");
 
   while (running) {
