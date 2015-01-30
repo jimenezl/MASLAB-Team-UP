@@ -160,8 +160,8 @@ int main() {
   setServoPosition(7, 1.6);
   usleep(1000*400);
   printf("Dropping arm\n");
-  setMotorPosition(11, 0.2);
-  usleep(1000*100);
+  setMotorPosition(11, 0.3);
+  usleep(1000*250);
   setMotorPosition(11, 0.0);
   printf("sleeping\n");
   sleep(10.0);
