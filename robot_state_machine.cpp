@@ -1089,8 +1089,8 @@ int main() {
 	        
 	        if (loopsInPickupRange > 15){
 	        	printf("picking up blocks\n");
-	        	// ROBOT_STATE = 2;
-	        	break;
+	        	ROBOT_STATE = 2;
+	        	// break;
 	        }
 	        
 	        setMotorSpeed(pwm, dir, -1 * power + forwardBias);
