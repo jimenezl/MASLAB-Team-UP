@@ -926,14 +926,14 @@ int main() {
     float timeBetweenReadings = 0;
     float gyroBias = 1.0;
     float forwardBias = 0.0;
-    float P_CONSTANT = 55;
+    float P_CONSTANT = 75;
     float I_CONSTANT = .1;
     float D_CONSTANT = -1;
 
     float previousDistance = 0;
 
     float P_CONSTANT_DISTANCE = .00175;
-    float D_CONSTANT_DISTANCE = .0002;
+    float D_CONSTANT_DISTANCE = .0004;
 
     
 
@@ -946,7 +946,7 @@ int main() {
     float frontDistance = 0;
     float headDistance = 10.0;
 
-    float desiredDistance = 5;
+    float desiredDistance = 7;
 
     float P_CONSTANT_WALL_FOLLOWER = .2;
 
