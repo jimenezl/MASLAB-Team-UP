@@ -247,6 +247,7 @@ int main() {
   setMotorPosition(11, 0.2);
   usleep(1000*100);
   setMotorPosition(11, 0);
+  sleep(15);
 
   while (running) {
     int armVal = armLimit.read(); 
@@ -293,7 +294,6 @@ int main() {
 
   } 
     setMotorPosition(11, 0.0);
-    setServoPosition(4, 1.6);
     setServoPosition(0, 0.90);
     setMotorPosition(8, 0.0);
 }
