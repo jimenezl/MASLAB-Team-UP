@@ -628,7 +628,7 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 		// distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
 		distanceToBlock = 190 - objectMaxY;
 		blockFound = true;
-		if (distanceToBlock<15 && fabs(objectAngle) < 5){
+		if (distanceToBlock<25 && fabs(objectAngle) < 5){
 	        	loopsInPickupRange++;
 		}
 	}
@@ -1121,8 +1121,8 @@ int main() {
 			// Move forwared 0.5 seconds
 			float speedPickup = .172; 
 			printf("Moving Forward\n");
-			setMotorSpeed(pwm, dir, -1*speedPickup);
-			setMotorSpeed(pwm2, dir2, speedPickup);
+			setMotorSpeed(pwm, dir, speedPickup);
+			setMotorSpeed(pwm2, dir2, -1 * speedPickup);
 			usleep(1000*2500);
 			setMotorSpeed(pwm, dir, 0);
 			setMotorSpeed(pwm2, dir2, 0);
