@@ -626,7 +626,7 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 		}
 
 		// distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
-		distanceToBlock = 190 - objectMaxY;
+		distanceToBlock = 180 - objectMaxY;
 		blockFound = true;
 		if (distanceToBlock<25 && fabs(objectAngle) < 5){
 	        	loopsInPickupRange++;
@@ -1152,8 +1152,9 @@ int main() {
 			printf("Dropping blocks\n");
 			setServoPosition(0, 0.0); //open claw up partially 
 			sleep(2.0); 
-			ROBOT_STATE = 3;
-		} else if (ROBOT_STATE == 3) {
+
+			//starting to sort
+
 			// Color Sensor Readings to Pin 0
 			// Limit Switch to Pin 1, Pin 2
 			mraa::Aio colorSensor = mraa::Aio(0);
