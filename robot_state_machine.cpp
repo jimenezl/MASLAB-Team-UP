@@ -917,7 +917,7 @@ int main() {
     mraa::Aio aioFrontInfrared = mraa::Aio(FRONT_INFRARED_PIN);
     mraa::Aio aioHeadInfrared = mraa::Aio(HEAD_INFRARED_PIN);
 
-    float speed = .15;
+    float speed = .2;
     // float desiredAngle = 0.0; //making this global so camera thread can use and change it
     float diffAngle = 0.0;
     float integral = 0;
@@ -938,9 +938,9 @@ int main() {
     
 
     //wall follower constants
-    float speedWallFollower = .15;
+    float speedWallFollower = .2;
     float powerWallFollower = 0;
-    float forwardBiasWallFollower = .15;
+    float forwardBiasWallFollower = .25;
 
     float backDistance = 0;
     float frontDistance = 0;
