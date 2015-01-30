@@ -161,7 +161,7 @@ int main() {
   usleep(1000*400);
   printf("Dropping arm\n");
   setMotorPosition(11, 0.3);
-  usleep(1000*1200);
+  usleep(1000*1400);
   setMotorPosition(11, 0.0);
   printf("sleeping\n");
   sleep(2.0);
@@ -173,7 +173,7 @@ int main() {
   printf("Moving Forward\n");
   setMotorSpeed(pwm, dir, -1*speed);
   setMotorSpeed(pwm2, dir2, speed);
-  usleep(1000*1250);
+  usleep(1000*1125);
   setMotorSpeed(pwm, dir, 0);
   setMotorSpeed(pwm2, dir2, 0);
   sleep(2.0);
