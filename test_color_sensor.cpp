@@ -202,6 +202,7 @@ void checkColors(float colorVal){
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
+    setMotorPosition(8, 0);
     printf("closing spi nicely\n");
     running = 0;
   }
