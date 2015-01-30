@@ -249,6 +249,8 @@ int main() {
   setMotorPosition(11, 0);
   printf("sleeping\n");
   sleep(20);
+  setServoPosition(0, 0.9);
+  sleep(2.0);
   printf("starting\n");
 
   while (running) {
@@ -259,7 +261,7 @@ int main() {
 
     if (cubeFound){ // Pick up Blocks
       dirArm.write(1);
-      setServoPosition(0, 0.30); // close claw
+      setServoPosition(0, 0.25); // close claw
       sleep(1.0);
       cubeFound = false;
     }
