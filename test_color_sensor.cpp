@@ -166,6 +166,7 @@ void checkColors(float colorVal){
       }
       else {
         setMotorPosition(8, 0.15);
+        sleep(2.0); // Give time for turntable to get to new pos.
         printf("Turntable moving\n");
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
@@ -181,6 +182,7 @@ void checkColors(float colorVal){
       else { 
         printf("Turntable moving\n");
         setMotorPosition(8, 0.15);
+        sleep(2.0); // Give time for turntable to get to new pos.
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
