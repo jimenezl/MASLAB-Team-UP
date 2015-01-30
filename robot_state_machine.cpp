@@ -88,6 +88,12 @@ float alpha_infrareds = .3;
 //motor stuff
 int running = 1;
 
+//picking up blocks
+mraa::I2c *i2c;
+
+mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
+mraa::Gpio dirArm = mraa::Gpio(4); //Direction of Arm
+
 void sig_handler(int signo) {
     if (signo == SIGINT) {
         printf("closing spi nicely\n");
@@ -285,11 +291,7 @@ void checkColors(float colorVal){
 }
 
 
-//picking up blocks
-mraa::I2c *i2c;
 
-mraa::Gpio dirTurn = mraa::Gpio(3); //Direction of Turntable
-mraa::Gpio dirArm = mraa::Gpio(4); //Direction of Arm
 
 // Motor Setup
 uint8_t registers[] = {
@@ -909,25 +911,6 @@ int main() {
     struct timeval tv;
     
     float rf;
-
-    //Motor Stuff
-    mraa::Pwm pwm = mraa::Pwm(9);
-    pwm.write(0.0);
-    pwm.enable(true);
-    //assert(pwm != NULL);
-    mraa::Gpio dir = mraa::Gpio(8);
-    //assert(dir != NULL);
-    dir.dir(mraa::DIR_OUT);
-    dir.write(0);
-
-    mraa::Pwm pwm2 = mraa::Pwm(6);
-    pwm2.write(0.0);
-    pwm2.enable(true);
-    //assert(pwm2 != NULL);
-    mraa::Gpio dir2 = mraa::Gpio(5);
-    //assert(dir != NULL);
-    dir2.dir(mraa::DIR_OUT);
-    dir2.write(0);
 
     //wall following ir's
     mraa::Aio aioBackInfrared = mraa::Aio(BACK_INFRARED_PIN);
