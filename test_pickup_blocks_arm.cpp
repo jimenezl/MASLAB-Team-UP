@@ -161,15 +161,15 @@ int main() {
   usleep(1000*400);
   printf("Dropping arm\n");
   setMotorPosition(11, 0.3);
-  sleep(2.0);
+  usleep(1000*15000);
   setMotorPosition(11, 0.0);
   printf("sleeping\n");
-  sleep(10.0);
+  sleep(6.0);
   setServoPosition(0, -0.2);
   sleep(2.0);
 
   // Move forwared 0.5 seconds
-  float speed = .25; 
+  float speed = .3; 
   printf("Moving Forward\n");
   setMotorSpeed(pwm, dir, -1*speed);
   setMotorSpeed(pwm2, dir2, speed);
