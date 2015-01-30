@@ -160,8 +160,8 @@ int main() {
   setServoPosition(7, 1.6);
   usleep(1000*400);
   printf("Dropping arm\n");
-  setMotorPosition(11, 0.4);
-  usleep(1000*250);
+  setMotorPosition(11, 0.3);
+  sleep(2.0);
   setMotorPosition(11, 0.0);
   printf("sleeping\n");
   sleep(10.0);
@@ -169,7 +169,7 @@ int main() {
   sleep(2.0);
 
   // Move forwared 0.5 seconds
-  float speed = .3; 
+  float speed = .25; 
   printf("Moving Forward\n");
   setMotorSpeed(pwm, dir, -1*speed);
   setMotorSpeed(pwm2, dir2, speed);
@@ -201,7 +201,7 @@ int main() {
     usleep(1000*300);
     
     printf("Dropping blocks\n");
-    setServoPosition(0, 0.7); //open claw up partially 
+    setServoPosition(0, 0.0); //open claw up partially 
     sleep(2.0);
 
     running = 0;  
