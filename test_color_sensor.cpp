@@ -17,8 +17,6 @@
 #define SHIELD_I2C_ADDR 0x40
 #define MS 1000
 
-//green is digigal pin 1
-// red is digial pin 0
 
 
 // Global Variables
@@ -242,7 +240,7 @@ int main() {
 
   // Arm motor
   dirArm.dir(mraa::DIR_OUT);
-  dirArm.write(1);
+  dirArm.write(0);
 
   initPWM();
   setServoPosition(4, 1.6);
@@ -294,4 +292,9 @@ int main() {
     }
 
   } 
+    setMotorPosition(11, 0.0);
+    setServoPosition(4, 1.6);
+    setServoPosition(0, 0.90);
+    setMotorPosition(8, 0.0);
 }
+
