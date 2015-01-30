@@ -626,9 +626,9 @@ void floodFillTracking(Mat *threshold, Mat *cameraFeed){
 		}
 
 		// distanceToBlock = 1 - (float(numOfBlocks*maxFloodPixelCount) / float(thresholdBlockSize));
-		distanceToBlock = 170 - objectMaxY;
+		distanceToBlock = 185 - objectMaxY;
 		blockFound = true;
-		if (distanceToBlock<25 && fabs(objectAngle) < 5){
+		if (distanceToBlock<35 && fabs(objectAngle) < 5){
 	        	loopsInPickupRange++;
 		}
 	}
@@ -1087,7 +1087,7 @@ int main() {
 	        previousDistance = distanceToBlock;
 
 	        
-	        if (loopsInPickupRange > 15){
+	        if (loopsInPickupRange > 10){
 	        	printf("picking up blocks\n");
 	        	ROBOT_STATE = 2;
 	        	// break;
