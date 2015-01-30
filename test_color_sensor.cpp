@@ -181,7 +181,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (370 < colorVal < 440){
+  else if (colorVal < 440){
       printf("No Block Found\n"); //prev > 1000
       dirTurn.write(0);
       // adding in check for already being at green station

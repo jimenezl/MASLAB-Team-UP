@@ -26,13 +26,13 @@ int main() {
     int val = aio.read();
     std::cout << "Read: " << val << std::endl;
 
-    if (280 < val <= 680){
-      printf("Red Block Found\n");
-    }
-    else if (val <= 280){
+    if (490 < val <= 550){
       printf("Green Block Found\n");
     }
-    else if (val > 750){
+    else if (val > 650){
+      printf("Red Block Found\n");
+    }
+    else if (val < 440){
       printf("No Block Found\n");
     }
   usleep(1000*500);
