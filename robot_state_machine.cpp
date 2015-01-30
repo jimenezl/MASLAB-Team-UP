@@ -933,7 +933,7 @@ int main() {
     float previousDistance = 0;
 
     float P_CONSTANT_DISTANCE = .00175;
-    float D_CONSTANT_DISTANCE = .0004;
+    float D_CONSTANT_DISTANCE = .0003;
 
     
 
@@ -1119,7 +1119,7 @@ int main() {
 			sleep(2.0);
 
 			// Move forwared 0.5 seconds
-			float speedPickup = .3; 
+			float speedPickup = .24; 
 			printf("Moving Forward\n");
 			setMotorSpeed(pwm, dir, speedPickup);
 			setMotorSpeed(pwm2, dir2, -1 * speedPickup);
