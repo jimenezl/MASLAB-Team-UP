@@ -35,6 +35,6 @@ int main() {
     else if (val < 440){
       printf("No Block Found\n");
     }
-  usleep(1000*500);
+      usleep(1000*500);
   }
 }
