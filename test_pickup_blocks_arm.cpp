@@ -1,5 +1,5 @@
 // Compile with:
-// g++ test_color_sensor_with_arm.cpp -o test_color_sensor_with_arm -lmraa
+// g++ test_pickup_blocks_arm.cpp -o test_pickup_blocks_arm -lmraa
 // Picks up blocks and sorts them in sets of three
 // brown, black, orange resistor for photoresistor
 // red, red, brown resistor for led
@@ -12,6 +12,7 @@
 #include <cassert>
 #include <csignal>
 #include <iostream>
+#include <math.h>
 
 #define SHIELD_I2C_ADDR 0x40
 #define MS 1000
@@ -168,7 +169,7 @@ int main() {
   sleep(2.0);
 
   // Move forwared 0.5 seconds
-  speed = .2; 
+  float speed = .2; 
   printf("Moving Forward\n");
   setMotorSpeed(pwm, dir, speed);
   setMotorSpeed(pwm2, dir2, -1*speed);
@@ -179,7 +180,7 @@ int main() {
 
   dirArm.write(1); // Arm going up
   printf("Claw closing\n");
-  setServoPosition(0.3); //Claw Closing
+  setServoPosition(0, 0.3); //Claw Closing
   sleep(1.0);
 
   while (running) {

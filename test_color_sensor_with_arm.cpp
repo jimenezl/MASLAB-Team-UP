@@ -197,6 +197,16 @@ void checkColors(float colorVal){
   } 
 }
 
+void setMotorSpeed(mraa::Pwm &pwm, mraa::Gpio &dir, double speed) {
+    assert(-1.0 <= speed && speed <= 1.0);
+    if (speed < 0) {
+        dir.write(0);
+    } else {
+        dir.write(1);
+    }
+    pwm.write(fabs(speed));
+}
+
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
@@ -239,16 +249,46 @@ int main() {
   usleep(1000*400);
 
   initPWM();
+
+  mraa::Pwm pwm = mraa::Pwm(9);
+  pwm.write(0.0);
+  pwm.enable(true);
+  //assert(pwm != NULL);
+  mraa::Gpio dir = mraa::Gpio(8);
+  //assert(dir != NULL);
+  dir.dir(mraa::DIR_OUT);
+  dir.write(1);
+  
+  mraa::Pwm pwm2 = mraa::Pwm(6);
+  pwm2.write(0.0);
+  pwm2.enable(true);
+  //assert(pwm2 != NULL);
+  mraa::Gpio dir2 = mraa::Gpio(5);
+  //assert(dir != NULL);
+  dir2.dir(mraa::DIR_OUT);
+  dir2.write(1);
+
+  // Arm Dropping and Claw Opening
   setServoPosition(7, 1.6);
   usleep(1000*400);
   setMotorPosition(11, 0.2);
   usleep(1000*100);
   setMotorPosition(11, 0.0);
   printf("sleeping\n");
-  sleep(15);
-  setServoPosition(0, 0.9);
+  sleep(10);
+  setServoPosition(0, -0.2);
   sleep(2.0);
+
+  // Move forwared 0.5 seconds
+  speed = .2; 
+  setMotorSpeed(pwm, dir, speed);
+  setMotorSpeed(pwm2, dir2, -1*speed);
+  usleep(500*1000);
+  setMotorSpeed(pwm, dir, 0);
+  setMotorSpeed(pwm2, dir2, 0);
+
   printf("starting\n");
+
 
   while (running) {
     int armVal = armLimit.read(); 
