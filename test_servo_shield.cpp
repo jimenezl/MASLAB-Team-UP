@@ -102,9 +102,9 @@ int main()
   while (running) {
     // Alternate two locations with 2-sec delay
 
-    setServoPosition(i2c, 0, 0.3);
+    setServoPosition(i2c, 0, 0.3); // close 0.3 
     sleep(2.0);
-    setServoPosition(i2c, 0, -0.60);
+    setServoPosition(i2c, 0, -0.20);
     sleep(2.0);
   }
 }
