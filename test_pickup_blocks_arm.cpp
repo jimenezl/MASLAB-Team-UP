@@ -169,7 +169,7 @@ int main() {
   sleep(2.0);
 
   // Move forwared 0.5 seconds
-  float speed = .15; 
+  float speed = .18; 
   printf("Moving Forward\n");
   setMotorSpeed(pwm, dir, -1*speed);
   setMotorSpeed(pwm2, dir2, speed);
