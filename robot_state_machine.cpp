@@ -1119,7 +1119,7 @@ int main() {
 			sleep(2.0);
 
 			// Move forwared 0.5 seconds
-			float speedPickup = .172; 
+			float speedPickup = .3; 
 			printf("Moving Forward\n");
 			setMotorSpeed(pwm, dir, speedPickup);
 			setMotorSpeed(pwm2, dir2, -1 * speedPickup);
