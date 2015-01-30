@@ -173,7 +173,7 @@ int main() {
   printf("Moving Forward\n");
   setMotorSpeed(pwm, dir, -1*speed);
   setMotorSpeed(pwm2, dir2, speed);
-  usleep(1000*1000);
+  usleep(1000*1250);
   setMotorSpeed(pwm, dir, 0);
   setMotorSpeed(pwm2, dir2, 0);
   sleep(2.0);
