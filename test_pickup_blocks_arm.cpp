@@ -116,7 +116,7 @@ void sig_handler(int signo)
     setMotorPosition(11, 0.0);
     setServoPosition(7, 1.6);
     setServoPosition(0, -0.20);
-    setMotorPosition(8, 0.0);
+
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -169,7 +169,7 @@ int main() {
   sleep(2.0);
 
   // Move forwared 0.5 seconds
-  float speed = .25; 
+  float speed = .3; 
   printf("Moving Forward\n");
   setMotorSpeed(pwm, dir, -1*speed);
   setMotorSpeed(pwm2, dir2, speed);
@@ -209,6 +209,6 @@ int main() {
   } 
     setMotorPosition(11, 0.0);
     setServoPosition(0, -0.20);
-    setMotorPosition(8, 0.0);
+    setServoPosition(7, 1.1);
 }
 
