@@ -736,7 +736,7 @@ int main() {
 
     float desiredDistance = 5;
 
-    float P_CONSTANT_WALL_FOLLOWER = .15;
+    float P_CONSTANT_WALL_FOLLOWER = .2;
 
     while (running) {
     	printf("Robot state: %d\n", ROBOT_STATE);
@@ -764,10 +764,10 @@ int main() {
 	        float diffDistance = desiredDistance - averageDistance;
 	        powerWallFollower = speedWallFollower * (P_CONSTANT_WALL_FOLLOWER * diffDistance);
 
-	        if (powerWallFollower > .3) {
-	            powerWallFollower = .3;
-	        } else if (powerWallFollower < -.3) {
-	            powerWallFollower = -.3;
+	        if (powerWallFollower > .4) {
+	            powerWallFollower = .4;
+	        } else if (powerWallFollower < -.4) {
+	            powerWallFollower = -.4;
 	        }
 	        if (headDistance < 6.0 && headDistance > 0){
 	            printf("PowerWallFollower reduced!\n"); //head hit a wall
