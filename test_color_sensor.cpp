@@ -247,7 +247,9 @@ int main() {
   setMotorPosition(11, 0.2);
   usleep(1000*100);
   setMotorPosition(11, 0);
+  printf("sleeping\n");
   sleep(15);
+  printf("starting\n");
 
   while (running) {
     int armVal = armLimit.read(); 
