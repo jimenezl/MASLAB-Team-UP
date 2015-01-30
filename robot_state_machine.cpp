@@ -242,7 +242,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 // 370 < no block > 420
 //  565 > red
 void checkColors(float colorVal){
-  if (620 < colorVal) { 
+  if (610 < colorVal) { 
       printf("Red Block Found\n");
       servoRun = true;
       dirTurn.write(0);
@@ -258,7 +258,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (colorVal < 550){  
+  else if (colorVal < 525){  
       printf("Green Block Found\n");
       servoRun = true;
       dirTurn.write(1);
