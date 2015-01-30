@@ -161,7 +161,7 @@ int main() {
   usleep(1000*400);
   printf("Dropping arm\n");
   setMotorPosition(11, 0.3);
-  usleep(1000*12500);
+  usleep(1000*1200);
   setMotorPosition(11, 0.0);
   printf("sleeping\n");
   sleep(2.0);
