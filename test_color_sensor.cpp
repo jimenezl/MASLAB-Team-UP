@@ -166,7 +166,7 @@ void checkColors(float colorVal){
         limitSwitches(greenSwitch, redSwitch, servoRun);
       }
     }
-  else if (490 < colorVal <= 550){ //prev. val<900 
+  else if (490 < colorVal && colorVal <= 550){ //prev. val<900 
       printf("Green Block Found\n");
       servoRun = true;
       dirTurn.write(0);
