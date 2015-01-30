@@ -948,7 +948,7 @@ int main() {
 
     float desiredDistance = 7;
 
-    float P_CONSTANT_WALL_FOLLOWER = .2;
+    float P_CONSTANT_WALL_FOLLOWER = .35;
 
     while (running) {
     	printf("Robot state: %d\n", ROBOT_STATE);
