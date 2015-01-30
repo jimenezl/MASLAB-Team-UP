@@ -2,7 +2,7 @@
 //Compile on PC:
 //g++ -ggdb `pkg-config --cflags opencv` -o `basename rgbObjectTrackingEdisonMultithread.cpp` rgbObjectTrackingEdisonMultithread `pkg-config --libs opencv`
 //Compile on Edison:
-//g++ block_tracking_with_state_machine.cpp -o block_tracking_with_state_machine `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
+//g++ robot_state_machine.cpp -o robot_state_machine `pkg-config opencv --cflags --libs` -lpthread -lmraa -std=c++11
 
 
 #include <sstream>
@@ -96,12 +96,16 @@ void sig_handler(int signo) {
         mraa::Pwm pwm2 = mraa::Pwm(6);
         pwm.write(0);
         pwm2.write(0);
-        setMotorPosition(11, 0.0);
-	    setServoPosition(7, 1.6);
-	    setServoPosition(0, -0.20);
-	    setMotorPosition(8, 0);
+     //    setMotorPosition(11, 0.0);
+	    // setServoPosition(7, 1.6);
+	    // setServoPosition(0, -0.20);
+	    // setMotorPosition(8, 0);
     }
 }
+
+void setServoPosition(int index, double duty);
+
+void setMotorPosition(int index, double duty);
 
 long timevalDiff(struct timeval *starttime, struct timeval *finishtime) { //returns time difference
   long msec;
@@ -232,7 +236,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 // 370 < no block > 420
 //  565 > red
 void checkColors(float colorVal){
-  if (620 < colorVal { 
+  if (620 < colorVal) { 
       printf("Red Block Found\n");
       servoRun = true;
       dirTurn.write(0);
@@ -358,6 +362,7 @@ void setServoPosition(int index, double duty) {
 }
 void setMotorPosition(int index, double duty) {
     writePWM(index, duty);
+}
 
 
 //
