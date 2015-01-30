@@ -207,7 +207,7 @@ void sig_handler(int signo)
   if (signo == SIGINT) {
     //turn Motors off or open them
     setMotorPosition(11, 0.0);
-    setServoPosition(4, 1.6);
+    setServoPosition(7, 1.6);
     setServoPosition(0, 0.90);
     setMotorPosition(8, 0.0);
     printf("closing spi nicely\n");
@@ -243,7 +243,7 @@ int main() {
   dirArm.write(0);
 
   initPWM();
-  setServoPosition(4, 1.6);
+  setServoPosition(7, 1.6);
   setMotorPosition(11, 0.2);
   usleep(1000*100);
   setMotorPosition(11, 0);
@@ -268,7 +268,7 @@ int main() {
 
     if (armVal < 1){
       setMotorPosition(11, 0.0);
-      setServoPosition(4,1.1);
+      setServoPosition(7,1.1);
       printf("Arm Limit: %d\n", armVal);
       armMoving = false;
       dirArm.write(0);
@@ -279,7 +279,7 @@ int main() {
 
       // Hold arm up
       printf("Arm being held up\n");
-      setServoPosition(4, 1.1);
+      setServoPosition(7, 1.1);
       setServoPosition(0, 0.5); //open up partially 
       sleep(2.0);
 
