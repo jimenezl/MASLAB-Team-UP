@@ -25,7 +25,7 @@ int main() {
   while (running) {
     int val = aio.read();
     std::cout << "Read: " << val << std::endl;
-    usleep(1000*500);
+
     if (280 < val <= 680){
       printf("Red Block Found\n");
     }
@@ -35,5 +35,6 @@ int main() {
     else if (val > 750){
       printf("No Block Found\n");
     }
+  usleep(1000*500);
   }
 }

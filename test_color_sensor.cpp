@@ -4,10 +4,9 @@
 // brown, black, orange resistor for photoresistor
 // red, red, brown resistor for led
 
-// No Block: greater than 750
-// Red: 620 less 
-// Green: 280 less than
-
+// No Block: 1023
+// Red:   power
+// Green: < 1000 less than
 
 #include "mraa.hpp"
 #include <cassert>
@@ -16,8 +15,6 @@
 
 #define SHIELD_I2C_ADDR 0x40
 #define MS 1000
-
-
 
 // Global Variables
 int running = 1;
