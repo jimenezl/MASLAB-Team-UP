@@ -150,7 +150,7 @@ void limitSwitches(float switch1, float switch2, bool servoRun){
 // 370 < no block > 440
 // 650 < red
 void checkColors(float colorVal){
-  if (colorVal > 650){ 
+  if (colorVal > 550){ 
       printf("Red Block Found\n");
       servoRun = true;
       dirTurn.write(1);
@@ -200,11 +200,6 @@ void checkColors(float colorVal){
 void sig_handler(int signo)
 {
   if (signo == SIGINT) {
-    //turn Motors off or open them
-    setMotorPosition(11, 0.0);
-    setServoPosition(7, 1.6);
-    setServoPosition(0, 0.90);
-    setMotorPosition(8, 0.0);
     printf("closing spi nicely\n");
     running = 0;
   }
@@ -217,8 +212,8 @@ int main() {
   // Color Sensor Readings to Pin 0
   // Limit Switch to Pin 1, Pin 2
   mraa::Aio colorSensor = mraa::Aio(0);
-  mraa::Gpio limit1 = mraa::Gpio(1); // Green side
-  mraa::Gpio limit2 = mraa::Gpio(0); // Red side
+  mraa::Gpio limit1 = mraa::Gpio(1); 
+  mraa::Gpio limit2 = mraa::Gpio(0);  
 
   // Edison i2c bus is 6
   i2c = new mraa::I2c(6);
